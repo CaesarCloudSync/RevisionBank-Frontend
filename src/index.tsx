@@ -1,17 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
+import FmathQP from './components/fmathqp';
+import FmathQPDF from './components/fmathqpdf';
+import FmathSB from './components/fmathsb';
+import FmathSBPDF from './components/fmathsbpdf';
+import Homepage from './components/homepage';
+import { BrowserRouter as Router, Route ,Routes} from "react-router-dom";
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Router>
+  <Routes>
+  <Route path="/" element={<Homepage/>}/>
+  <Route path="/fmathqp" element={<FmathQP/>}/>
+  <Route path="/fmathqp/pdf" element={<FmathQPDF/>}/>
+  <Route path="/fmathsb" element={<FmathSB/>}/>
+  <Route path="/fmathsb/pdf" element={<FmathSBPDF/>}/>
+  
+  </Routes>
+  </Router>
+  ,
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
