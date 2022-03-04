@@ -2,7 +2,27 @@ import React, {useState,useEffect} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { Button } from "@mui/material";
+import useMediaQuery from "./useMedia";
+import { maxRowBasedquery } from "./mediamax";
+class FmathSBStyles{
+    containercenter:Object;
+    containercentercol:Object;
+    largecontainer :Object;
+    inputbars:Object;
+    textcolor:Object;
+    title:Object;
+    constructor(maxRowBased:any){
+      this.title = maxRowBased ? {marginLeft: "10%",position:"relative",top:"30px",fontSize:"1.5em",fontWeight:"bold",color:"#3f51b5"} : {}
+      this.textcolor = {color:"white"};
+      this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto"};
+      this.inputbars = {width: "100%"}
+      this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
+      this.largecontainer = {margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none"} 
+    }
+  }
 export default function FmathSB(){
+    const maxRowBased = useMediaQuery(maxRowBasedquery);
+    const styles = new FmathSBStyles(maxRowBased);
     let navigate = useNavigate();
     const [email,setEmail] = useState('');
     const [emailisset,setEmailIsSet] = useState(false);
@@ -36,7 +56,14 @@ export default function FmathSB(){
       }, [navigated])
     return(
         <div >
-            <h2>FMathsSB</h2>
+            <div style={Object.assign({},styles.containercenter,styles.title)}>
+            <h2 style={styles.textcolor}>FurtherMathSBScraper</h2>
+            </div>
+            <div style={styles.largecontainer}>
+            <div style={styles.containercenter}>
+                <h2 style={styles.textcolor}>FMathsSB</h2>
+            </div>
+            <div style={styles.containercenter}>
             <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
             <input
                 onChange={(e) => setEmail(e.target.value)} 
@@ -45,6 +72,8 @@ export default function FmathSB(){
                 
                 />
             </form>
+            </div>
+            <div style={styles.containercentercol}>
                 <p>{emailisset && <p>Email is set</p>}</p>
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("0"); setFurthermathsbookid("Pure Maths")}}><p>Pure Maths</p></Button>
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("1"); setFurthermathsbookid("Statistics-Mechanics")}}><p>Statistics-Mechanics</p></Button>
@@ -54,11 +83,18 @@ export default function FmathSB(){
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("5"); setFurthermathsbookid("Further-Mechanics")}}><p>Further-Mechanics</p></Button>
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("6"); setFurthermathsbookid("Decision-Maths")}}><p>Decision Maths</p></Button>
                 <p>{ furthermathsbook && <p>Further Maths Book Selected {furthermathsbookid}</p>}</p>
+                </div>
+                <div style={styles.containercenter}>
+                    <h3 style={styles.textcolor}>FMaths Topic</h3>
+                </div>
+                <div style={styles.containercenter}>
                 <input
                 onChange={(e) => setFurthermathsyear(e.target.value)}
                 value={furthermathsyear}
                 placeholder="Enter Further Maths Year/Book"
                 />
+                </div>
+                <div style={styles.containercenter}>
                 
                 <form onSubmit={(e) => sendApi(e)}>
                 <input
@@ -68,6 +104,8 @@ export default function FmathSB(){
                 />
                 </form>
                 <p>{isLoading && <p>Loading...</p>}</p>
+                </div>
+        </div>
     
         </div>
     )

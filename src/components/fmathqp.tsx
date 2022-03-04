@@ -2,7 +2,6 @@ import React, {useState,useEffect} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { Button } from "@mui/material";
-import styled from "styled-components";
 import useMediaQuery from "./useMedia";
 import { maxRowBasedquery } from "./mediamax";
 
