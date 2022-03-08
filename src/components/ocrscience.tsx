@@ -78,7 +78,7 @@ export default function OCRScience (){
       setIsLoading(false);
       setError(false);
       setEmailIsSet(false);
-    }, [navigated,error,datanotset])
+    }, [navigated,error]) //datanotset
 
     return (
       <div>
