@@ -17,8 +17,8 @@ class FmathQPStyles{
     this.textcolor = {color:"white"};
     this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto"};
     this.inputbars = {width: "100%"}
-    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
-    this.largecontainer = {margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none"} 
+    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "2%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
+    this.largecontainer = {margin: maxRowBased ? "10%" : "none",marginTop: maxRowBased ? "2%": "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none"} 
   }
 }
 export default function OCRScience (){
@@ -35,6 +35,9 @@ export default function OCRScience (){
     const [bookyear,setBookYear] = useState('');
     const [isLoading,setIsLoading] = useState(false);
     const [navigated,setNavigated] = useState(false);
+    const [error,setError] = useState(false);
+    const [alphaset,setAlphaSet] = useState(false);
+    const [datanotset,setDataNotSet] = useState(false);
 
     //onSubmitEditing ={() => sendApi(name)}
     const sendApi = async (e:any) => {
@@ -44,12 +47,23 @@ export default function OCRScience (){
         if (!chapter.includes("chapter")){
             chapter = `chapter ${chapter}`;
         }
-      const response = await axios.post("https://palondomus-api.herokuapp.com/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha,"year":bookyear,"platform": "web"}})
-;
-      //console.log(response.data.scienceocranswers)      
+      const response = await axios.post("https://palondomus-api.herokuapp.com/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha.toUpperCase(),"year":bookyear,"platform": "web"}})
+;     if (email !== "" && ocrsubject !== "" && chapter !== "" && bookalpha !== "" && bookyear !== ""){
+      if (!Object.keys(response.data).includes("error")){   
       setIsLoading(false);
       navigate("/ocrscience/pdf",{state:{"ocrsciencepdf": response.data,"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha,"year":bookyear}});
       setNavigated(true);
+      }
+      else{
+        console.log("error",response.data.error);
+        setIsLoading(false);
+        setError(true);
+      }
+    }
+    else{
+      setIsLoading(false);
+      setDataNotSet(true);
+    }
     }
   
     useEffect(() => {
@@ -57,8 +71,14 @@ export default function OCRScience (){
       setChapter("")
       setOCRSubject("");
       setBookAlpha("");
+      setBookYear("");
       setNavigated(false)
-    }, [navigated])
+      setAlphaSet(false);
+      setDataNotSet(false);
+      setIsLoading(false);
+      setError(false);
+      setEmailIsSet(false);
+    }, [navigated,error,datanotset])
 
     return (
       <div>
@@ -67,7 +87,7 @@ export default function OCRScience (){
         </div>
         <div style={styles.largecontainer}>
           <div style={styles.containercenter}>
-          <h2 style={styles.textcolor}>FMathsQP</h2>
+          <h2 style={styles.textcolor}>Physics, Biology and Chemistry QP Markschemes</h2>
           </div>
           <div style={styles.containercenter}>
           <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
@@ -94,8 +114,8 @@ export default function OCRScience (){
             <h3 style={styles.textcolor}>Physics, Biology and Chemistry Book A or B</h3>
           </div>
 
-          <div style={styles.containercenter}>
-          <form onSubmit ={(e) => {e.preventDefault();}}>
+        <div style={styles.containercenter}>
+          <form onSubmit ={(e) => {e.preventDefault();setAlphaSet(true)}}>
             <input style={styles.inputbars}
                 onChange={(e) => setBookAlpha(e.target.value)} 
                 value={bookalpha}
@@ -104,14 +124,16 @@ export default function OCRScience (){
             </form>
                 
         </div>
-
+        <div style={styles.containercenter}>
+          <p>{alphaset && <p>Book type selected</p>}</p>
+        </div>
         <div style={styles.containercentercol}>
           <Button variant= "contained" onClick={() => {setBookYear("AS/Year 1")}}><p>AS/Year 1</p></Button>
           <Button variant= "contained" onClick={() => {setBookYear("A Level")}}><p>A Level</p></Button>
           <Button variant= "contained" onClick={() => {setBookYear("Year 2")}}><p>A Year 2</p></Button>
           </div>
           <div style={styles.containercenter}>
-            <p>{ ocrsubject && <p>Year Selected {bookyear}</p>}</p>
+            <p>{ bookyear && <p>Year Selected {bookyear}</p>}</p>
             </div>
           
           <div style={styles.containercenter}>
@@ -132,6 +154,12 @@ export default function OCRScience (){
           </div>
           <div style={styles.containercenter}>
           <p>{isLoading && <p>Loading...</p>}</p>
+        </div>
+        <div style={styles.containercenter}>
+          <p>{error && <p>Chapter doesn't exist</p>}</p>
+        </div>
+        <div style={styles.containercenter}>
+          <p>{datanotset && <p>Please select all options</p>}</p>
         </div>
         </div>
         
