@@ -1,14 +1,15 @@
 import React, {useState,useEffect} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate,useLocation } from "react-router";
 import { Button } from "@mui/material";
-import useMediaQuery from "./useMedia";
-import { maxRowBasedquery } from "./mediamax";
+import useMediaQuery from "../mediahooks/useMedia";
+import { maxRowBasedquery } from "../mediahooks/mediamax";
 import Select from "react-select";
 import {Chapter} from './physicsaqadata';
 import {Topic} from './physicsaqadata';
 import {TopicMS} from './physicsaqadata';
 import {TopicSelectBar} from './physicsaqadata';
+import { Navigate } from "react-router-dom";
 interface ChapterTopic{
   label:string;
   value:string;
@@ -33,6 +34,10 @@ export default function PhysicsAqa (){
     const maxRowBased = useMediaQuery(maxRowBasedquery);
     const styles = new PhysicsAqaStyles(maxRowBased);
     let navigate = useNavigate();
+    
+    const location:any = useLocation() //.state
+    const token = location.state
+    const tokenbool = (token === null) ? false : true // false if token doesnot exist
     //const [pdfresponse,setPdfResponse] = useState('');
     const [email,setEmail] = useState('');
     const [emailisset,setEmailIsSet] = useState(false);
@@ -72,6 +77,8 @@ export default function PhysicsAqa (){
     //console.log(Topic)
     return (
       <div>
+        { tokenbool ?
+        <div>
         <div style={Object.assign({},styles.containercenter,styles.title)}>
           <h2 style={styles.textcolor}>PhysicsAqa Question Papers</h2>
         </div>
@@ -115,7 +122,11 @@ export default function PhysicsAqa (){
             <p>{datanotset && <p>Select all options</p>}</p>
           </div>
         </div>
-        
+        </div>
+        :
+        <div>
+        <Navigate to="/"/>
+        </div>}
       </div>
     );
   };

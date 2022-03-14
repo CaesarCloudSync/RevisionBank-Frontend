@@ -1,3 +1,17 @@
+/* ==== "Inter" FONT-FAMILY FROM FONTS.GOOGLE.COM  ==== */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
+/* ==== ROOT RESET ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,8 +19,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(131,58,180);
-  background: linear-gradient(101deg, rgba(131,58,180,1) 0%, rgba(29,120,253,1) 50%, rgba(107,252,69,1) 100%);
+  width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+  
+}
+
+/* ==== CSS VARIABLES ==== */
+:root {
+  /*background-color: #161c2d;*/
+  --primary-color: #335eea;
+  --link-color: #506690;
+  --btn-hover-color: #2b50c7;
+  --lg-heading: #161c2d;
+  --text-content: #869ab8;
+  --fixed-header-height: 4.5rem;
 }
 
 code {

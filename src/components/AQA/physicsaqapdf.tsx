@@ -1,7 +1,7 @@
 import React from "react";
 import {useLocation} from "react-router-dom";
-import useMediaQuery from "./useMedia";
-import { maxRowBasedquery } from "./mediamax";
+import useMediaQuery from "../mediahooks/useMedia";
+import { maxRowBasedquery } from "../mediahooks/mediamax";
 
 class PhysicsAQAPDFStyles{
     containercenter:Object;

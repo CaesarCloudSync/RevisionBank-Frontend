@@ -1,9 +1,10 @@
 import React, {useState,useEffect} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate ,useLocation} from "react-router";
 import { Button } from "@mui/material";
-import useMediaQuery from "./useMedia";
-import { maxRowBasedquery } from "./mediamax";
+import useMediaQuery from "../mediahooks/useMedia";
+import { maxRowBasedquery } from "../mediahooks/mediamax";
+import { Navigate } from "react-router-dom";
 class FmathSBStyles{
     containercenter:Object;
     containercentercol:Object;
@@ -24,6 +25,12 @@ export default function FmathSB(){
     const maxRowBased = useMediaQuery(maxRowBasedquery);
     const styles = new FmathSBStyles(maxRowBased);
     let navigate = useNavigate();
+    
+    const location:any = useLocation() //.state
+    const token = location.state
+    const tokenbool = (token === null) ? false : true // false if token doesnot exist
+
+
     const [email,setEmail] = useState('');
     const [emailisset,setEmailIsSet] = useState(false);
     const [furthermathsbook,setFurthermathsbook]=useState("");
@@ -56,6 +63,8 @@ export default function FmathSB(){
       }, [navigated])
     return(
         <div >
+          {tokenbool ?
+          <div>
             <div style={Object.assign({},styles.containercenter,styles.title)}>
             <h2 style={styles.textcolor}>FurtherMathSBScraper</h2>
             </div>
@@ -106,7 +115,10 @@ export default function FmathSB(){
                 <p>{isLoading && <p>Loading...</p>}</p>
                 </div>
         </div>
-    
+        </div>:
+        <div>
+        <Navigate to="/"/>
+        </div>}
         </div>
     )
 }
