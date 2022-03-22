@@ -15,10 +15,10 @@ class FmathQPStyles{
   constructor(maxRowBased:any){
     this.title = maxRowBased ? {marginLeft: "10%",position:"relative",top:"30px",fontSize:"1.5em",fontWeight:"bold",color:"#3f51b5"} : {}
     this.textcolor = {color:"white"};
-    this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto"};
+    this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto",marginTop:"20px"};
     this.inputbars = {width: "100%"}
-    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "2%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
-    this.largecontainer = {margin: maxRowBased ? "10%" : "none",marginTop: maxRowBased ? "2%": "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none"} 
+    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'column' : 'column',alignItems: maxRowBased ? "left":"center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto",width:"20%",gap:"10px"};
+    this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none",height: maxRowBased ? "85vh" : "auto"} 
   }
 }
 export default function OCRScience (){
@@ -95,9 +95,6 @@ export default function OCRScience (){
         </div>
         <div style={styles.largecontainer}>
           <div style={styles.containercenter}>
-          <h2 style={styles.textcolor}>Physics, Biology and Chemistry QP Markschemes</h2>
-          </div>
-          <div style={styles.containercenter}>
           <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
           <input style={styles.inputbars}
               onChange={(e) => setEmail(e.target.value)}
@@ -118,9 +115,6 @@ export default function OCRScience (){
           <div style={styles.containercenter}>
           <p >{ ocrsubject && <p>Subject Selected {ocrsubject}</p>}</p>    
             </div>
-          <div style={styles.containercenter}>
-            <h3 style={styles.textcolor}>Physics, Biology and Chemistry Book A or B</h3>
-          </div>
 
         <div style={styles.containercenter}>
           <form onSubmit ={(e) => {e.preventDefault();setAlphaSet(true)}}>
@@ -132,7 +126,7 @@ export default function OCRScience (){
             </form>
                 
         </div>
-        <div style={styles.containercenter}>
+        <div style={{display:"flex",marginLeft:maxRowBased? "2%" : "auto"}}>
           <p>{alphaset && <p>Book type selected</p>}</p>
         </div>
         <div style={styles.containercentercol}>
@@ -144,9 +138,6 @@ export default function OCRScience (){
             <p>{ bookyear && <p>Year Selected {bookyear}</p>}</p>
             </div>
           
-          <div style={styles.containercenter}>
-            <h3 style={styles.textcolor}>Physics, Biology or Chemistry Chapter</h3>
-          </div>
           
           <div style={styles.containercenter}>
           

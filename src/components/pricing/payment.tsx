@@ -20,7 +20,7 @@ export default function Payment(){
     const price = (statevalue !== null) ? statevalue.price : "" 
     const email = (statevalue !== null) ? statevalue.email : ""
     const [checkout, setCheckout] = React.useState(false);
-    console.log(statevalue)
+    //console.log(statevalue)
     function navbilling(){
         navigate("/billing",{state:{token:token,subscription:subscription,price:price,email:email}})
         

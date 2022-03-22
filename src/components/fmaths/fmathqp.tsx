@@ -17,9 +17,9 @@ class FmathQPStyles{
     this.title = maxRowBased ? {marginLeft: "10%",position:"relative",top:"30px",fontSize:"1.5em",fontWeight:"bold",color:"#3f51b5"} : {}
     this.textcolor = {color:"white"};
     this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto"};
-    this.inputbars = {width: "100%"}
-    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
-    this.largecontainer = {margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none"} 
+    this.inputbars = {width: "100%",marginTop:"5px"}
+    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'column' : 'column',alignItems: maxRowBased ? "left":"center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "2%" : "5%",marginLeft:maxRowBased ? "2%": "auto",width: "15%",gap: "10px"};
+    this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none",height: maxRowBased ? "45rem" : "auto"} 
   }
 }
 export default function FmathQP (){
@@ -66,13 +66,10 @@ export default function FmathQP (){
         {tokenbool ? 
         <div>
         <div style={Object.assign({},styles.containercenter,styles.title)}>
-          <h2 style={styles.textcolor}>FurtherMathsScraper</h2>
+          <h2 style={styles.textcolor}>FurtherMaths Question Papers</h2>
         </div>
         <div style={styles.largecontainer}>
-          <div style={styles.containercenter}>
-          <h2 style={styles.textcolor}>FMathsQP</h2>
-          </div>
-          <div style={styles.containercenter}>
+          <div style={Object.assign({},styles.containercenter,{marginTop:"10px"})}>
           <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
           <input style={styles.inputbars}
               onChange={(e) => setEmail(e.target.value)}
@@ -91,9 +88,6 @@ export default function FmathQP (){
           <Button variant= "contained" onClick={() => {setFurthermathsbook("d"); setFurthermathsbookid("Decision Maths")}}><p>Decision Maths</p></Button>
           <Button variant= "contained" onClick={() => {setFurthermathsbook("a"); setFurthermathsbookid("All")}}><p>All</p></Button>
           <p >{ furthermathsbook && <p>Further Maths Book Selected {furthermathsbookid}</p>}</p>
-          </div>
-          <div style={styles.containercenter}>
-            <h3 style={styles.textcolor}>FMaths Topic</h3>
           </div>
           <div style={styles.containercenter}>
           

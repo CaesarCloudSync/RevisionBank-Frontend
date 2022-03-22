@@ -10,7 +10,7 @@ export default function AboutSection() {
         </div>
         <div className="container" data-aos="fade-up" data-aos-duration="1000">
             <p className='about-text'>
-                STEMScraper was founded with the goal improve the efficiency of students study. Our tools provide Question Papers, Markschemes
+                RevisionBank was founded with the goal improve the efficiency of students study. Our tools provide Question Papers, Markschemes and
                 Solution Banks for a range of subjects and so many more to reduce the time needed for students searching for resources. Spanning many
                 exam boards in the A level discography. Sending an email with the papers.
 

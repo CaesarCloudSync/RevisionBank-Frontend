@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import './topsection.css'
 export default function TopSection(){
   const navigate = useNavigate();
+  //<button  className="btn documentation_btn">documentation</button>
     return(
       <section className="wrapper">
         <div className="container">
@@ -19,10 +20,10 @@ export default function TopSection(){
   
               <div className="btn_wrapper">
                 <button onClick={() => {navigate('/revisionbanktools')}} className="btn view_more_btn">
-                  view all tools <i className="ri-arrow-right-line"></i>
+                  RevisionBanks <i className="ri-arrow-right-line"></i>
                 </button>
   
-                <button  className="btn documentation_btn">documentation</button>
+                
               </div>
             </div>
             <div className="grid-item-2">

@@ -15,10 +15,10 @@ class FmathSBStyles{
     constructor(maxRowBased:any){
       this.title = maxRowBased ? {marginLeft: "10%",position:"relative",top:"30px",fontSize:"1.5em",fontWeight:"bold",color:"#3f51b5"} : {}
       this.textcolor = {color:"white"};
-      this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto"};
+      this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto",marginTop:"20px"};
       this.inputbars = {width: "100%"}
-      this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
-      this.largecontainer = {margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none"} 
+      this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'column' : 'column',alignItems: maxRowBased ? "left":"center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto",width:"20%"};
+      this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none",height: maxRowBased ? "51rem" : "auto"} 
     }
   }
 export default function FmathSB(){
@@ -67,12 +67,10 @@ export default function FmathSB(){
           {tokenbool ?
           <div>
             <div style={Object.assign({},styles.containercenter,styles.title)}>
-            <h2 style={styles.textcolor}>FurtherMathSBScraper</h2>
+            <h2 style={styles.textcolor}>FurtherMathSolution Bank</h2>
             </div>
             <div style={styles.largecontainer}>
-            <div style={styles.containercenter}>
-                <h2 style={styles.textcolor}>FMathsSB</h2>
-            </div>
+
             <div style={styles.containercenter}>
             <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
             <input
@@ -93,28 +91,27 @@ export default function FmathSB(){
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("5"); setFurthermathsbookid("Further-Mechanics")}}><p>Further-Mechanics</p></Button>
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("6"); setFurthermathsbookid("Decision-Maths")}}><p>Decision Maths</p></Button>
                 <p>{ furthermathsbook && <p>Further Maths Book Selected {furthermathsbookid}</p>}</p>
-                </div>
-                <div style={styles.containercenter}>
-                    <h3 style={styles.textcolor}>FMaths Topic</h3>
-                </div>
-                <div style={styles.containercenter}>
-                <input
+                <div style={Object.assign({},styles.containercenter,{width:"100%"})}>
+                <input style={{width:"100%"}}
                 onChange={(e) => setFurthermathsyear(e.target.value)}
                 value={furthermathsyear}
                 placeholder="Enter Further Maths Year/Book"
                 />
                 </div>
-                <div style={styles.containercenter}>
-                
-                <form onSubmit={(e) => sendApi(e)}>
-                <input
-                onChange={(e) => setFurthermathsexerciseNum(e.target.value)} 
-                value={furthermathsexerciesNum}
-                placeholder="Enter Further Maths Exercise Number"
-                />
-                </form>
+                <div style={Object.assign({},styles.containercenter,{width:"100%"})}>               
+                  <form onSubmit={(e) => sendApi(e)}>
+                    <input
+                    onChange={(e) => setFurthermathsexerciseNum(e.target.value)} 
+                    value={furthermathsexerciesNum}
+                    placeholder="Enter Further Maths Exercise Number"
+                    />
+                  </form>
+                </div>
+                <div style={Object.assign({},styles.containercenter,{width:"100%"})}>
                 <p>{isLoading && <p>Loading...</p>}</p>
                 </div>
+            </div>
+
         </div>
         </div>:
         <div>

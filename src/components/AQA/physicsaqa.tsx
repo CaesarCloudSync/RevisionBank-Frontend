@@ -23,11 +23,11 @@ class PhysicsAqaStyles{
   title:Object;
   constructor(maxRowBased:any){
     this.title = maxRowBased ? {marginLeft: "10%",position:"relative",top:"30px",fontSize:"1.5em",fontWeight:"bold",color:"#3f51b5"} : {}
-    this.textcolor = {color:"white"};
-    this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto"};
-    this.inputbars = {width: "100%"}
+    this.textcolor = {color:"black"};
+    this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto",marginBottom: maxRowBased ? "2%" :"auto"};
+    this.inputbars = {width: "100%",borderRadius:"5px",border:"1px solid grey"}
     this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
-    this.largecontainer = {margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none"} 
+    this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none",height:"40rem"} 
   }
 }
 export default function PhysicsAqa (){
@@ -79,10 +79,10 @@ export default function PhysicsAqa (){
         { tokenbool ?
         <div>
         <div style={Object.assign({},styles.containercenter,styles.title)}>
-          <h2 style={styles.textcolor}>PhysicsAqa Question Papers</h2>
+          <h2 style={{color:"#3f51b5"}}>PhysicsAqa Question Papers</h2>
         </div>
         <div style={styles.largecontainer}>
-          <div style={styles.containercenter}>
+          <div style={Object.assign({},styles.containercenter,{marginTop:"10px"})}>
           <h2 style={styles.textcolor}>PhysicsAqaQP</h2>
           </div>
           <div style={styles.containercenter}>
@@ -112,7 +112,7 @@ export default function PhysicsAqa (){
           </div>
 
           <div style={Object.assign({},styles.containercenter,{marginTop:maxRowBased ? "20px":"auto",marginBottom:maxRowBased ? "20px":"auto"})}>
-          <Button variant="contained" onClick={sendApi}>Scrape</Button>
+          <Button variant="contained" style={{fontSize:"13px"}} onClick={sendApi}>Submit</Button>
           </div>
           <div style={styles.containercenter}>
           <p>{isLoading && <p>Loading...</p>}</p>
