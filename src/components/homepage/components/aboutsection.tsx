@@ -5,7 +5,7 @@ export default function AboutSection() {
         <section className="wrapper">
         <div className="container" data-aos="fade-up" data-aos-duration="1000">
             <div className="grid-cols-title">
-            <h1>About STEM Scraper</h1>
+            <h1>About Revision Bank</h1>
             </div>
         </div>
         <div className="container" data-aos="fade-up" data-aos-duration="1000">

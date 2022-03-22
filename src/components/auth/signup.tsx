@@ -93,8 +93,10 @@ function Signup() {
     const [notSignedUp,setNotSignedup] = useState<Boolean>(false);
     let navigate:any = useNavigate();
     let location:any = useLocation();
-    let subscription = location.state;
-    //console.log(subscription)
+    let statevalue = location.state;
+    const subscription = (statevalue !== null) ? statevalue.subscription : "" 
+    const price = (statevalue !== null) ? statevalue.price : "" 
+
     const {register : registerSignup,handleSubmit : handleSubmitSignup,formState: { errors },} = useForm<IFormInput>({
         resolver: yupResolver(schema),
         });
@@ -109,16 +111,17 @@ function Signup() {
         const response:any = await axios.post(`https://palondomus-api.herokuapp.com/signupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
+        console.log(subscription)
         if (response.data !== undefined){
           if ("status" in response.data){
             setJwttoken(true)
             
-            if (subscription === null){
-              navigate("/pricing",{state:{"token":response.data.access_token}}) // Navigate to home page
+            if (subscription === ""){
+              navigate("/pricing",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
               
             }
-            else if (subscription !== null){
-              navigate("/payment",{state:{"token":response.data.access_token,"subscription":subscription.subscription}}) // Navigate to home page
+            else if (subscription !== ""){
+              navigate("/payment",{state:{"token":response.data.access_token,"subscription":subscription,"price":price,"email":json.email}}) // Navigate to home page
 
             }
 

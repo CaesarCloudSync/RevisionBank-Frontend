@@ -52,7 +52,8 @@ export default function OCRScience (){
         if (!chapter.includes("chapter")){
             chapter = `chapter ${chapter}`;
         }
-      const response = await axios.post("https://palondomus-api.herokuapp.com/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha.toUpperCase(),"year":bookyear,"platform": "web"}})
+        const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+      const response = await axios.post("https://palondomus-api.herokuapp.com/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha.toUpperCase(),"year":bookyear,"platform": "web"}},config)
 ;     if (email !== "" && ocrsubject !== "" && chapter !== "" && bookalpha !== "" && bookyear !== ""){
       if (!Object.keys(response.data).includes("error")){   
       setIsLoading(false);

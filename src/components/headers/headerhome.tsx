@@ -34,13 +34,13 @@ function HeaderComponent(){
                  <a href="/pricing" className="nav_menu_link"><p>Pricing</p></a>
                </li>
                <li className="nav_menu_item">
-                 <a href="/about" className="nav_menu_link"><p>about</p></a>
-               </li>
-               <li className="nav_menu_item">
                  <a href="/signin" className="nav_menu_link"><p>Signin</p></a>
                </li>
                <li className="nav_menu_item">
                  <a href="/signup" className="nav_menu_link"><p>Signup</p></a>
+               </li>
+               <li className="nav_menu_item">
+                 <a href="/contactus" className="nav_menu_link"><p>Contact Us</p></a>
                </li>
              </ul>
            </div>

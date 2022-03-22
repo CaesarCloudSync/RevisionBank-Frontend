@@ -381,7 +381,7 @@ Main Components
   }
 }
 
-.cd-select {
+.cd-select .cd-selectsignin {
   position: relative;
   z-index: 1;
   display: block;
@@ -393,7 +393,7 @@ Main Components
   color: transparent;
 }
 @media only screen and (min-width: 768px) {
-  .cd-select {
+  .cd-select,.cd-selectsignin {
     position: static;
     display: inline-block;
     height: auto;
@@ -406,11 +406,17 @@ Main Components
     text-transform: uppercase;
     letter-spacing: 2px;
   }
-  .no-touch .cd-select:hover {
+  .no-touch .cd-select:hover  {
     background-color: #112e3c;
+  }
+  .no-touch .cd-selectsignin:hover{
+    background-color: #e97d68;
   }
   .cd-popular .cd-select {
     background-color: #e97d68;
+  }
+  .cd-popular .cd-selectsignin {
+    background-color: #3aa0d1;
   }
   .no-touch .cd-popular .cd-select:hover {
     background-color: #ec907e;
@@ -418,10 +424,13 @@ Main Components
   .cd-secondary-theme .cd-popular .cd-select {
     background-color: #0c1f28;
   }
+  .cd-secondary-theme .cd-popular .cd-selectsignin {
+    background-color: #0c1f28;
+  }
   .no-touch .cd-secondary-theme .cd-popular .cd-select:hover {
     background-color: #112e3c;
   }
-  .cd-has-margins .cd-select {
+  .cd-has-margins .cd-select,.cd-selectsignin {
     display: block;
     padding: 1.7em 0;
     border-radius: 0 0 4px 4px;

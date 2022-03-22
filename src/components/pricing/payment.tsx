@@ -6,9 +6,8 @@ import { maxRowBasedquery } from "../mediahooks//mediamax";
 import { useLocation,useNavigate } from 'react-router';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import ReactPayPal from "./paypal";
 import { Button } from "react-bootstrap";
-import './paypal'
+
 export default function Payment(){
     const maxRowBased = useMediaQuery(maxRowBasedquery);
     //const styles = new STEMScraperOptionsStyles(maxRowBased);
@@ -19,9 +18,11 @@ export default function Payment(){
     const token = (statevalue !== null) ? statevalue.token : "" 
     const subscription = (statevalue !== null) ? statevalue.subscription : "" 
     const price = (statevalue !== null) ? statevalue.price : "" 
+    const email = (statevalue !== null) ? statevalue.email : ""
     const [checkout, setCheckout] = React.useState(false);
+    console.log(statevalue)
     function navbilling(){
-        navigate("/billing",{state:{token:token,subscription:subscription,price:price}})
+        navigate("/billing",{state:{token:token,subscription:subscription,price:price,email:email}})
         
 
     }
@@ -42,8 +43,8 @@ export default function Payment(){
             <HeaderComponent/>
             <div style={styles.container} >
                 <div style={{width:"100%"}}>
-                    <h1 style={Object.assign({},styles.textcolor,{fontSize:"30px"})}>STEMTutorBank {subscription.replace(/^\w/, (c:any) => c.toUpperCase())} Checkout</h1>
-                    <p style={Object.assign({},styles.textcolor,{fontSize:"20px"},{marginTop:"30px"})}>Please complete your subscription to start using STEMTutorBank {subscription.replace(/^\w/, (c:any) => c.toUpperCase())}</p>
+                    <h1 style={Object.assign({},styles.textcolor,{fontSize:"30px"})}>RevisionBank {subscription.replace(/^\w/, (c:any) => c.toUpperCase())} Checkout</h1>
+                    <p style={Object.assign({},styles.textcolor,{fontSize:"20px"},{marginTop:"30px"})}>Please complete your subscription to start using RevsionBank {subscription.replace(/^\w/, (c:any) => c.toUpperCase())}</p>
                     <Button style={{width:"250px",marginTop:"50px"}}onClick={() => {navbilling()}} className="checkout-button">Complete Subscription</Button>
                 </div>
                 

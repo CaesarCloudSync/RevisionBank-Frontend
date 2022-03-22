@@ -1,7 +1,5 @@
-import React, {useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -11,9 +9,8 @@ import { useState } from "react";
 import LoadingSpinner from "../../animations/Loadingspinner";
 import styled from 'styled-components'
 import HeaderComponent from '../headers/headerhome';
-import {useNavigate} from 'react-router-dom';
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import './signin.css'
+import {useNavigate,useLocation} from 'react-router-dom';
+//import './signin.css'
 // https://javascript.plainenglish.io/creating-a-sign-up-form-in-react-with-typescript-516b1a172913
 // TODO Next to collect specific data from database send requests to api with jwttoken in the axios header.
 interface IFormInput {
@@ -91,16 +88,51 @@ const schema = yup.object().shape({
 function Signin(){
     const [isLoadingLogin, setIsLoadingLogin] = useState<Boolean>(false); // State dealing with loading spinner
     const [noResultsLogin, setNoResultsLogin] = useState<Boolean>(false); // TODO for catch errors
-    const [Loggedin,setLoggedin] = useState<Boolean>(false); // handles successful login
     const [incorrectPassword,setIncorrectPassword] = useState<Boolean>(false); // handles incorrect login
-    const [jwttoken,setJWTToken] = useState<IFormInput>(); // Initialize jwttoken 
+    const [subdoesnotexist,setSetSubdoesnotexist]= useState<Boolean>(false); 
+    //const [jwttoken,setJWTToken] = useState<IFormInput>(); // Initialize jwttoken 
     const [loginerror,setLoginError] = useState<Boolean>(false); // handles incorrect login
     let navigate:any = useNavigate(); // use navigate hook to navigate to different pages
+    let current_date = new Date().toISOString();
+    //let location:any = useLocation();
+    //let statevalue = location.state;
+    //const subscription = (statevalue !== null) ? statevalue.subscription : "" 
+    //const price = (statevalue !== null) ? statevalue.price : "" 
+    
+    const checkSubscriptionEndDate = async (token:string,json:any) => {
+      const config = {headers: {Authorization: `Bearer ${token}`,}}
+      const responseget:any = await axios.get(`https://palondomus-api.herokuapp.com/getsubscription`,config); // Send login post request.
+      let end_date = responseget.data.end_date_subscription 
+      //console.log(end_date)
+      if (end_date < current_date) {
+        console.log("Subscription has expired")
+        navigate("/pricing",{state:{"token":token,"pre_subscription_expiration":"expired","email":json.email}})
+        const config = {headers: {Authorization: `Bearer ${token}`,}}
+        const responsedel:any = await axios.delete(`https://palondomus-api.herokuapp.com/deletesubscription`,config);
+        // TODO Test this by looking on whether it works if the dates are in the future.
+      }
+      else if (end_date === current_date) {
+        console.log("Subscription will expire today")
+        navigate("/stemscraper",{state:{"token":token,"email":json.email}})
+      }
+      else if (end_date > current_date) {
+        console.log("Subscription will expire on " + end_date)
+        navigate("/stemscraper",{state:{"token":token,"email":json.email}})
+      }
+      else if (responseget.data.end_date_subscription === undefined) {
+       //console.log(token)
+        navigate("/pricing",{state:{"token":token,"pre_subscription_expiration":"expired","email":json.email}})
+        //console.log("Subscription doesn't exist")
+        setSetSubdoesnotexist(true)
+        //
+
+      }
+    }
+  
     const { register: registerLogin,handleSubmit: handleSubmitLogin ,formState: { errors: loginerrors },} = useForm<IFormInput>({
         resolver: yupResolver(schema),
       }); // stores data from form into register data and handler,using "registerLogin" and "handleSubmitLogin" as aliases
     const onSubmitLogin = async (data: IFormInput) => { 
-        setLoggedin(false) // Resets Loggedin state
         setIncorrectPassword(false) // Resets Incorrect password state
         setNoResultsLogin(false); // Resets error handling state
         setIsLoadingLogin(true); // Starts loading spinner
@@ -108,23 +140,21 @@ function Signin(){
         var json = JSON.parse(JSON.stringify(data)); // Converts data to json
         
         const response:any = await axios.post(`https://palondomus-api.herokuapp.com/loginapi`, json); // Send login post request.
-       
         if (response.data !== undefined){
           if ("access_token" in response.data){
-            setLoggedin(true) 
-            
-            navigate("/stemscraper",{state:{"token":response.data.access_token}}) // Navigate to home page
+            checkSubscriptionEndDate(response.data.access_token,json)
+             // Navigate to home page
 
 
           }
         }
-       else if ("message" in response.data){
+        if ("message" in response.data){
           setIncorrectPassword(true)
         }
-
-        
-        //setJWTToken(response.data); // response is a jwttoken which is basically a footprint for the user to access certain data
-        setIsLoadingLogin(false); // Stops spinner
+        setIsLoadingLogin(false); 
+      
+  //setJWTToken(response.data); // response is a jwttoken which is basically a footprint for the user to access certain data
+       // Stops spinner
         }
         catch(error){
           setIncorrectPassword(true); // Error handling
@@ -175,8 +205,9 @@ function Signin(){
           <SigninRow>
           {isLoadingLogin ? <LoadingSpinner /> : null}
           {noResultsLogin ? <p>No Results Found</p> : null}
-          {Loggedin && <p>Logged in</p>}
+          
           {incorrectPassword && <p>The username or password is incorrect.</p>}
+          {subdoesnotexist && <p>Subscription does not exist.</p>}
           <SigninButton 
             type="submit"
             fullWidth

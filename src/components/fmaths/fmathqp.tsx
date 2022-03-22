@@ -43,7 +43,8 @@ export default function FmathQP (){
       //console.log("name",name);
       e.preventDefault();
       setIsLoading(true);
-      const response = await axios.post("https://palondomus-api.herokuapp.com/fmathsqp",{"furthermaths":{"email":email,"furthermathsbook": furthermathsbook,"furthermathstopic":furthermathstopic,"platform": "web"}})
+      const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+      const response = await axios.post("https://palondomus-api.herokuapp.com/fmathsqp",{"furthermaths":{"email":email,"furthermathsbook": furthermathsbook,"furthermathstopic":furthermathstopic,"platform": "web"}},config)
       //console.log("pdfresponse",response.data.furthermathsresult);      
       //setPdfResponse(response.data.furthermathsresult)
       setIsLoading(false);

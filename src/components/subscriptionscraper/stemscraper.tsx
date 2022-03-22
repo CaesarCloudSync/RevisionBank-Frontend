@@ -1,6 +1,3 @@
-import React from 'react';
-import styled from 'styled-components'
-import HeaderComponent from "../headers/headerhome";
 import Button from '@mui/material/Button';
 import useMediaQuery from "../mediahooks/useMedia";
 import { maxRowBasedquery } from "../mediahooks//mediamax";
@@ -34,6 +31,7 @@ class STEMScraperOptionsStyles{
 function STEMScraperOptions() {
   const maxRowBased = useMediaQuery(maxRowBasedquery);
   const styles = new STEMScraperOptionsStyles(maxRowBased);
+  const current_date = new Date()
   //let navigate:any = useNavigate();
   const location:any = useLocation() //.state
   const statevalue:any = location.state
@@ -45,6 +43,10 @@ function STEMScraperOptions() {
   const sendTokenBool = (token:string,route:string) => {
     navigate(route,{state:{token:token}})
   }
+  //console.log(token)
+  // TODO - When this page is opened collect data from database and and check if end_date is greater than current date. 
+
+
 
 
   return(

@@ -48,16 +48,15 @@ export default function PhysicsAqa (){
     const [navigated,setNavigated] = useState(false);
     const [datanotset,setDataNotSet] = useState(false);
     const [pdfresposne,setPdfResponse] = useState("");
-    
     const sendApi = async (e:any) => {
       //&& physicsaqatopicms
       if (physicsaqachapter && physicsaqatopic  !== {} && email !== '') {
       setDataNotSet(false);
       e.preventDefault();
       setIsLoading(true);
-  
-      const response = await axios.post("https://palondomus-api.herokuapp.com/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}})
- 
+      const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+      const response:any = await axios.post("https://palondomus-api.herokuapp.com/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
+      console.log(response.data)
       setIsLoading(false);
       navigate("/physicsaqa/pdf",{state:{"physicsaqapdf": response.data.physicsaqa,"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label}});
 

@@ -44,7 +44,8 @@ export default function FmathSB(){
         e.preventDefault();
         //console.log("name",name);
         setIsLoading(true);
-        const response:any = await axios.post("https://palondomus-api.herokuapp.com/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}})
+        const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+        const response:any = await axios.post("https://palondomus-api.herokuapp.com/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
         //console.log("pdfresponse",response.data.furthermathsresult);
         setPdfResponse(response.data.furthermathsresult)
         setIsLoading(false);
