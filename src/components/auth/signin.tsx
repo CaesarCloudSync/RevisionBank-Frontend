@@ -74,8 +74,7 @@ height: 40px;
 font-size: 1.3rem;
 color: white;
 font-weight: 700;
-background: rgb(34,193,195);
-background: linear-gradient(90deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%);
+background-color: black;
 border: 0px;
 cursor: pointer;
 transition: opacity 0.25s ease-out;
@@ -90,6 +89,7 @@ function Signin(){
     const [noResultsLogin, setNoResultsLogin] = useState<Boolean>(false); // TODO for catch errors
     const [incorrectPassword,setIncorrectPassword] = useState<Boolean>(false); // handles incorrect login
     const [subdoesnotexist,setSetSubdoesnotexist]= useState<Boolean>(false); 
+    const [errorsignin,setErrorSignin] = useState<Boolean>(false);
     //const [jwttoken,setJWTToken] = useState<IFormInput>(); // Initialize jwttoken 
     const [loginerror,setLoginError] = useState<Boolean>(false); // handles incorrect login
     let navigate:any = useNavigate(); // use navigate hook to navigate to different pages
@@ -157,7 +157,8 @@ function Signin(){
        // Stops spinner
         }
         catch(error){
-          setIncorrectPassword(true); // Error handling
+          setErrorSignin(true) // Error handling
+          setIsLoadingLogin(false); 
         }
 
         
@@ -205,7 +206,7 @@ function Signin(){
           <SigninRow>
           {isLoadingLogin ? <LoadingSpinner /> : null}
           {noResultsLogin ? <p>No Results Found</p> : null}
-          
+          {errorsignin && <p>Check your network connection.</p>}
           {incorrectPassword && <p>The username or password is incorrect.</p>}
           {subdoesnotexist && <p>Subscription does not exist.</p>}
           <SigninButton 

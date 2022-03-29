@@ -8,7 +8,9 @@ import LanguageIcon from '@mui/icons-material/Language';
 import HeaderComponent from "../headers/headerhome";
 import LoadingSpinner from "../../animations/Loadingspinner";
 import { send } from 'emailjs-com';
-import './contactus.css';
+import { maxRowBasedquery } from "../mediahooks/mediamax";
+import useMediaQuery from "../mediahooks/useMedia";
+//import './contactus.css';
 //https://dev.to/daliboru/how-to-send-emails-from-a-form-in-react-emailjs-27d1
 function BootCard(props:any){
 	return(
@@ -30,6 +32,7 @@ export default function ContactUs(){
 	const [isLoadingLogin, setIsLoadingLogin] = useState<Boolean>(false); // State dealing with loading spinner
 	const [formnotcompleted,setFormNotCompleted] = useState<Boolean>(false);
 	const [formcompleted,setFormCompleted] = useState<Boolean>(false);
+	const maxRowBased = useMediaQuery(maxRowBasedquery)
 	const [toSend, setToSend] = useState({
 		Name: '',
 		message: '',
@@ -44,7 +47,7 @@ export default function ContactUs(){
 		constructor(){
 			this.textcolor = {color:"white"}
 			this.contactustitle = {display:"flex",justifyContent:"center",position:"relative",top:"40px",marginTop:"20px"}
-			this.contactuscont = {display:"flex",justifyContent:"center",position:"relative",top:"70px", gap:"350px"}
+			this.contactuscont = {display:"flex",justifyContent:"center",position:"relative",top:"70px", gap: maxRowBased ? "350px":"20px",flexDirection: maxRowBased ? "row"  : "column"}
 			this.contactsub = {color:"white",marginTop:"5px"}
 			this.contactsubcont = {color:"grey",marginRight:"10px",fontSize:"30px"}
 		}
@@ -96,92 +99,122 @@ export default function ContactUs(){
 	
 	/*								
 	<div style={{display:"flex"}}>
-	<PhoneIcon style={styles.contactsubcont}></PhoneIcon>
-	<h3 style={styles.contactsub}>Phone</h3>
+	<PhoneIcon style={props.styles.contactsubcont}></PhoneIcon>
+	<h3 style={props.styles.contactsub}>Phone</h3>
 	</div> 
 	<div>
 	<p style={{position:"relative",left:"40px",color:"white"}}>+44 'Business Number'</p>
 	</div>*/
+	function ContactDetails(props:any){
+		return(
+			<div className="contact row">
+			<div style={{position:"relative",top:"20px", left:maxRowBased ? "none" : "20px"}}>
+				<div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
+					<h2 style={{color:"white"}}>Contact Us</h2>
+					<div style={{display:"flex"}}>
+						<EmailIcon style={props.styles.contactsubcont}></EmailIcon>
+						<h3 style={props.styles.contactsub}>Email Address:</h3>
+						
+					</div>
+					<div>
+						<p style={{position:"relative",left:"40px",color:"white"}}>amari.lawal@gmail.com</p>
+					</div>
+					{/*Phone Icon Here*/}
+
+					<div style={{display:"flex"}}>
+						<GitHubIcon style={props.styles.contactsubcont}/>
+						<h3 style={props.styles.contactsub}>Github:</h3>
+					</div>
+					<div>
+						<a href="https://github.com/Amari-Lawal/" target="_blank" rel="noopener noreferrer" style={{position:"relative",left:"40px",color:"white"}}>https://github.com/Amari-Lawal</a>
+					</div>
+					<div style={{display:"flex"}}>
+						<LanguageIcon style={props.styles.contactsubcont}/>
+						<h3 style={props.styles.contactsub}>Website</h3>
+					</div>
+					<div>
+						<a href="https://amari.dev" target="_blank" rel="noopener noreferrer" style={{position:"relative",left:"40px",color:"white"}}>https://amari.dev</a>
+					</div>
+				</div>
+			</div>
+			
+		
+		
+		</div>
+		)
+	}
+	function EmailPrompt(props:any){
+		return(
+			<div >
+				<div className="contact row">
+					<div style={{height:"60vh",width:"400px",backgroundColor:"white",borderRadius:"10px",position: "relative" ,left: maxRowBased ? "none" :"20px"}}>
+						<div style={{display:"flex",position:"relative",top:"40px",left:"15%"}}>
+							<div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
+								<h1 style={{color:"black",fontSize:"20px"}}>Get In Touch</h1>
+								<input
+									type='text'
+									name='Name'
+									placeholder='Name'
+									value={toSend.Name}
+									onChange={handleChange}
+								/>
+								<input
+									type='text'
+									name='message'
+									placeholder='Your message'
+									value={toSend.message}
+									onChange={handleChange}
+								/>
+								<input
+									type='text'
+									name='reply_to'
+									placeholder='Your email'
+									value={toSend.reply_to}
+									onChange={handleChange}
+								/>
+								
+								<Button variant="contained" onClick={onSubmit}>Submit</Button>
+								{isLoadingLogin ? <LoadingSpinner /> : null}
+								{formnotcompleted && <p>Please Complete Form!</p>}
+								{formcompleted && <p>Email Sent!</p>}
+
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		)
+	}
 	return(
 		<div>
+			{ maxRowBased ? 
+			<div>
 			<HeaderComponent/>
 			<div style={styles.contactustitle} className="ContactusTitlecont">
 				<h1 style={{color:"white"}}>Contact Us</h1>
 			</div>
 			<div style={styles.contactuscont} className="ContactusTitlecont">
-					<div className="contact row">
-						<div style={{position:"relative",top:"20px"}}>
-							<div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
-								<h2 style={{color:"white"}}>Contact Us</h2>
-								<div style={{display:"flex"}}>
-									<EmailIcon style={styles.contactsubcont}></EmailIcon>
-									<h3 style={styles.contactsub}>Email Address:</h3>
-									
-								</div>
-								<div>
-									<p style={{position:"relative",left:"40px",color:"white"}}>amari.lawal@gmail.com</p>
-								</div>
-								{/*Phone Icon Here*/}
-
-								<div style={{display:"flex"}}>
-									<GitHubIcon style={styles.contactsubcont}/>
-									<h3 style={styles.contactsub}>Github:</h3>
-								</div>
-								<div>
-									<a href="https://github.com/Amari-Lawal/" target="_blank" rel="noopener noreferrer" style={{position:"relative",left:"40px",color:"white"}}>https://github.com/Amari-Lawal</a>
-								</div>
-								<div style={{display:"flex"}}>
-									<LanguageIcon style={styles.contactsubcont}/>
-									<h3 style={styles.contactsub}>Website</h3>
-								</div>
-								<div>
-									<a href="https://amari.dev" target="_blank" rel="noopener noreferrer" style={{position:"relative",left:"40px",color:"white"}}>https://amari.dev</a>
-								</div>
-							</div>
-						</div>
-						
+					<ContactDetails styles= {styles}/>
+					<EmailPrompt/>
 					
-					
-					</div>
-					<div >
-						<div className="contact row">
-							<div style={{height:"60vh",width:"400px",backgroundColor:"white",borderRadius:"10px"}}>
-								<div style={{display:"flex",position:"relative",top:"40px",left:"15%"}}>
-									<div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
-										<h1 style={{color:"black",fontSize:"20px"}}>Get In Touch</h1>										<input
-											type='text'
-											name='Name'
-											placeholder='Name'
-											value={toSend.Name}
-											onChange={handleChange}
-										/>
-										<input
-											type='text'
-											name='message'
-											placeholder='Your message'
-											value={toSend.message}
-											onChange={handleChange}
-										/>
-										<input
-											type='text'
-											name='reply_to'
-											placeholder='Your email'
-											value={toSend.reply_to}
-											onChange={handleChange}
-										/>
-										
-										<Button variant="contained" onClick={onSubmit}>Submit</Button>
-										{isLoadingLogin ? <LoadingSpinner /> : null}
-										{formnotcompleted && <p>Please Complete Form!</p>}
-										{formcompleted && <p>Email Sent!</p>}
-
-									</div>
-								</div>
-							</div>
-						</div>
-						
-					</div>
 			</div>
+			</div>
+			: 
+			<div>
+				<HeaderComponent/>
+				<div style={styles.contactustitle} className="ContactusTitlecont">
+					<h1 style={{color:"white"}}>Contact Us</h1>
+				</div>
+				<div style={styles.contactuscont} className="ContactusTitlecont">
+						<EmailPrompt/>
+						<ContactDetails styles= {styles}/>
+						
+						
+				</div>
+			</div>
+			}
+
 
 		</div>
     )

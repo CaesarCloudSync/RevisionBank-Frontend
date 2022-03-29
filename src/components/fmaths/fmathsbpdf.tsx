@@ -21,12 +21,14 @@ function FmathSBPDF(){
     let fmathsbpdfresponse:any = location.state
     let fmathsbpdf = fmathsbpdfresponse.furthermathsbpdf.furthermathsmessage.split("<br>")
     let email = fmathsbpdfresponse.email
-    console.log(fmathsbpdf);
+    let emailcount = (fmathsbpdfresponse.furthermathsbpdf.emailcount > 40) ? "Unlimited" : fmathsbpdfresponse.furthermathsbpdf.emailcount.furthermathspdf.emailcount
+   
     return(
         <div>
         <h2>FmathSBPDF</h2>
         <p>Further Maths Papers </p>
         <p>{email}</p>
+        <p>Email Count: {emailcount}</p>
         <ul>
         {fmathsbpdf.map((pdf:any,index:any) => showData(pdf,index))}
         </ul>

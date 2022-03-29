@@ -1,4 +1,5 @@
 import team from './team.svg'
+import Infographic from './AMARI_INFO.png'
 import { useNavigate } from 'react-router-dom'
 import './topsection.css'
 export default function TopSection(){
@@ -22,13 +23,14 @@ export default function TopSection(){
                 <button onClick={() => {navigate('/revisionbanktools')}} className="btn view_more_btn">
                   RevisionBanks <i className="ri-arrow-right-line"></i>
                 </button>
-  
-                
+                <button onClick={() => {navigate('/signup',{state:{"subscription":"freetrial"}})}} className="btn view_more_btn">
+                  Try Free trial<i className="ri-arrow-right-line"></i>
+                </button>                
               </div>
             </div>
             <div className="grid-item-2">
               <div className="team_img_wrapper">
-                <img src={team} alt="team-img" />
+                <img src={Infographic} alt="team-img" />
               </div>
             </div>
           </div>

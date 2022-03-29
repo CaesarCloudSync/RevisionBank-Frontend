@@ -9,12 +9,15 @@ import STEMRoadMaplogo from '../static/STEMRoadmap.svg';
 import logo from '../static/RoadmapLogo.svg'
 import './headerhome.css'
 import STEMTutorBankLogo from '../static/STEMTutorBankLogo.svg';
-
+import { maxRowBasedquery } from '../mediahooks/mediamax';
+import useMediaQuery from '../mediahooks/useMedia';
+//https://alvarotrigo.com/blog/hamburger-menu-css/
 //https://javascript.plainenglish.io/how-to-create-a-responsive-navbar-with-react-bb9ce4cebddd
 // https://codepen.io/rares-lungescu/pen/KLbMvo
 
 function HeaderComponent(){       
   //<h2>STEMTutorBank.</h2>
+  const maxRowBased =useMediaQuery(maxRowBasedquery)
     return(
     <div>
         <header className="container header">
@@ -23,6 +26,24 @@ function HeaderComponent(){
            <div className="logo">
              <Link to="/"><img src={STEMTutorBankLogo}></img></Link>
            </div>
+           {maxRowBased ? 
+           <div></div>
+           
+           :
+           <div className="hamburger-menu">
+              <input id="menu__toggle" type="checkbox" />
+              <label className="menu__btn" htmlFor="menu__toggle">
+                <span></span>
+              </label>
+
+              <ul className="menu__box">
+                <li><a className="menu__item" href="/signup">Signup</a></li>
+                <li><a className="menu__item" href="/signin">Signin</a></li>
+                <li><a className="menu__item" href="/pricing">Pricing</a></li>
+                <li><a className="menu__item" href="/contactus">Contact Us</a></li>
+              </ul>
+            </div>
+              }
    
            <div className="nav_menu" id="nav_menu">
              <button className="close_btn" id="close_btn">

@@ -222,22 +222,22 @@ tbody tr:hover {
     top: 0;
   }
   table tbody tr td:nth-child(1):before {
-    content: "Date";
+    content: "RevisionBanks";
   }
   table tbody tr td:nth-child(2):before {
-    content: "Order ID";
+    content: "Exam Boards";
   }
   table tbody tr td:nth-child(3):before {
-    content: "Name";
+    content: "Chapters/Books";
   }
   table tbody tr td:nth-child(4):before {
-    content: "Price";
+    content: "AS/A Level";
   }
   table tbody tr td:nth-child(5):before {
-    content: "Quantity";
+    content: "Number of papers";
   }
   table tbody tr td:nth-child(6):before {
-    content: "Total";
+    content: "Sent to email";
   }
 
   .column4,

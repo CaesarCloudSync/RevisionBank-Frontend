@@ -342,6 +342,7 @@ Main Components
 
 .cd-pricing-footer {
   position: absolute;
+  overflow: auto;
   z-index: 1;
   top: 0;
   left: 0;
@@ -363,7 +364,7 @@ Main Components
   transform: translateY(-50%);
   height: 20px;
   width: 20px;
-  background: url(../img/cd-icon-small-arrow.svg);
+  /*background: url(../img/cd-icon-small-arrow.svg);*/
 }
 @media only screen and (min-width: 768px) {
   .cd-pricing-footer {

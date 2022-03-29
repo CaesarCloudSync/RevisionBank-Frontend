@@ -5,6 +5,11 @@ export default function RevissNameionBankToolssName(){
     return(
         <div className="limiter">
         <HeaderComponent></HeaderComponent>
+		<div style={{position:"relative",top:"30px"}}>
+		<div style={{display:"flex",justifyContent:"center"}}>
+			<h1 style={{color:"white"}}>RevisionBanks</h1>
+		</div>
+		</div>
 		<div className='containerposition'>
 			<div className="container-table100">
 				<div className="wrap-table100">

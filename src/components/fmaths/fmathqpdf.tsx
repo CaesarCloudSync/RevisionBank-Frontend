@@ -21,14 +21,14 @@ function FmathQPDF(){
     let fmathpdfresponse:any = location.state
     let fmathpdf = fmathpdfresponse.furthermathspdf.furthermathsmessage.split("<br>")
     let email = fmathpdfresponse.email
-    //console.log(fmathpdfresponse);
-
-    console.log(fmathpdf);
+    let emailcount = (fmathpdfresponse.furthermathspdf.emailcount > 40) ? "Unlimited" : fmathpdfresponse.furthermathspdf.emailcount
+    //console.log(fmathpdfresponse)
     return(
         <div>
         <h1 style={{color:"white"}}>FmathQPDF Page</h1>
         <p style={{color:"white"}}>Further Maths Papers </p>
         <p style={{color:"white"}}>{email}</p>
+        <p style={{color:"white"}}>Email Count: {emailcount}</p>
         <ul>
         {fmathpdf.map((pdf:any,index:any) => showData(pdf,index))}
         </ul>

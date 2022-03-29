@@ -11,7 +11,8 @@ function OCRSciencePDF(){
     let email = scienceocr.email
     let query = `${scienceocr.subject.replace(/^\w/, (c:string) => c.toUpperCase())} ${scienceocr.physicsocralph} ${scienceocr.year}`
     let chapter = scienceocr.chapter.replace(/^\w/, (c:string) => c.toUpperCase())
-    //console.log(query);
+    let emailcount = (ocrsciencepdf.emailcount > 40) ? "Unlimited" : ocrsciencepdf.emailcount
+    //console.log(emailcount);
     class PhysicsAQAPDFStyles{
         containercenter:Object;
         containercentercol:Object;
@@ -42,6 +43,9 @@ function OCRSciencePDF(){
           </div>
           <div style={styles.containercenter}>
             <p style={styles.textcolor}>Email sent to: {email}</p>
+          </div>
+          <div style={styles.containercenter}>
+            <p style={styles.textcolor}>Email Count: {emailcount}</p>
           </div>
           <div style={styles.containercenter}>
             <h2 style={styles.textcolor}><u> PhysicsAQA Question Paper</u></h2>

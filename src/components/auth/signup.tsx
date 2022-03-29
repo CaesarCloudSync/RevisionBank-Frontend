@@ -78,12 +78,13 @@ height: 40px;
 font-size: 1.3rem;
 color: white;
 font-weight: 700;
-background: rgb(34,193,195);
-background: linear-gradient(90deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%);
 border: 0px;
 cursor: pointer;
 transition: opacity 0.25s ease-out;
 `
+/*
+background: rgb(34,193,195);
+background: linear-gradient(90deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%); */
 function Signup() {
     const [signupResponse,setsignupResponse] = useState<IFormInput>();
     const [isLoadingSignup, setIsLoadingSignup] = useState<Boolean>(false);
@@ -96,6 +97,7 @@ function Signup() {
     let statevalue = location.state;
     const subscription = (statevalue !== null) ? statevalue.subscription : "" 
     const price = (statevalue !== null) ? statevalue.price : "" 
+    //const freetrial = (statevalue !== null) ? statevalue.subscription : ""
 
     const {register : registerSignup,handleSubmit : handleSubmitSignup,formState: { errors },} = useForm<IFormInput>({
         resolver: yupResolver(schema),
@@ -111,7 +113,7 @@ function Signup() {
         const response:any = await axios.post(`https://palondomus-api.herokuapp.com/signupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
-        console.log(subscription)
+        //console.log(subscription)
         if (response.data !== undefined){
           if ("status" in response.data){
             setJwttoken(true)
@@ -119,6 +121,19 @@ function Signup() {
             if (subscription === ""){
               navigate("/pricing",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
               
+            }
+            else if (subscription === "freetrial"){
+              // Free trial
+              let start_date_freetrial:any = new Date()
+              const end_date_freetrial = new Date(start_date_freetrial.getFullYear(), start_date_freetrial.getMonth(),start_date_freetrial.getDate() + 7).toISOString()
+              var json:any = {"subscription":subscription,"start_date_subscription":start_date_freetrial,"end_date_subscription":end_date_freetrial}
+              const config = {headers: {Authorization: `Bearer ${response.data.access_token}`,}}
+
+              const responseft:any = await axios.post(`https://palondomus-api.herokuapp.com/storefreetrial`,json,config)
+              // navigate to 
+              navigate("/completefreetrial", { state: { token: response.data.access_token, subscription: subscription,email:json.email} });
+              // TODO  send to freetrial api
+              // then navigate to stemcraper
             }
             else if (subscription !== ""){
               navigate("/payment",{state:{"token":response.data.access_token,"subscription":subscription,"price":price,"email":json.email}}) // Navigate to home page
@@ -138,7 +153,9 @@ function Signup() {
       if (signupResponse !== undefined){
       if ("status" in signupResponse){
         setJwttoken(true)
-        navigate("/stemscraper",{state: {token: jwttoken}})
+        if (subscription !== "freetrial"){
+          navigate("/stemscraper",{state: {token: jwttoken}})
+        }
       }
     else if ("message" in signupResponse){
       setNotSignedup(true)

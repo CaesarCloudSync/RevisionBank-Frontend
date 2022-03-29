@@ -30,8 +30,10 @@ function PhysicsAQAPDF(){
     let chapter = physicsqaqapdfresponse.chapter
     let topic = physicsqaqapdfresponse.topic
     let topicms = `${topic} MS`   
+    let emailcount = (physicsqaqapdfresponse.physicsaqapdf.emailcount.furthermathspdf.emailcount > 40) ? "Unlimited" : physicsqaqapdfresponse.physicsaqapdf.emailcount.furthermathspdf.emailcount
+    
     //const textcolor = {color:"white"}
-    console.log(physicsqaqapdfresponse)
+    //console.log(physicsqaqapdfresponse)
     return(
         <div>
         <div style={Object.assign({},styles.containercenter,styles.title)}>
@@ -43,6 +45,9 @@ function PhysicsAQAPDF(){
           </div>
           <div style={styles.containercenter}>
             <p style={styles.textcolor}>Email sent to: {email}</p>
+          </div>
+          <div style={styles.containercenter}>
+            <p style={styles.textcolor}>Email Count: {emailcount}</p>
           </div>
           <div style={styles.containercenter}>
             <p style={styles.textcolor}>{chapter}</p>

@@ -17,8 +17,8 @@ class FmathSBStyles{
       this.textcolor = {color:"white"};
       this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto",marginTop:"20px"};
       this.inputbars = {width: "100%"}
-      this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'column' : 'column',alignItems: maxRowBased ? "left":"center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto",width:"20%"};
-      this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none",height: maxRowBased ? "51rem" : "auto"} 
+      this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'column' : 'column',alignItems: maxRowBased ? "left":"center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto",width:maxRowBased ?  "20%" : "auto",gap:"10px"};
+      this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "30px",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "10px",height: maxRowBased ? "60rem" : "auto"} 
     }
   }
 export default function FmathSB(){
@@ -40,22 +40,39 @@ export default function FmathSB(){
     const [pdfresponse,setPdfResponse] = useState('');
     const [isLoading,setIsLoading] = useState(false);
     const [navigated,setNavigated] = useState(false);
+    const [paperNotExist,setPaperNotExist] = useState(false);
     const sendApi = async (e:any) => {
         e.preventDefault();
         //console.log("name",name);
         setIsLoading(true);
         const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+        try{
         const response:any = await axios.post("https://palondomus-api.herokuapp.com/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
-        //console.log("pdfresponse",response.data.furthermathsresult);
-        setPdfResponse(response.data.furthermathsresult)
-        setIsLoading(false);
-        navigate("/fmathsb/pdf",{state:{"furthermathsbpdf": response.data.furthermathsresult,"email":email}});
-        //navigation.navigate('furthermathsb', {"furthermathsbpdf": response.data.furthermathsresult,"email":email});
-        setNavigated(true);
+        
+        if ('error' in response.data){
+            //console.log("error",response.data.error)
+            setIsLoading(false);
+            setPaperNotExist(true)
+        }
+        else if (!('error' in response.data)){
+          setPdfResponse(response.data.furthermathsresult)
+          setIsLoading(false);
+          navigate("/fmathsb/pdf",{state:{"furthermathsbpdf": response.data.furthermathsresult,"email":email}});
+          setNavigated(true);
+
+        }
+        
+        }catch(err){
+            console.log(err);
+            setIsLoading(false);
+            //setNavigated(true);
+        }
       }
     //console.log(pdfresponse)
+    //onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}
     useEffect(() => {
         setEmail("");
+        setEmailIsSet(false);
         setFurthermathsbook("")
         setFurthermathsbookid("");
         setNavigated(false)
@@ -72,7 +89,7 @@ export default function FmathSB(){
             <div style={styles.largecontainer}>
 
             <div style={styles.containercenter}>
-            <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
+            <form >
             <input
                 onChange={(e) => setEmail(e.target.value)} 
                 value={email}
@@ -92,11 +109,11 @@ export default function FmathSB(){
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("6"); setFurthermathsbookid("Decision-Maths")}}><p>Decision Maths</p></Button>
                 <p>{ furthermathsbook && <p>Further Maths Book Selected {furthermathsbookid}</p>}</p>
                 <div style={Object.assign({},styles.containercenter,{width:"100%"})}>
-                <input style={{width:"100%"}}
-                onChange={(e) => setFurthermathsyear(e.target.value)}
-                value={furthermathsyear}
-                placeholder="Enter Further Maths Year/Book"
-                />
+                  <input style={{marginLeft:maxRowBased ? "auto" :"70px",width:"100%"}}
+                  onChange={(e) => setFurthermathsyear(e.target.value)}
+                  value={furthermathsyear}
+                  placeholder="Enter Further Maths Year/Book"
+                  />
                 </div>
                 <div style={Object.assign({},styles.containercenter,{width:"100%"})}>               
                   <form onSubmit={(e) => sendApi(e)}>
@@ -109,6 +126,7 @@ export default function FmathSB(){
                 </div>
                 <div style={Object.assign({},styles.containercenter,{width:"100%"})}>
                 <p>{isLoading && <p>Loading...</p>}</p>
+                <p>{paperNotExist && <p>Paper Does not exist</p>}</p>
                 </div>
             </div>
 

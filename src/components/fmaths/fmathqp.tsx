@@ -18,8 +18,8 @@ class FmathQPStyles{
     this.textcolor = {color:"white"};
     this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto"};
     this.inputbars = {width: "100%",marginTop:"5px"}
-    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'column' : 'column',alignItems: maxRowBased ? "left":"center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "2%" : "5%",marginLeft:maxRowBased ? "2%": "auto",width: "15%",gap: "10px"};
-    this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none",height: maxRowBased ? "45rem" : "auto"} 
+    this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'column' : 'column',alignItems: maxRowBased ? "left":"center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "2%" : "5%",marginLeft:maxRowBased ? "2%": "auto",width:maxRowBased ?  "15%" : "auto",gap: "10px"};
+    this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "30px",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "10px",height: maxRowBased ? "45rem" : "auto"} 
   }
 }
 export default function FmathQP (){
@@ -38,6 +38,7 @@ export default function FmathQP (){
     const [furthermathsbookid,setFurthermathsbookid] = useState('');
     const [isLoading,setIsLoading] = useState(false);
     const [navigated,setNavigated] = useState(false);
+    const [errorBool,setErrorBool] = useState(false);
     //onSubmitEditing ={() => sendApi(name)}
     const sendApi = async (e:any) => {
       //console.log("name",name);
@@ -45,12 +46,19 @@ export default function FmathQP (){
       setIsLoading(true);
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
       const response = await axios.post("https://palondomus-api.herokuapp.com/fmathsqp",{"furthermaths":{"email":email,"furthermathsbook": furthermathsbook,"furthermathstopic":furthermathstopic,"platform": "web"}},config)
-      //console.log("pdfresponse",response.data.furthermathsresult);      
-      //setPdfResponse(response.data.furthermathsresult)
-      setIsLoading(false);
-      navigate("/fmathqp/pdf",{state:{"furthermathspdf": response.data.furthermathsresult,"email":email}});
-      //navigation.navigate('furthermathsqp', {"furthermathspdf": response.data.furthermathsresult,"email":email});
-      setNavigated(true);
+      if ('error' in response.data){
+        setIsLoading(false);
+        setErrorBool(true);
+
+        //console.log("error",response.data.error);
+      }
+      else if (!('error' in response.data)){
+        //console.log("response",response.data);
+        setIsLoading(false);
+        navigate("/fmathqp/pdf",{state:{"furthermathspdf": response.data.furthermathsresult,"email":email}});
+        //navigation.navigate('furthermathsqp', {"furthermathspdf": response.data.furthermathsresult,"email":email});
+        setNavigated(true);
+      }
     }
   
     //<Text style={styles.prompttext}>{pdfresponse && <Text>{pdfresponse}</Text>}</Text>
@@ -98,8 +106,13 @@ export default function FmathQP (){
             placeholder="Enter Further Maths Topic"
           />
           </form>
-          <p>{isLoading && <p>Loading...</p>}</p>
           </div>
+        <div style={styles.containercenter}>
+          <p>{isLoading && <p>Loading...</p>}</p>
+        </div>
+        <div style={styles.containercenter}>
+          <p>{errorBool && <p>Question paper does not exist.</p>}</p>
+        </div>
         </div>
         </div>
         :

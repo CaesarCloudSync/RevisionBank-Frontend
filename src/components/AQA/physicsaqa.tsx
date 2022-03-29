@@ -27,7 +27,7 @@ class PhysicsAqaStyles{
     this.containercenter = {display:"flex",justifyContent: maxRowBased ? "left" : "center",marginLeft:maxRowBased ? "2%": "auto",marginBottom: maxRowBased ? "2%" :"auto"};
     this.inputbars = {width: "100%",borderRadius:"5px",border:"1px solid grey"}
     this.containercentercol = {display: "flex",flexDirection: maxRowBased ? 'row' : 'column',alignItems: "center",justifyContent: maxRowBased ? "left":"center",marginTop: maxRowBased ? "5%" : "5%",marginLeft:maxRowBased ? "2%": "auto"};
-    this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "none",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "none",height:"40rem"} 
+    this.largecontainer = {backgroundColor:"white",margin: maxRowBased ? "10%" : "30px",border: maxRowBased ?  "1px solid black" : "none", borderRadius: maxRowBased ? "10px" : "10px",height:"40rem"} 
   }
 }
 export default function PhysicsAqa (){
@@ -48,6 +48,8 @@ export default function PhysicsAqa (){
     const [navigated,setNavigated] = useState(false);
     const [datanotset,setDataNotSet] = useState(false);
     const [pdfresposne,setPdfResponse] = useState("");
+    const [errormessage,setErrorMessage] = useState("");
+    const [errormessagebool,setErrorMessagebool] = useState(false);
     const sendApi = async (e:any) => {
       //&& physicsaqatopicms
       if (physicsaqachapter && physicsaqatopic  !== {} && email !== '') {
@@ -56,11 +58,20 @@ export default function PhysicsAqa (){
       setIsLoading(true);
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
       const response:any = await axios.post("https://palondomus-api.herokuapp.com/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
-      console.log(response.data)
-      setIsLoading(false);
-      navigate("/physicsaqa/pdf",{state:{"physicsaqapdf": response.data.physicsaqa,"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label}});
+      if ('error' in response.data){
+        setIsLoading(false);
+        setErrorMessage(response.data.error);
+        setErrorMessagebool(true);
 
-      setNavigated(true);
+        //console.log('An Error has occur')
+        //console.log(response.data)
+      } 
+      else if (!('error' in response.data)){
+        //console.log(response.data
+        setIsLoading(false);
+        navigate("/physicsaqa/pdf",{state:{"physicsaqapdf": response.data.physicsaqa,"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label}});
+        setNavigated(true);
+      }
     }
     else{
       setDataNotSet(true);
@@ -83,7 +94,7 @@ export default function PhysicsAqa (){
         </div>
         <div style={styles.largecontainer}>
           <div style={Object.assign({},styles.containercenter,{marginTop:"10px"})}>
-          <h2 style={styles.textcolor}>PhysicsAqaQP</h2>
+          <h2 style={Object.assign({},styles.textcolor,{marginTop:"20px"})}>PhysicsAqaQP</h2>
           </div>
           <div style={styles.containercenter}>
           <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
@@ -116,6 +127,7 @@ export default function PhysicsAqa (){
           </div>
           <div style={styles.containercenter}>
           <p>{isLoading && <p>Loading...</p>}</p>
+          <p>{errormessagebool && <p>{errormessage}</p>}</p>
           </div>
           <div style={styles.containercenter}>
             <p>{datanotset && <p>Select all options</p>}</p>

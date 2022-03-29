@@ -19,7 +19,7 @@ import Signin from './components/auth/signin';
 import Signup from './components/auth/signup';
 import PricingPage from './components/pricing/pricing';
 import Billing from './components/pricing/billing';
-
+import CompleteFreeTrial from './components/freetrial/freetrial';
 import { BrowserRouter as Router, Route ,Routes} from "react-router-dom";
 import RevisionBankTools from './components/revisionbanktools/revisionbanktools'
 ReactDOM.render(
@@ -27,7 +27,7 @@ ReactDOM.render(
   <Routes>
   <Route path="/" element={<HomePage/>}/>
   <Route path="/contactus" element={<ContactUs/>}/>
-
+  
   <Route path="/signup" element={<Signup/>}/>
   <Route path="/signin" element={<Signin/>}/>
 
@@ -35,6 +35,7 @@ ReactDOM.render(
   <Route path="/stemscraper" element={<STEMScraperOptions/>}/>
   <Route path="/payment" element={<Payment/>}/>
   <Route path="/billing" element={<Billing/>}/>
+  <Route path="/completefreetrial" element={<CompleteFreeTrial/>}></Route>
   
   <Route path="/revisionbanktools" element={<RevisionBankTools/>}/>
   
