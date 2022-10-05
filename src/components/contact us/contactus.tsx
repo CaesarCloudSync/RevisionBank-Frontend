@@ -10,6 +10,7 @@ import LoadingSpinner from "../../animations/Loadingspinner";
 import { send } from 'emailjs-com';
 import { maxRowBasedquery } from "../mediahooks/mediamax";
 import useMediaQuery from "../mediahooks/useMedia";
+import Policies from "../homepage/components/policies";
 //import './contactus.css';
 //https://dev.to/daliboru/how-to-send-emails-from-a-form-in-react-emailjs-27d1
 function BootCard(props:any){
@@ -158,18 +159,19 @@ export default function ContactUs(){
 									value={toSend.Name}
 									onChange={handleChange}
 								/>
-								<input
-									type='text'
-									name='message'
-									placeholder='Your message'
-									value={toSend.message}
-									onChange={handleChange}
-								/>
+
 								<input
 									type='text'
 									name='reply_to'
 									placeholder='Your email'
 									value={toSend.reply_to}
+									onChange={handleChange}
+								/>
+								<textarea
+								style={{height:"100px",border:"0px"}}
+									name='message'
+									placeholder='Your message'
+									value={toSend.message}
 									onChange={handleChange}
 								/>
 								
@@ -199,6 +201,7 @@ export default function ContactUs(){
 					<EmailPrompt/>
 					
 			</div>
+			<Policies></Policies>
 			</div>
 			: 
 			<div>

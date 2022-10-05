@@ -1,0 +1,44 @@
+
+/* ==== CSS VARIABLES ==== */
+:root {
+    --primary-color: #335eea;
+    --link-color: #506690;
+    --btn-hover-color: #2b50c7;
+    --lg-heading: #161c2d;
+    --text-content: #869ab8;
+    --fixed-header-height: 4.5rem;
+  }
+  
+  
+  ul li {
+    list-style-type: none;
+  }
+  a {
+    text-decoration: none;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  /* ==== CONTAINER ==== */
+  .container {
+    width: 100%;
+  }
+  @media screen and (min-width: 1040px) {
+    .container {
+      width: 1040px;
+      margin: 0 auto;
+    }
+  }
+  
+  /* ====  WRAPPER ==== */
+  .wrapper {
+    width: 100%;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    padding-top: 2rem;
+    margin-bottom: 5rem;
+  }
+  

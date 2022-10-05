@@ -1,0 +1,244 @@
+
+
+import { useState } from "react";
+import useMediaQuery from "../../mediahooks/useMedia";
+import { maxRowBasedquery } from "../../mediahooks/mediamax";
+import axios from 'axios'
+import Select from "react-select";
+import { useNavigate } from "react-router";
+//import Tesseract from 'tesseract.js';
+import "./addrevisioncard.css";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { Button } from "react-bootstrap";
+import Jimp from "jimp";
+export default function AddRevisionCard(props:any){
+    const [submitting,setSubmitting] = useState<Boolean>(false)
+    const navigate = useNavigate();
+    const maxRowBased = useMediaQuery(maxRowBasedquery);
+    //const numoaccounts = 200 - props.numstudentaccounts
+    const getdigitregex = /\d+/g;
+    const revisionscheduleintervalselect = [{"label":"60 minutes","value":0}]//,{"label":"30 minutes","value":1}]
+    const [revisionscheduleinterval,setRevisionScheduleInterval] = useState<any>("")
+    const [studentemailstored,setStudentEmailStored] = useState(false)
+    const [emptyfield,setEmptyField] = useState(false)
+    const [selectalloptions,setSelectAllOptions] = useState(false)
+    const [email,setEmail] = useState('');
+    const [emailisset,setEmailIsSet] = useState(false);
+    const [ocrrecogloading,setOcrRecogLoading] = useState<any>([{ocrloading:false}])
+    const [ocrprogress,setOCRProgress] = useState<any>([{ocrprogress:0}])
+    const [ocrfilename,setOCRFilename] = useState([{filename:''}])
+    const [showComponent,setShowComponent] = useState(false)
+    const [formFields, setFormFields] = useState([
+        { subject: '',revisioncardtitle:'',revisioncard:''},
+        ])
+
+	const [fileisnottxt,setFileisNotTxt] = useState(false);
+    
+    const handleFormChange = (event:any, index:any,ocr=true) => {
+        if (event.target.files){
+            const reader = new FileReader()
+            if (event.target.files[0].name.includes(".txt")){
+                
+                reader.onload = async (e:any) => {
+                    const text = (e.target.result)
+                    let data:any = [...formFields];
+                    data[index][event.target.name] = text;
+                    setFormFields(data);
+                    //console.log(text)
+                    //alert(text)
+                }
+                reader.readAsText(event.target.files[0])
+                
+            }
+            else if (event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".PNG") || event.target.files[0].name.includes(".jpg") || event.target.files[0].name.includes(".jpeg")){
+
+                let ocrfilenamedata:any = [...ocrfilename];
+                ocrfilenamedata[index]["filename"] = event.target.files[0].name;
+                setOCRFilename(ocrfilenamedata);
+
+                let ocrrecogloadingdata:any = [...ocrfilename];
+                ocrrecogloadingdata[index]["ocrloading"] = true;
+                setOcrRecogLoading(ocrrecogloadingdata);
+                //console.log(event.target.files[0])
+                const reader=new FileReader();
+                reader.onload=(tessevent:any)=>{
+                const image= tessevent.target.result;
+                var json = {"revisioncardscreenshot":image};
+
+                const tessresponse = ocr === true ? axios.post("https://revisionbankapi.herokuapp.com/revisionbanktranslate",json) : axios.post("https://revisionbanktensorflow.herokuapp.com/revisionbankhandtranslate",{"img":image})  
+                tessresponse.then(response=>{
+    
+                    console.log(response.data)
+                    let data:any = [...formFields];
+                    data[index][event.target.name] = ocr === true ? response.data.revisioncardscreenshotext : response.data.recognized;
+                    //console.log(data)
+                    setFormFields(data);
+                    let ocrrecogloadingdata:any = [...ocrfilename];
+                    ocrrecogloadingdata[index]["filename"] = false;
+                    setOcrRecogLoading(ocrrecogloadingdata);
+                })
+            
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+            
+            else{
+                setFileisNotTxt(true)
+            }
+
+        }
+        else{
+            let data:any = [...formFields];
+            data[index][event.target.name] = event.target.value;
+            setFormFields(data);
+        }
+
+    }
+    const handleFormChangeHand = (event:any) => {
+        //const tessresponse = axios.post("https://revisionbanktensorflow.herokuapp.com/revisionbankhandtranslate",{"img":image}).then(response=>{})
+    }
+    //console.log(revisionscheduleinterval)
+    const submitRevisionCard = async (e:any) => {
+        setSelectAllOptions(false)
+        //e.preventDefault();
+        setSubmitting(true)
+        //console.log(revisionscheduleinterval.label)
+        const checkformfields:any = formFields.map((revisioncard:any) => { if (revisioncard.subject === '' || revisioncard.revisioncardtitle === '' || revisioncard.revisioncard === ''){return("true")}else{return("false")} })
+        //console.log(checkformfields)
+        //console.log(checkformfields)
+        if (checkformfields.includes("true") || (email  === '' || props.emailcount === 0 ) || checkformfields.length === 0 || revisionscheduleinterval.label === undefined){
+            setSubmitting(false)
+            setStudentEmailStored(false)
+            setSelectAllOptions(true)
+        }
+        else if (!(checkformfields.includes("true")) && email !== '' && revisionscheduleinterval.label !== undefined){
+            var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
+            var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval.label.match(getdigitregex)[0]),"revisioncards":formFields}}
+            //console.log(json)
+            const response = await axios.post("https://revisionbankapi.herokuapp.com/storerevisioncards",json,config)
+            //console.log(response.data)
+            setSubmitting(false)
+            //window.location.reload();
+            navigate('/revisioncards',{state:{"token":props.token.token}})
+        } 
+        
+    
+        
+    }
+    
+    const addFields = () => {
+        let object = {
+            subject: '',
+            revisioncardtitle:'',
+            revisioncard:''
+        }
+    
+        setFormFields([...formFields, object])
+        
+        let ocrloadingobject = {
+            ocrloading:false
+        }
+        setOcrRecogLoading([...ocrrecogloading, ocrloadingobject])
+        let ocrprogressobject = {
+            ocrprogress:0
+        }
+        setOCRProgress([...ocrprogress, ocrprogressobject])
+        let ocrfilenameobject = {
+            filename:''
+        }
+        setOCRFilename([...ocrfilename, ocrfilenameobject])
+        }
+    
+        const removeFields = (index:any) => {
+        let data = [...formFields];
+        data.splice(index, 1)
+        setFormFields(data)
+        let ocrloadingdata = [...ocrrecogloading];
+        ocrloadingdata.splice(index, 1)
+        setOcrRecogLoading(ocrloadingdata)
+        let ocrprogressdata = [...ocrprogress];
+        ocrprogressdata.splice(index, 1)
+        setOCRProgress(ocrprogressdata)
+        let ocrfilenamedata = [...ocrfilename];
+        ocrfilenamedata.splice(index, 1)
+        setOCRFilename(ocrfilenamedata)
+        
+        //props.setAccountInfo((accountinfo:any)=> ({...props.accountinfo,numofaccounts:props.accountinfo.numofaccounts+1}))
+        }
+    //<UploadFileIcon style={{fontSize:"20px"}}/>
+    return(
+        <div>
+            <div style={{margin:"20px"}}>
+
+                <form onSubmit={submitRevisionCard}>
+                    {props.showemailprompt &&
+                    <input
+                        
+                            name='email'
+                            placeholder='Email to send to'
+                            onChange={(e:any) => {setEmail(e.target.value);setEmailIsSet(true)}}
+                            value={email}
+                        />
+                    }
+                    
+                    {formFields.map((form, index) => {
+                    //console.log(ocrprogress[index]["ocrprogress"])
+                    return (
+                        <div>
+                            <div key={index} style={{display:"flex",flexDirection:maxRowBased ? "column" :"column",marginTop:"10px"}}>
+                            <input
+                                style={{"marginBottom":"10px"}}
+                                name='subject'
+                                placeholder='Subject'
+                                onChange={event => handleFormChange(event, index)}
+                                value={form.subject}
+                            />
+                            <input
+                                style={{"marginBottom":"10px"}}
+                                name='revisioncardtitle'
+                                placeholder='Revision card title'
+                                onChange={event => handleFormChange(event, index)}
+                                value={form.revisioncardtitle}
+                            />
+                            {index === 0 && <Select options={revisionscheduleintervalselect} value={revisionscheduleintervalselect.find((obj:any) => obj.value === revisionscheduleinterval)} onChange= {(e:any) => {setRevisionScheduleInterval(e);}}  ></Select>}
+                            <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]}className="form-control" style={{height: "200px",width:"100%"}} onChange={event => handleFormChange(event, index)}>
+                            </textarea>
+                        
+                            </div>
+                            <div style={{display:"flex",marginTop:"10px"}}>
+                                <label className="label">
+                                <input className="uploadfile" type="file" name="revisioncard" accept=".txt,text/html,text/plain,.png,.jpg,.jpeg"  onChange={event => handleFormChange(event, index,true)} />
+                                <span style={{width:"100px",border:"1px solid grey",borderRadius:"10px",backgroundColor:"grey",padding:"10px",color:"white"}}>Upload txt or image of text</span>
+                                </label>
+                                { showComponent === true && 
+                                <label className="label">
+                                <input type="file" name="revisioncard" accept=".png,.jpg,.jpeg"  onChange={event => handleFormChange(event, index,false)} />
+                                <span >Upload Handwriting</span>
+                                </label>
+                                }
+                                <button style={{width:"100px",border:"1px solid red",borderRadius:"10px",backgroundColor:"red",padding:"5px",color:"white"}} id="upload" onClick={() => removeFields(index)}>Remove</button>
+                            </div>
+                            {ocrfilename[index]["filename"] !== "" ?<p >{ocrfilename[index]["filename"]}</p> : <p></p>}
+                            {ocrprogress[index]["ocrprogress"] >  0 && ocrprogress[index]["ocrprogress"] <  100 &&<div >Loading text image: {ocrprogress[index]["ocrprogress"]}%</div>}
+                        </div>
+                    )
+                    })}
+                </form>
+                <div style={{display:"flex",flexDirection:"row",gap:"1%",marginTop:"10px"}}>
+                    {submitting ? <p>Submitting...</p> : <button style={{width:"100px",borderRadius:"10px",backgroundColor:"#335eea",padding:"5px",color:"white"}} onClick={submitRevisionCard}>Submit</button>}
+                    <br/>
+                    <button style={{marginLeft:"10px",width:"100px",borderRadius:"10px",backgroundColor:"green",padding:"5px",color:"white"}} onClick={addFields}>Add More...</button>
+                
+                    
+                </div>
+            </div>
+            <div style={{display:"flex",flexDirection:"row",justifyContent:"center"}}>
+                {studentemailstored && <p style={{color:"green"}}>Student emails stored.</p>}
+                {selectalloptions && <p style={{color:"red"}}>Please fill in all fields.</p>}
+            </div>
+        </div>
+                
+    )
+}
+
+

@@ -6,10 +6,11 @@ import { useLocation,useNavigate } from 'react-router';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { Button } from "react-bootstrap";
+import axios from "axios";
 
 export default function CompleteFreeTrial(){
     const maxRowBased = useMediaQuery(maxRowBasedquery);
-    //const styles = new STEMScraperOptionsStyles(maxRowBased);
+    //const styles = new RevisionBankOptionsStyles(maxRowBased);
     let navigate:any = useNavigate();
     const location:any = useLocation() //.state
     const statevalue:any = location.state
@@ -20,8 +21,13 @@ export default function CompleteFreeTrial(){
     const email = (statevalue !== null) ? statevalue.email : ""
     //const [checkout, setCheckout] = React.useState(false);
     //console.log(statevalue)
-    function navbank(){
-        navigate("/stemscraper", { state: { token: token, subscription: subscription,email:email} });
+    const navbank = async () => {
+        let start_date_freetrial:any = new Date()
+        const end_date_freetrial = new Date(start_date_freetrial.getFullYear(), start_date_freetrial.getMonth(),start_date_freetrial.getDate() + 7).toISOString()
+        var json:any = {"subscription":subscription,"start_date_subscription":start_date_freetrial,"end_date_subscription":end_date_freetrial}
+        const config = {headers: {Authorization: `Bearer ${token}`,}}
+        const responseft:any = await axios.post(`https://revisionbankapi.herokuapp.com/storefreetrial`,json,config)
+        navigate("/revisionbank", { state: { token: token, subscription: subscription,email:email} });
         //navigate("/billing",{state:{token:token,subscription:subscription,price:price,email:email}})
         
 
@@ -45,8 +51,12 @@ export default function CompleteFreeTrial(){
                 <div style={{width:"100%"}}>
                     <h1 style={Object.assign({},styles.textcolor,{fontSize:"30px"})}>RevisionBank {subscription.replace(/^\w/, (c:any) => c.toUpperCase())} Checkout</h1>
                     <p style={Object.assign({},styles.textcolor,{fontSize:"20px"},{marginTop:"30px"})}>Please complete your subscription to start using RevsionBank {subscription.replace(/^\w/, (c:any) => c.toUpperCase())}</p>
+                    <div style={{display:"flex",gap:"30px"}}> 
                     <Button style={{width:"250px",marginTop:"50px"}}onClick={() => {navbank()}} className="checkout-button">Complete Subscription</Button>
+                    <Button style={{width:"250px",marginTop:"50px"}}onClick={() => {navigate("/revisionbank",{state:{"token":token,"email":email}})}} className="checkout-button">Don't Redeem Free trial</Button>
+                    </div>
                 </div>
+                
                 
             </div>
 

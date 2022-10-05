@@ -12,6 +12,8 @@ import { useState } from "react";
 import LoadingSpinner from "../../animations/Loadingspinner";
 import {useNavigate,useLocation} from 'react-router-dom';
 import HeaderComponent from "../headers/headerhome";
+import { Helmet } from "react-helmet"
+import Policies from "../homepage/components/policies";
 interface IFormInput {
     email: string;
     password: string;
@@ -109,8 +111,11 @@ function Signup() {
         setJwttoken(false)
         setNotSignedup(false)
         var json = JSON.parse(JSON.stringify(data));
+        json.email = json.email.toLowerCase();
+        //json["betatest"] = "true";
+        //console.log(json)
         
-        const response:any = await axios.post(`https://palondomus-api.herokuapp.com/signupapi`, json);
+        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/signupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
         //console.log(subscription)
@@ -122,14 +127,11 @@ function Signup() {
               navigate("/pricing",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
               
             }
+            else if (subscription === "basic") {
+              navigate("/revisionbank",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
+            }
             else if (subscription === "freetrial"){
               // Free trial
-              let start_date_freetrial:any = new Date()
-              const end_date_freetrial = new Date(start_date_freetrial.getFullYear(), start_date_freetrial.getMonth(),start_date_freetrial.getDate() + 7).toISOString()
-              var json:any = {"subscription":subscription,"start_date_subscription":start_date_freetrial,"end_date_subscription":end_date_freetrial}
-              const config = {headers: {Authorization: `Bearer ${response.data.access_token}`,}}
-
-              const responseft:any = await axios.post(`https://palondomus-api.herokuapp.com/storefreetrial`,json,config)
               // navigate to 
               navigate("/completefreetrial", { state: { token: response.data.access_token, subscription: subscription,email:json.email} });
               // TODO  send to freetrial api
@@ -145,7 +147,6 @@ function Signup() {
        else if ("message" in response.data){
           setNotSignedup(true)
         }
-        
 
         };
 
@@ -154,7 +155,7 @@ function Signup() {
       if ("status" in signupResponse){
         setJwttoken(true)
         if (subscription !== "freetrial"){
-          navigate("/stemscraper",{state: {token: jwttoken}})
+          navigate("/revisionbank",{state: {token: jwttoken}})
         }
       }
     else if ("message" in signupResponse){
@@ -166,6 +167,17 @@ function Signup() {
   
   return (
       <div>
+      <Helmet>
+      <title>RevisonBank Signup</title>
+      <meta
+      name="description"
+      content="RevisionBank signup for practice questsion, exam questions and revision cards for AS and A level students."
+      />
+      <meta
+          name="keywords"
+          content="Revision,revisionbank signup,revision bank signup,solution bank signup,revision bank,revisionbank,Revision Bank,RevisionBank,solutionbank,solution bank year 1,solution bank pure maths year 1,revision village,solution bank year 1 stats,solution bank year 2,solution bank,Solutionbank,Solution Bank,A Level revision, Practice Papers, Revision Bank, Revision Bank Scraper, Revision Bank Scraper for A Level, Revision Bank Scraper for O Level, Revision Bank Scraper for GCSE, Revision Bank Scraper for IB, Revision Bank Scraper for A Level Practice Papers, Revision Bank Scraper for O Level Practice Papers, Revision Bank Scraper for GCSE Practice Papers, Revision Bank Scraper for IB Practice Papers, Revision Bank Scraper for A Level Revision Cards, Revision Bank Scraper for O Level Revision Cards, Revision Bank Scraper for GCSE Revision Cards, Revision Bank Scraper for IB Revision Cards, Revision Bank Scraper for A Level Revision Practice Papers, Revision Bank Scraper for O Level Revision Practice Papers, Revision Bank Scraper for GCSE Revision Practice Papers, Revision Bank Scraper for IB Revision Practice Papers, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB"
+      />
+      </Helmet>
     <HeaderComponent/>
     <SigninContainer>
         <HeaderTitle variant="h2">
@@ -219,6 +231,7 @@ function Signup() {
 
         </form>
         </SigninContainer>
+        <Policies></Policies>
       </div>
   )
 }

@@ -10,7 +10,7 @@ import { Button } from "react-bootstrap";
 
 export default function Payment(){
     const maxRowBased = useMediaQuery(maxRowBasedquery);
-    //const styles = new STEMScraperOptionsStyles(maxRowBased);
+    //const styles = new RevisionBankOptionsStyles(maxRowBased);
     let navigate:any = useNavigate();
     const location:any = useLocation() //.state
     const statevalue:any = location.state

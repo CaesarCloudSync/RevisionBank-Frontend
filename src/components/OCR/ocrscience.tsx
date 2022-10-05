@@ -5,6 +5,8 @@ import { Button } from "@mui/material";
 import useMediaQuery from "../mediahooks/useMedia";
 import { maxRowBasedquery } from "../mediahooks/mediamax";
 import { Navigate } from "react-router-dom";
+import Policies from "../homepage/components/policies";
+import LoadingSpinner from "../../animations/Loadingspinner";
 class FmathQPStyles{
   containercenter:Object;
   containercentercol:Object;
@@ -53,7 +55,7 @@ export default function OCRScience (){
             chapter = `chapter ${chapter}`;
         }
         const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const response = await axios.post("https://palondomus-api.herokuapp.com/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha.toUpperCase(),"year":bookyear,"platform": "web"}},config)
+      const response = await axios.post("https://revisionbankapi.herokuapp.com/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha.toUpperCase(),"year":bookyear,"platform": "web"}},config)
 ;     if (email !== "" && ocrsubject !== "" && chapter !== "" && bookalpha !== "" && bookyear !== ""){
       if (!Object.keys(response.data).includes("error")){   
       setIsLoading(false);
@@ -98,6 +100,7 @@ export default function OCRScience (){
           <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
           <input style={styles.inputbars}
               onChange={(e) => setEmail(e.target.value)}
+              name="email"
             value={email}
             placeholder="Enter email"
             
@@ -152,7 +155,7 @@ export default function OCRScience (){
           
           </div>
           <div style={styles.containercenter}>
-          <p>{isLoading && <p>Loading...</p>}</p>
+          <p>{isLoading && <LoadingSpinner/>}</p>
         </div>
         <div style={styles.containercenter}>
           <p>{error && <p>Chapter doesn't exist</p>}</p>
@@ -161,6 +164,7 @@ export default function OCRScience (){
           <p>{datanotset && <p>Please select all options</p>}</p>
         </div>
         </div>
+        <Policies marginTop="-140px"></Policies>
         </div>
         :
         <div>

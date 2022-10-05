@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import STEMRoadMaplogo from '../static/STEMRoadmap.svg';
 import logo from '../static/RoadmapLogo.svg'
 import './headerhome.css'
-import STEMTutorBankLogo from '../static/STEMTutorBankLogo.svg';
+import RevisionBankLogo from '../static/RevisionBankLogo.svg';
 import { maxRowBasedquery } from '../mediahooks/mediamax';
 import useMediaQuery from '../mediahooks/useMedia';
 //https://alvarotrigo.com/blog/hamburger-menu-css/
@@ -24,7 +24,7 @@ function HeaderComponent(){
          
          <nav className="nav">
            <div className="logo">
-             <Link to="/"><img src={STEMTutorBankLogo}></img></Link>
+             <Link to="/"><img src={RevisionBankLogo}></img></Link>
            </div>
            {maxRowBased ? 
            <div></div>

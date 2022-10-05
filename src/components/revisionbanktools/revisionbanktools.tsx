@@ -1,9 +1,20 @@
-
 import './revisionbanktools.css'
 import HeaderComponent from '../headers/headerhome';
+import { Helmet } from 'react-helmet';
 export default function RevissNameionBankToolssName(){
     return(
         <div className="limiter">
+		<Helmet>
+		<title>RevisionBank Tools</title>
+        <meta
+          name="description"
+          content="See the question papers and markschemes available. An unlimited number of revision cards that can be scheduled every 60 minutes to revise on-the-go for AS and A Level subjects."
+        />
+        <meta
+          name="keywords"
+          content="RevisionBank tools,Revision Bank tools,RevisionBank scheduler,Revision card scheduler,Exam papers, practice questions, practice papers, Exam questions, topic questions, maths questions,maths practice questions, maths practice papers, further maths practice papers, further maths practice questions, further maths solution banks, maths solution banks, a level maths questions, a level maths practice papers, a level physics question papers, a level physics practice questions, a level physics mark schemes, a level aqa physics question papers, "
+        />
+	</Helmet>
         <HeaderComponent></HeaderComponent>
 		<div style={{position:"relative",top:"30px"}}>
 		<div style={{display:"flex",justifyContent:"center"}}>
@@ -12,6 +23,28 @@ export default function RevissNameionBankToolssName(){
 		</div>
 		<div className='containerposition'>
 			<div className="container-table100">
+				<div style={{marginBottom:"20px"}} className="wrap-table100">
+						<div className="table100">
+							<table>
+								<thead>
+									<tr className="table100-head">
+										<th className="column1-small">RevisionBank Scheduler</th>
+										<th className="column2-small">Number of Revision Cards</th>
+										<th className="column3-small">Revision Intervals</th>
+										<th className="column4-small">Number of Scheduled Cards</th>
+									</tr>
+								</thead>
+								<tbody>
+											<tr>
+												<td className="column1-small">RevisionBank Scheduler</td>
+												<td className="column2-small">Unlimited</td>
+												<td className="column3-small">60 Minutes</td>
+												<td className="column4-small">3-5 Cards Limit</td>
+											</tr>
+								</tbody>
+							</table>
+						</div>
+				</div>
 				<div className="wrap-table100">
 					<div className="table100">
 						<table>
@@ -27,7 +60,15 @@ export default function RevissNameionBankToolssName(){
 							</thead>
 							<tbody>
 									<tr>
-										<td className="column1">Further Maths & Maths Question papers</td>
+										<td className="column1">Further Maths & Maths Exam Papers</td>
+										<td className="column2">Edexcel</td>
+										<td className="column3">Core Mathematics,Pure Mathematics 1 & 2,Statistics and Mechanics, Decision Maths, Further Pure Mathematics </td>
+										<td className="column4">&#10004;</td>
+										<td className="column5">200+ papers</td>
+										<td className="column6">&#10004;</td>
+									</tr>
+									<tr>
+										<td className="column1">Further Maths & Maths Topic papers</td>
 										<td className="column2">Edexcel,OCR,AQA</td>
 										<td className="column3">Pure Maths,Statistics and Mechanics and Further Maths </td>
 										<td className="column4">&#10004;</td>

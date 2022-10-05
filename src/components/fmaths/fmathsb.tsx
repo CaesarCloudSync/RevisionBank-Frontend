@@ -5,6 +5,9 @@ import { Button } from "@mui/material";
 import useMediaQuery from "../mediahooks/useMedia";
 import { maxRowBasedquery } from "../mediahooks/mediamax";
 import { Navigate } from "react-router-dom";
+import Policies from "../homepage/components/policies";
+import Select from "react-select";
+import LoadingSpinner from "../../animations/Loadingspinner";
 class FmathSBStyles{
     containercenter:Object;
     containercentercol:Object;
@@ -35,39 +38,70 @@ export default function FmathSB(){
     const [emailisset,setEmailIsSet] = useState(false);
     const [furthermathsbook,setFurthermathsbook]=useState("");
     const [furthermathsbookid,setFurthermathsbookid] = useState("");
-    const [furthermathsyear,setFurthermathsyear] = useState("");
+    const [furthermathsyear,setFurthermathsyear] = useState<any>("");
     const [furthermathsexerciesNum,setFurthermathsexerciseNum] = useState("");
     const [pdfresponse,setPdfResponse] = useState('');
     const [isLoading,setIsLoading] = useState(false);
     const [navigated,setNavigated] = useState(false);
     const [paperNotExist,setPaperNotExist] = useState(false);
+    const [fillallfields,setFillAllFields] = useState(false);
+    const [hideemailprompt,setHideEmailPrompt] = useState(false);
+    const [emailcount,setEmailCount] = useState(0);
+    const bookyearoptions = [{"label":1,"value":0},{"label":2,"value":0}]
+    const getemailcount = async () => {
+      const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+      const responsecount = await axios.get("https://revisionbankapi.herokuapp.com/getemailcount",config)
+      if (responsecount.data.emailcount === 0){
+        setHideEmailPrompt(false);
+        setEmailCount(0)
+        setEmail("noemail")
+      }
+      if (responsecount.data.emailcount !== 0){
+        setHideEmailPrompt(true);
+        setEmailCount(responsecount.data.emailcount)
+      }
+    }
     const sendApi = async (e:any) => {
         e.preventDefault();
         //console.log("name",name);
+        setPaperNotExist(false);
         setIsLoading(true);
-        const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-        try{
-        const response:any = await axios.post("https://palondomus-api.herokuapp.com/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
-        
-        if ('error' in response.data){
-            //console.log("error",response.data.error)
-            setIsLoading(false);
-            setPaperNotExist(true)
-        }
-        else if (!('error' in response.data)){
-          setPdfResponse(response.data.furthermathsresult)
+        if ((email  === '' && emailcount !== 0 ) ||  furthermathsbook === '' || furthermathsyear === '' || furthermathsexerciesNum === ''){  // Checks if all fields are filled, and is tolerent to the email not being filled
+          setFillAllFields(true);
           setIsLoading(false);
-          navigate("/fmathsb/pdf",{state:{"furthermathsbpdf": response.data.furthermathsresult,"email":email}});
-          setNavigated(true);
+        }
+        else if (email  !== '' ||  furthermathsbook !== '' || furthermathsyear !== '' || furthermathsexerciesNum !== ''){
+          setFillAllFields(false);
 
-        }
-        
-        }catch(err){
-            console.log(err);
+          const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+          try{
+          const response:any = await axios.post("https://revisionbankapi.herokuapp.com/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear.label,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
+          
+          if ('error' in response.data){
+              console.log("error",response.data.error)
+              setIsLoading(false);
+              setPaperNotExist(true)
+          }
+          else if (!('error' in response.data)){
+            console.log(response.data)
+            setPdfResponse(response.data.furthermathsresult)
             setIsLoading(false);
-            //setNavigated(true);
+            navigate("/fmathsb/pdf",{state:{"furthermathsbpdf": response.data.furthermathsresult,"email":email}});
+            setNavigated(true);
+
+          }
+          
+          }catch(err){
+              console.log(err);
+              setIsLoading(false);
+              //setNavigated(true);
+          }
         }
-      }
+    }
+    useEffect(() => {
+      //Runs only on the first render
+      getemailcount()
+    });
     //console.log(pdfresponse)
     //onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}
     useEffect(() => {
@@ -87,17 +121,18 @@ export default function FmathSB(){
             <h2 style={styles.textcolor}>FurtherMathSolution Bank</h2>
             </div>
             <div style={styles.largecontainer}>
-
+            { hideemailprompt && 
             <div style={styles.containercenter}>
-            <form >
+            <form  onSubmit={(e:any) => {e.preventDefault()}}>
             <input
                 onChange={(e) => setEmail(e.target.value)} 
                 value={email}
                 placeholder="Enter email"
-                
+                name="email"
                 />
             </form>
             </div>
+              }
             <div style={styles.containercentercol}>
                 <p>{emailisset && <p>Email is set</p>}</p>
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("0"); setFurthermathsbookid("Pure Maths")}}><p>Pure Maths</p></Button>
@@ -108,13 +143,9 @@ export default function FmathSB(){
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("5"); setFurthermathsbookid("Further-Mechanics")}}><p>Further-Mechanics</p></Button>
                 <Button variant= "contained" onClick={() => {setFurthermathsbook("6"); setFurthermathsbookid("Decision-Maths")}}><p>Decision Maths</p></Button>
                 <p>{ furthermathsbook && <p>Further Maths Book Selected {furthermathsbookid}</p>}</p>
-                <div style={Object.assign({},styles.containercenter,{width:"100%"})}>
-                  <input style={{marginLeft:maxRowBased ? "auto" :"70px",width:"100%"}}
-                  onChange={(e) => setFurthermathsyear(e.target.value)}
-                  value={furthermathsyear}
-                  placeholder="Enter Further Maths Year/Book"
-                  />
-                </div>
+                
+
+                <Select options={bookyearoptions} value={bookyearoptions.find(obj => obj.value === furthermathsyear)} onChange= {(e:any) => {setFurthermathsyear(e)}}   ></Select>
                 <div style={Object.assign({},styles.containercenter,{width:"100%"})}>               
                   <form onSubmit={(e) => sendApi(e)}>
                     <input
@@ -125,12 +156,15 @@ export default function FmathSB(){
                   </form>
                 </div>
                 <div style={Object.assign({},styles.containercenter,{width:"100%"})}>
-                <p>{isLoading && <p>Loading...</p>}</p>
+                <p>{isLoading && <LoadingSpinner/>}</p>
                 <p>{paperNotExist && <p>Paper Does not exist</p>}</p>
+                <p>{fillallfields && <p>Select all options.</p>}</p>
+        
                 </div>
             </div>
 
         </div>
+        <Policies marginTop="-140px"></Policies>
         </div>:
         <div>
         <Navigate to="/"/>

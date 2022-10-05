@@ -5,6 +5,10 @@ import { Button } from "@mui/material";
 import useMediaQuery from "../mediahooks/useMedia";
 import { maxRowBasedquery } from "../mediahooks/mediamax";
 import { Navigate } from "react-router-dom";
+import Policies from "../homepage/components/policies";
+import Select from "react-select";
+import {Bookids, TopicAll, TopicsSelect} from './fmathsqpdata';
+import LoadingSpinner from "../../animations/Loadingspinner";
 
 class FmathQPStyles{
   containercenter:Object;
@@ -39,28 +43,85 @@ export default function FmathQP (){
     const [isLoading,setIsLoading] = useState(false);
     const [navigated,setNavigated] = useState(false);
     const [errorBool,setErrorBool] = useState(false);
-    //onSubmitEditing ={() => sendApi(name)}
+    const [bookidselect,setBookIDSelect] = useState<any>('');
+    const [bookidselectname,setBookIDSelectName] = useState<any>('');
+    const [topicselect,setTopicSelect] = useState<any>('');
+    const [fillallfields,setFillAllFields] = useState(false);
+    const [hideemailprompt,setHideEmailPrompt] = useState(false);
+    const [emailcount,setEmailCount] = useState(0);
+    const handlebookid = (bookid:any) => {
+      if (bookid.label === "Core Maths"){
+        setBookIDSelect("c")
+        setBookIDSelectName(bookid)
+      }
+      else if (bookid.label === "Mechanics"){
+        setBookIDSelect("m")
+        setBookIDSelectName(bookid)
+      }
+      else if (bookid.label === "Statistics"){
+        setBookIDSelect("s")
+        setBookIDSelectName(bookid)
+      }
+      else if (bookid.label === "Further Pure"){
+        setBookIDSelect("fp")
+        setBookIDSelectName(bookid)
+      }
+      else if (bookid.label === "Decision Maths"){
+        setBookIDSelect("d")
+        setBookIDSelectName(bookid)
+      }
+
+    }
+    //console.log(bookidselect)
+    //console.log(topicselect)
+    const getemailcount = async () => {
+      const config = {headers: {Authorization: `Bearer ${token.token}`,}}
+      const responsecount = await axios.get("https://revisionbankapi.herokuapp.com/getemailcount",config)
+      //console.log(responsecount.data)
+      if (responsecount.data.emailcount === 0){
+        setHideEmailPrompt(false);
+        setEmailCount(0)
+      }
+      if (responsecount.data.emailcount !== 0){
+        setHideEmailPrompt(true);
+        setEmailCount(responsecount.data.emailcount)
+      }
+    }
     const sendApi = async (e:any) => {
       //console.log("name",name);
       e.preventDefault();
       setIsLoading(true);
+      if ((email  === '' && emailcount !== 0 ) ||  bookidselect === '' || topicselect === ''){ 
+        setFillAllFields(true);
+        setIsLoading(false);
+      }
+      else if (email  !== '' ||  bookidselect !== '' || topicselect !== ''){
+      setFillAllFields(false);
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const response = await axios.post("https://palondomus-api.herokuapp.com/fmathsqp",{"furthermaths":{"email":email,"furthermathsbook": furthermathsbook,"furthermathstopic":furthermathstopic,"platform": "web"}},config)
+      //console.log(email)
+      const response = await axios.post("https://revisionbankapi.herokuapp.com/fmathsqp",{"furthermaths":{"email":email,"furthermathsbook": bookidselect,"furthermathstopic":topicselect.label,"platform": "web"}},config)
+      console.log(response.data)
       if ('error' in response.data){
         setIsLoading(false);
         setErrorBool(true);
 
-        //console.log("error",response.data.error);
+        console.log("error",response.data);
       }
       else if (!('error' in response.data)){
         //console.log("response",response.data);
         setIsLoading(false);
+        console.log(response.data)
         navigate("/fmathqp/pdf",{state:{"furthermathspdf": response.data.furthermathsresult,"email":email}});
         //navigation.navigate('furthermathsqp', {"furthermathspdf": response.data.furthermathsresult,"email":email});
         setNavigated(true);
       }
+      }
+      
     }
-  
+    useEffect(() => {
+      //Runs only on the first render
+      getemailcount()
+    });
     //<Text style={styles.prompttext}>{pdfresponse && <Text>{pdfresponse}</Text>}</Text>
     useEffect(() => {
       setEmail("");
@@ -68,7 +129,7 @@ export default function FmathQP (){
       setFurthermathsbook("");
       setNavigated(false)
     }, [navigated])
-    //console.log(pdfresponse)
+    console.log(topicselect)
     return (
       <div>
         {tokenbool ? 
@@ -77,43 +138,46 @@ export default function FmathQP (){
           <h2 style={styles.textcolor}>FurtherMaths Question Papers</h2>
         </div>
         <div style={styles.largecontainer}>
+          { hideemailprompt &&
           <div style={Object.assign({},styles.containercenter,{marginTop:"10px"})}>
           <form onSubmit ={(e) => {e.preventDefault(); setEmailIsSet(true)}}>
           <input style={styles.inputbars}
               onChange={(e) => setEmail(e.target.value)}
             value={email}
             placeholder="Enter email"
+            name="email"
             
           />
           </form>
           </div>
+          }
+
           <div style={styles.containercentercol}>
           <p>{emailisset && <p>Email is set</p>}</p>
-          <Button variant= "contained" onClick={() => {setFurthermathsbook("c"); setFurthermathsbookid("Core Maths")}}><p>Core Maths</p></Button>
-          <Button variant= "contained" onClick={() => {setFurthermathsbook("m"); setFurthermathsbookid("Mechanics")}}><p>Mechanics</p></Button>
-          <Button variant= "contained" onClick={() => {setFurthermathsbook("s"); setFurthermathsbookid("Statistics")}}><p>Statistics</p></Button>
-          <Button variant= "contained" onClick={() => {setFurthermathsbook("fp"); setFurthermathsbookid("Further Pure")}}><p>Further Pure</p></Button>
-          <Button variant= "contained" onClick={() => {setFurthermathsbook("d"); setFurthermathsbookid("Decision Maths")}}><p>Decision Maths</p></Button>
-          <Button variant= "contained" onClick={() => {setFurthermathsbook("a"); setFurthermathsbookid("All")}}><p>All</p></Button>
-          <p >{ furthermathsbook && <p>Further Maths Book Selected {furthermathsbookid}</p>}</p>
-          </div>
-          <div style={styles.containercenter}>
+
+          <h2 style={{fontSize:"19px"}}>Select Maths Book:</h2>
           
-          <form onSubmit ={(e) => sendApi(e)}>
-          <input style={styles.inputbars}
-            onChange={(e) => setFurthermathstopic(e.target.value)} 
-            value={furthermathstopic}
-            placeholder="Enter Further Maths Topic"
-          />
-          </form>
+          <div>
+          <Select options={Bookids} value={Bookids.find((obj:any) => obj.value === bookidselect)} onChange= {(e:any) => {handlebookid(e);}}  ></Select>
           </div>
+          <h2 style={{fontSize:"19px"}}>Select Maths Topic:</h2>
+          <div>
+          <Select options={TopicsSelect.fmathsqpselect[bookidselectname.label]} value={TopicAll.find(obj => obj.value === topicselect)} onChange= {(e:any) => {setTopicSelect(e)}}   ></Select>
+          <Button style={{fontSize:"13px",marginTop:"10px", position:"relative",left:maxRowBased ? "0px" : "15px"}} variant="contained" color="primary" onClick={sendApi}>Submit</Button>
+          </div>
+
+        </div>
         <div style={styles.containercenter}>
-          <p>{isLoading && <p>Loading...</p>}</p>
+          <p>{isLoading && <LoadingSpinner/>}</p>
         </div>
         <div style={styles.containercenter}>
           <p>{errorBool && <p>Question paper does not exist.</p>}</p>
         </div>
+        <div style={styles.containercenter}>
+          <p>{fillallfields && <p>Select all options.</p>}</p>
         </div>
+        </div>
+        <Policies marginTop="-140px" ></Policies>
         </div>
         :
         <div>

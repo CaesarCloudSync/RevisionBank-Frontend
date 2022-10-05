@@ -1,105 +1,76 @@
 //import HeaderStyled from "./headerStyles";
-import React from 'react';
+import {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
-import SearchIcon from '@mui/icons-material/Search';
-import { Button } from '@mui/material';
-import styled from 'styled-components';
 import { Link } from "react-router-dom";
-import STEMRoadMaplogo from '../STEMRoadmap.svg';
-import logo from '../RoadmapLogo.svg'
+import './headerhome.css'
+import RevisionBankLogo from '../static/RevisionBankLogo.svg';
+import { maxRowBasedquery } from '../mediahooks/mediamax';
+import useMediaQuery from '../mediahooks/useMedia';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+//https://alvarotrigo.com/blog/hamburger-menu-css/
 //https://javascript.plainenglish.io/how-to-create-a-responsive-navbar-with-react-bb9ce4cebddd
 // https://codepen.io/rares-lungescu/pen/KLbMvo
-const NavBar = styled.nav`
-height: 100px;
-width: 100%;
-background: #111316;
-color: white;
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 0 2rem;
-font-size: 1.2rem;
-`
-const NavLeftmargintop = "2.3rem" // 1.5
-const NavBarLogo = styled(Link)`
-    text-decoration: none;
-    color: white;
-    :nth-child(n + 2) {
-        margin-top: ${NavLeftmargintop};
-    }
-`
-const NavBarLinks = styled.div`
-display: grid;
-grid-template-columns: repeat(6, auto);
-grid-gap: 20px;
-list-style: none;
-text-align: center;
-`
-const NavBarLink = styled(Link)`
-    text-decoration: none;
-    color: white;
-    transition: 0.3s all;
-    :hover{
-        color: red;
-    }
-`
-const NavBarIcon = styled(Link)`
-display: none;
-font-size: 2rem;
-cursor: pointer;
-`
-const RoadMapLogo = styled.img`
-    width: 80px;
-    height: 80px;
-    margin-left: 30px;`
-// <RoadMapLogo src={logo} alt="logo" />
-function HeaderComponent(){
-    //var styles = new HeaderStyled();        
+
+export default function HeaderScraper(props:any){       
+  //<h2>STEMTutorBank.</h2>
+  const [email,setEmail] = useState("")
+  const navigate = useNavigate()
+  const maxRowBased =useMediaQuery(maxRowBasedquery)
+  const getEmail = async (token:any) => {
+    const config = {headers: {Authorization: `Bearer ${token}`,}}
+    const response:any = await axios.get(`https://revisionbankapi.herokuapp.com/getemail`,config); // Send login post request.
+    const email = response.data.email
+    setEmail(email)
+  }
+  useEffect(() => {
+    //Runs only on the first render
+    getEmail(props.token)
+  },[]);
+  
+  //console.log(email)
+  //const email = getEmail(props.token)
     return(
     <div>
-    <NavBar className="navbar">
-        <NavBarLinks >
-            <NavBarLink to="/" className="nav-link">
-                <RoadMapLogo src={logo} alt=''/>
-            </NavBarLink>
-            <NavBarLogo to="/fmathqp" className="nav-logo" >
-                FmathQP
-            </NavBarLogo>
-            <NavBarLogo to="/fmathsb" className="nav-logo" >
-                FmathSB
-            </NavBarLogo>
-            <NavBarLogo to="/physicsaqa" className="nav-logo" >
-                PhysicsAQA
-            </NavBarLogo>
-            <NavBarLogo to="/ocrscience" className="nav-logo" >
-                A Level ScienceOCR
-            </NavBarLogo>
+        <header className="container header">
+         
+         <nav className="nav">
+           <div className="logo">
+             <Link to="/"><img src={RevisionBankLogo}></img></Link>
+           </div>
+           {maxRowBased ? 
+           <div></div>
+           
+           :
+            <div style={{position:"absolute", left:"80%",top:"8%"}}>
+             
+              <a href="/account" className="nav_menu_link"><AccountCircleIcon onClick={() => navigate('/account',{state:{"token":props.token}})} style={{fontSize:"40px",color:"white"}}/></a>
+            
+            </div>
+              }
+   
+           <div className="nav_menu" id="nav_menu">
+             <button className="close_btn" id="close_btn">
+               <i className="ri-close-fill"></i>
+             </button>
+   
+             <ul className="nav_menu_list">
+                <li className="nav_menu_item">
+                    <a id="navHello" >{email}</a>
+                </li>
+               <li className="nav_menu_item">
+                 <a href="/account" className="nav_menu_link"><AccountCircleIcon onClick={() => navigate('/account',{state:{"token":props.token}})} style={{fontSize:"40px"}}/></a>
+               </li>
+             </ul>
+           </div>
+   
+           <button className="toggle_btn" id="toggle_btn">
+             <i className="ri-menu-line"></i>
+           </button>
+         </nav>
+       </header>
 
-        </NavBarLinks>
-
-        <NavBarLinks >
-            <li className="nav-item">
-                <NavBarLink to="/stemroadmaps" className="nav-link">
-                    RoadMaps
-                </NavBarLink>
-            </li>
-            <li className="nav-item">
-                <NavBarLink to="/about" className="nav-link">
-                    About
-                </NavBarLink>
-            </li>
-            <li className="nav-item">
-                <NavBarLink to="/signin" className="nav-link">
-                    Sign in
-                </NavBarLink>
-            </li>
-            <li className="nav-item">
-                <NavBarLink to="/signup" className="nav-link" >
-                    SignUp
-                </NavBarLink>
-            </li>
-        </NavBarLinks>
-    </NavBar>
     </div>
     
     )
@@ -113,4 +84,3 @@ function HeaderComponent(){
 {pages.map((page) => Items(page))}
 </Box>
 */
-export default HeaderComponent;

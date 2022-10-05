@@ -8,17 +8,23 @@ export default function ReactPayPal(props:any) {
   const paypalRef:any = React.useRef();
   const navigate = useNavigate();
   let start_date:any = new Date()
-  const end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1,start_date.getDate()).toISOString()
+  const month = new Date(start_date.getFullYear(), start_date.getMonth()+1,start_date.getDate()).toISOString()
+  const year = new Date(start_date.getFullYear()+1, start_date.getMonth(),start_date.getDate()).toISOString()
+  const threemonths = new Date(start_date.getFullYear(), start_date.getMonth()+3,start_date.getDate()).toISOString()
+  const sixmonths = new Date(start_date.getFullYear(), start_date.getMonth()+6,start_date.getDate()).toISOString()
+  const end_date = props.subscription === "educational" ? props.price < 3000 ? props.price > 1000 ? sixmonths : props.price < 400 ? month : threemonths :year: month
+  //const end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1,start_date.getDate()).toISOString()
   start_date = start_date.toISOString()
   const storeSubscriptionData = async (subscription:string,start_date:string,end_date:string,token:any) => {
     var json = {"subscription":subscription,"start_date_subscription":start_date,"end_date_subscription":end_date}
     const config = {headers: {Authorization: `Bearer ${token}`,}}
-    const response:any = await axios.post(`https://palondomus-api.herokuapp.com/storesubscription`, json,config); // Send login post request.
+    const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/storesubscription`, json,config); // Send login post request.
   }
 
 
   // To show PayPal buttons once the component loads
   //console.log(props.price)
+  console.log(props.subscription)
   React.useEffect(() => {
     paypal
       .Buttons({
@@ -27,7 +33,7 @@ export default function ReactPayPal(props:any) {
             intent: "CAPTURE",
             purchase_units: [
               {
-                description: "Your description",
+                description: `${props.subscription.replace(/^\w/, (c:string) => c.toUpperCase())} Subscription.`,
                 amount: {
                   currency_code: "GBP",
                   value: props.price,
@@ -52,8 +58,9 @@ export default function ReactPayPal(props:any) {
   // If the payment has been made
   if (paid) {
     // TODO Call storeSubscriptionData() to store the subscription data in the database.
+    console.log("Payment Successful")
     storeSubscriptionData(props.subscription,start_date,end_date,props.token)
-    navigate("/stemscraper", { state: { token: props.token, subscription: props.subscription,email:props.email} });
+    navigate("/revisionbank", { state: { token: props.token, subscription: props.subscription,email:props.email} });
     return <div>Payment successful.!</div>;
   }
 

@@ -30,10 +30,8 @@ function PhysicsAQAPDF(){
     let chapter = physicsqaqapdfresponse.chapter
     let topic = physicsqaqapdfresponse.topic
     let topicms = `${topic} MS`   
-    let emailcount = (physicsqaqapdfresponse.physicsaqapdf.emailcount.furthermathspdf.emailcount > 40) ? "Unlimited" : physicsqaqapdfresponse.physicsaqapdf.emailcount.furthermathspdf.emailcount
-    
-    //const textcolor = {color:"white"}
-    //console.log(physicsqaqapdfresponse)
+    let emailcount = (physicsqaqapdfresponse.physicsaqapdf.emailcount > 40) ? "Unlimited" : physicsqaqapdfresponse.physicsaqapdf.emailcount
+    let end_date_subscription = new Date(physicsqaqapdfresponse.physicsaqapdf.end_date_subscription).toString()
     return(
         <div>
         <div style={Object.assign({},styles.containercenter,styles.title)}>
@@ -48,6 +46,9 @@ function PhysicsAQAPDF(){
           </div>
           <div style={styles.containercenter}>
             <p style={styles.textcolor}>Email Count: {emailcount}</p>
+          </div>
+          <div style={styles.containercenter}>
+            <p style={styles.textcolor}>Subscription Expiry: {end_date_subscription}</p>
           </div>
           <div style={styles.containercenter}>
             <p style={styles.textcolor}>{chapter}</p>

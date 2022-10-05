@@ -1,1 +1,1 @@
-export const maxRowBasedquery = '(min-width: 700px)'
+export const maxRowBasedquery = '(min-width: 600px)'

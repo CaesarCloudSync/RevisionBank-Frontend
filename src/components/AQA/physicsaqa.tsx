@@ -10,6 +10,8 @@ import {Topic} from './physicsaqadata';
 import {TopicMS} from './physicsaqadata';
 import {TopicSelectBar} from './physicsaqadata';
 import { Navigate } from "react-router-dom";
+import Policies from "../homepage/components/policies";
+import LoadingSpinner from "../../animations/Loadingspinner";
 interface ChapterTopic{
   label:string;
   value:string;
@@ -57,7 +59,8 @@ export default function PhysicsAqa (){
       e.preventDefault();
       setIsLoading(true);
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const response:any = await axios.post("https://palondomus-api.herokuapp.com/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
+      const response:any = await axios.post("https://revisionbankapi.herokuapp.com/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
+      console.log(response.data)
       if ('error' in response.data){
         setIsLoading(false);
         setErrorMessage(response.data.error);
@@ -69,6 +72,7 @@ export default function PhysicsAqa (){
       else if (!('error' in response.data)){
         //console.log(response.data
         setIsLoading(false);
+        //console.log(response.data)
         navigate("/physicsaqa/pdf",{state:{"physicsaqapdf": response.data.physicsaqa,"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label}});
         setNavigated(true);
       }
@@ -101,6 +105,7 @@ export default function PhysicsAqa (){
           <input style={styles.inputbars}
               onChange={(e) => setEmail(e.target.value)}
             value={email}
+            name="email"
             placeholder="Enter email"
             
           />
@@ -126,13 +131,14 @@ export default function PhysicsAqa (){
           <Button variant="contained" style={{fontSize:"13px"}} onClick={sendApi}>Submit</Button>
           </div>
           <div style={styles.containercenter}>
-          <p>{isLoading && <p>Loading...</p>}</p>
+          <p>{isLoading && <LoadingSpinner/>}</p>
           <p>{errormessagebool && <p>{errormessage}</p>}</p>
           </div>
           <div style={styles.containercenter}>
             <p>{datanotset && <p>Select all options</p>}</p>
           </div>
         </div>
+        <Policies marginTop="-140px"></Policies>
         </div>
         :
         <div>

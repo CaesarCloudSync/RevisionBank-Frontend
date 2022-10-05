@@ -96,5 +96,42 @@ footer {
 }
 
 
+/*Cookie Bar*/
+.cookie-banner {
+  position: fixed;
+  bottom: 0px;
+  left: 10%;
+  right: 10%;
+  width: 80%;
+  padding: 5px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #eee;
+  border-radius: 5px;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
 
-
+.cookie-banner  > p{
+  font-size: 13px;
+  font-weight: 400;
+  color: #333;
+}
+@media only screen and (max-width: 700px){
+  .cookie-banner  > p{
+    font-size: 7.5px;
+    font-weight: 200;
+    color: #333;
+  }
+  
+}
+.close {
+  height: 20px;
+  position: relative;
+  font-size: 20px;
+  top: -5px;
+  border: none;
+  color: black;
+  border-radius: 2px;
+  cursor: pointer;
+}
