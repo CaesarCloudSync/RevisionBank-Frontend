@@ -33,7 +33,7 @@ export default function AddRevisionCard(props:any){
         ])
 
 	const [fileisnottxt,setFileisNotTxt] = useState(false);
-    const [revisioncardimage,setRevisionCardImage] = useState([{revisioncardimgname:'',revisioncardimage:''}])
+    
     const handleFormChange = (event:any, index:any,ocr=true) => {
         if (event.target.files){
             const reader = new FileReader()
@@ -59,16 +59,25 @@ export default function AddRevisionCard(props:any){
                 let ocrrecogloadingdata:any = [...ocrfilename];
                 ocrrecogloadingdata[index]["ocrloading"] = true;
                 setOcrRecogLoading(ocrrecogloadingdata);
-                
+                //console.log(event.target.files[0])
                 const reader=new FileReader();
                 reader.onload=(tessevent:any)=>{
                 const image= tessevent.target.result;
-                const revisioncardimagename = event.target.files[0].name
-                let data:any = [...revisioncardimage];
-                data[index]["revisioncardimgname"] = revisioncardimagename;
-                data[index]["revisioncardimage"] = image;
-                // TODO Store the image in the database here using post request
-                setRevisionCardImage(data);
+                //console.log(image)
+                var json = {"revisioncardscreenshot":image};
+
+                const tessresponse = ocr === true ? axios.post("https://revisionbankapi.herokuapp.com/revisionbanktranslate",json) : axios.post("https://revisionbanktensorflow.herokuapp.com/revisionbankhandtranslate",{"img":image})  
+                tessresponse.then(response=>{
+    
+                    console.log(response.data)
+                    let data:any = [...formFields];
+                    data[index][event.target.name] = ocr === true ? response.data.revisioncardscreenshotext : response.data.recognized;
+                    //console.log(data)
+                    setFormFields(data);
+                    let ocrrecogloadingdata:any = [...ocrfilename];
+                    ocrrecogloadingdata[index]["filename"] = false;
+                    setOcrRecogLoading(ocrrecogloadingdata);
+                })
             
                 };
                 reader.readAsDataURL(event.target.files[0]);
@@ -210,7 +219,7 @@ export default function AddRevisionCard(props:any){
                                 }
                                 <button style={{width:"100px",border:"1px solid red",borderRadius:"10px",backgroundColor:"red",padding:"5px",color:"white"}} id="upload" onClick={() => removeFields(index)}>Remove</button>
                             </div>
-                            {ocrfilename[index]["filename"] !== "" ?<div style={{display:"flex",flexDirection:"column"}}><p>{revisioncardimage[index]["revisioncardimgname"]}</p><img style={{width:"50%",height:"50%"}} src={revisioncardimage[index]["revisioncardimage"]}></img></div>: <p></p>}
+                            {ocrfilename[index]["filename"] !== "" ?<p >{ocrfilename[index]["filename"]}</p> : <p></p>}
                             {ocrprogress[index]["ocrprogress"] >  0 && ocrprogress[index]["ocrprogress"] <  100 &&<div >Loading text image: {ocrprogress[index]["ocrprogress"]}%</div>}
                         </div>
                     )
