@@ -33,7 +33,7 @@ export default function AddRevisionCard(props:any){
         ])
 
 	const [fileisnottxt,setFileisNotTxt] = useState(false);
-    const [revisioncardimage,setRevisionCardImage] = useState([{revisioncardimgname:'',revisioncardimage:''}])
+    const [revisioncardimage,setRevisionCardImage] = useState([{revisioncardimgname:[],revisioncardimage:[]}])
     const handleFormChange = (event:any, index:any,ocr=true) => {
         if (event.target.files){
             const reader = new FileReader()
@@ -65,9 +65,9 @@ export default function AddRevisionCard(props:any){
                 const image= tessevent.target.result;
                 const revisioncardimagename = event.target.files[0].name
                 let data:any = [...revisioncardimage];
-                data[index]["revisioncardimgname"] = revisioncardimagename;
-                data[index]["revisioncardimage"] = image;
-                // TODO Store the image in the database here using post request
+                
+                data[index]["revisioncardimgname"].push(revisioncardimagename);
+                data[index]["revisioncardimage"].push(image);
                 setRevisionCardImage(data);
             
                 };
@@ -96,17 +96,21 @@ export default function AddRevisionCard(props:any){
         setSubmitting(true)
         //console.log(revisionscheduleinterval.label)
         const checkformfields:any = formFields.map((revisioncard:any) => { if (revisioncard.subject === '' || revisioncard.revisioncardtitle === '' || revisioncard.revisioncard === ''){return("true")}else{return("false")} })
+        const checkrevisioncardimages:any = revisioncardimage.map((revisioncard:any) => { if (revisioncard.revisioncardimgname.length === 0 || revisioncard.revisioncardimage === 0){return("true")}else{return("false")} })
         //console.log(checkformfields)
         //console.log(checkformfields)
-        if (checkformfields.includes("true") || (email  === '' || props.emailcount === 0 ) || checkformfields.length === 0 || revisionscheduleinterval.label === undefined){
+        if ((checkformfields.includes("true") && checkrevisioncardimages.includes("true")) || (email  === '' || props.emailcount === 0 ) || (checkformfields.length === 0 && checkrevisioncardimages.length === 0)|| revisionscheduleinterval.label === undefined){
             setSubmitting(false)
             setStudentEmailStored(false)
             setSelectAllOptions(true)
         }
-        else if (!(checkformfields.includes("true")) && email !== '' && revisionscheduleinterval.label !== undefined){
+        else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' && revisionscheduleinterval.label !== undefined){
             var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
+            // TODO Store the image in the database here using post request
+            revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
             var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval.label.match(getdigitregex)[0]),"revisioncards":formFields}}
-            //console.log(json)
+            console.log(json)
+            
             const response = await axios.post("https://revisionbankapi.herokuapp.com/storerevisioncards",json,config)
             //console.log(response.data)
             setSubmitting(false)
@@ -139,7 +143,12 @@ export default function AddRevisionCard(props:any){
             filename:''
         }
         setOCRFilename([...ocrfilename, ocrfilenameobject])
+        let revisioncardimageobject = {revisioncardimgname:[],revisioncardimage:[]}
+        //console.log([...revisioncardimage])
+        setRevisionCardImage([...revisioncardimage,revisioncardimageobject])
         }
+
+    
     
         const removeFields = (index:any) => {
         let data = [...formFields];
@@ -154,6 +163,9 @@ export default function AddRevisionCard(props:any){
         let ocrfilenamedata = [...ocrfilename];
         ocrfilenamedata.splice(index, 1)
         setOCRFilename(ocrfilenamedata)
+        //let revisioncardimagedata = [...revisioncardimage];
+        //revisioncardimagedata.splice(index,1)
+        //setRevisionCardImage(revisioncardimagedata)
         
         //props.setAccountInfo((accountinfo:any)=> ({...props.accountinfo,numofaccounts:props.accountinfo.numofaccounts+1}))
         }
@@ -175,6 +187,7 @@ export default function AddRevisionCard(props:any){
                     
                     {formFields.map((form, index) => {
                     //console.log(ocrprogress[index]["ocrprogress"])
+                    
                     return (
                         <div>
                             <div key={index} style={{display:"flex",flexDirection:maxRowBased ? "column" :"column",marginTop:"10px"}}>
@@ -210,7 +223,18 @@ export default function AddRevisionCard(props:any){
                                 }
                                 <button style={{width:"100px",border:"1px solid red",borderRadius:"10px",backgroundColor:"red",padding:"5px",color:"white"}} id="upload" onClick={() => removeFields(index)}>Remove</button>
                             </div>
-                            {ocrfilename[index]["filename"] !== "" ?<div style={{display:"flex",flexDirection:"column"}}><p>{revisioncardimage[index]["revisioncardimgname"]}</p><img style={{width:"50%",height:"50%"}} src={revisioncardimage[index]["revisioncardimage"]}></img></div>: <p></p>}
+                            {ocrfilename[index]["filename"] !== "" ?<div>
+                            <table>
+                                <tbody >
+                                <tr>
+                                {revisioncardimage[index]["revisioncardimgname"].map((val)=> {return(<th key={val} style={{textAlign:"left"}}>{val}</th>)})}
+                                </tr>
+                                <tr>
+                                {revisioncardimage[index]["revisioncardimage"].map((val)=> {return(<td ><img key={val} style={{width:"75",height:"75%"}} src={val}></img></td>)})}
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>: <p></p>}
                             {ocrprogress[index]["ocrprogress"] >  0 && ocrprogress[index]["ocrprogress"] <  100 &&<div >Loading text image: {ocrprogress[index]["ocrprogress"]}%</div>}
                         </div>
                     )

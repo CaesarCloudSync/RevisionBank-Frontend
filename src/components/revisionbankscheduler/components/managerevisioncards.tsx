@@ -149,6 +149,7 @@ export default function ManageRevisionCards(props:any){
         //console.log(trafficlightinit)
         setShowPickedTrafficLightind(trafficlightinit)
         if (!(Object.keys(response.data).includes("message"))){
+            //console.log(response.data)
             setRevisionCarddata((previousState:any) => {
                 //revisioncarddata.revisioncards.reverse()
 
@@ -401,12 +402,13 @@ export default function ManageRevisionCards(props:any){
                             <p style={{color:"grey"}}>Manage Revision Cards:</p>
                             </div>
                             {/*TODO Dynamically display the revision cards*/}
-                            {revisioncards !== []  && !revisioncards.includes(undefined) && revisioncards.map((revisioncard:any,index:any) => {
+                            {revisioncards.length > 0  && !revisioncards.includes(undefined) && revisioncards.map((revisioncard:any,index:any) => {
                                 var weirdboole:any = checkrevisecard(revisioncard,scheduledcards)
                                 //console.log(weirdboole)
                                 const revboole = weirdboole !== undefined ? weirdboole[0] : [] 
                                 const revisioncardcolor =  weirdboole !== undefined && weirdboole[1] !== undefined && "color" in weirdboole[1]  && weirdboole[1].color   
                                 //console.log(revisioncardcolor)
+                                //console.log(revisioncard.revisioncardimage)
                                 return(
                                 <div>
                                     <div key={index} style={{display:"flex",marginTop:"50px",flexDirection:maxRowBased ? "row":"column",justifyContent: "space-between"}}>
@@ -415,8 +417,24 @@ export default function ManageRevisionCards(props:any){
                                     </div>
                                     <textarea onChange={(e:any) => {setNewRevisionCard((items:any)=> ({...index,revisioncardind:index,newrevisoncard:e.target.value}))} } defaultValue={revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px"}}>
                                     </textarea>
+                                    
+                                    {revisioncard.revisioncardimage !== undefined &&
+                                    <table>
+                                        <tbody >
+                                        <tr>
+                                        {revisioncard.revisioncardimgname.map((val:any)=> {return(<th key={val} style={{textAlign:"left"}}>{val}</th>)})}
+                                        </tr>
+                                        <tr>
+                                        {revisioncard.revisioncardimage.map((val:any)=> {return(<td ><img key={val} style={{width:"75",height:"75%"}} src={val}></img></td>)})}
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    }
+                                        
+                                    
                                     <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
                                     {newrevisioncard.revisioncardind === index && newrevisioncard.newrevisoncard  !== "" && 
+                                    
                                     <Button onClick={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} style={{backgroundColor:"#00008B",width:"100px",border:"1px solid #00008B",height:"30px",fontSize:"13px"}}>Submit</Button>}
                                     <Button onClick={() => {removerevisioncard(revisioncard,token)}} style={{backgroundColor:"#dc3545",width:"100px",border:"1px solid #dc3545",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Remove</Button>
 
