@@ -1,6 +1,6 @@
 
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useMediaQuery from "../../mediahooks/useMedia";
 import { maxRowBasedquery } from "../../mediahooks/mediamax";
 import axios from 'axios'
@@ -11,7 +11,10 @@ import "./addrevisioncard.css";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Button } from "react-bootstrap";
 import Jimp from "jimp";
+import LoadingSpinner from "../../../animations/Loadingspinner";
+import { useAlert } from 'react-alert'
 export default function AddRevisionCard(props:any){
+    const reactalert = useAlert()
     const [submitting,setSubmitting] = useState<Boolean>(false)
     const navigate = useNavigate();
     const maxRowBased = useMediaQuery(maxRowBasedquery);
@@ -34,6 +37,7 @@ export default function AddRevisionCard(props:any){
 
 	const [fileisnottxt,setFileisNotTxt] = useState(false);
     const [revisioncardimage,setRevisionCardImage] = useState([{revisioncardimgname:[],revisioncardimage:[]}])
+    const [toomanyimages,setTooManyImages] = useState(false)
     const handleFormChange = (event:any, index:any,ocr=true) => {
         if (event.target.files){
             const reader = new FileReader()
@@ -51,7 +55,7 @@ export default function AddRevisionCard(props:any){
                 
             }
             else if (event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".PNG") || event.target.files[0].name.includes(".jpg") || event.target.files[0].name.includes(".jpeg")){
-
+               
                 let ocrfilenamedata:any = [...ocrfilename];
                 ocrfilenamedata[index]["filename"] = event.target.files[0].name;
                 setOCRFilename(ocrfilenamedata);
@@ -65,12 +69,22 @@ export default function AddRevisionCard(props:any){
                 const image= tessevent.target.result;
                 const revisioncardimagename = event.target.files[0].name
                 let data:any = [...revisioncardimage];
+
                 
                 data[index]["revisioncardimgname"].push(revisioncardimagename);
                 data[index]["revisioncardimage"].push(image);
-                setRevisionCardImage(data);
-            
-                };
+                //console.log(data.length)
+                //if (data.)
+                
+                if (revisioncardimage[index].revisioncardimgname.length <= 2){
+                    setRevisionCardImage(data);
+                }
+                else if (revisioncardimage[index].revisioncardimgname.length > 2){
+                    revisioncardimage[index].revisioncardimgname.pop()
+                    revisioncardimage[index].revisioncardimage.pop()
+                    reactalert.show("Maximum 2 images in cards.")
+                }
+            }
                 reader.readAsDataURL(event.target.files[0]);
             }
             
@@ -170,6 +184,8 @@ export default function AddRevisionCard(props:any){
         //props.setAccountInfo((accountinfo:any)=> ({...props.accountinfo,numofaccounts:props.accountinfo.numofaccounts+1}))
         }
     //<UploadFileIcon style={{fontSize:"20px"}}/>
+
+    
     return(
         <div>
             <div style={{margin:"20px"}}>
@@ -230,7 +246,7 @@ export default function AddRevisionCard(props:any){
                                 {revisioncardimage[index]["revisioncardimgname"].map((val)=> {return(<th key={val} style={{textAlign:"left"}}>{val}</th>)})}
                                 </tr>
                                 <tr>
-                                {revisioncardimage[index]["revisioncardimage"].map((val)=> {return(<td ><img key={val} style={{width:"75",height:"75%"}} src={val}></img></td>)})}
+                                {revisioncardimage[index]["revisioncardimage"].map((val)=> {return(<td ><img key={val} style={{width:maxRowBased ? "55%": "75%" ,height: maxRowBased ? "55%" : "75%"}} src={val}></img></td>)})}
                                 </tr>
                                 </tbody>
                             </table>
@@ -241,7 +257,7 @@ export default function AddRevisionCard(props:any){
                     })}
                 </form>
                 <div style={{display:"flex",flexDirection:"row",gap:"1%",marginTop:"10px"}}>
-                    {submitting ? <p>Submitting...</p> : <button style={{width:"100px",borderRadius:"10px",backgroundColor:"#335eea",padding:"5px",color:"white"}} onClick={submitRevisionCard}>Submit</button>}
+                    {submitting ? <LoadingSpinner></LoadingSpinner> : <button style={{width:"100px",borderRadius:"10px",backgroundColor:"#335eea",padding:"5px",color:"white"}} onClick={submitRevisionCard}>Submit</button>}
                     <br/>
                     <button style={{marginLeft:"10px",width:"100px",borderRadius:"10px",backgroundColor:"green",padding:"5px",color:"white"}} onClick={addFields}>Add More...</button>
                 
@@ -251,6 +267,7 @@ export default function AddRevisionCard(props:any){
             <div style={{display:"flex",flexDirection:"row",justifyContent:"center"}}>
                 {studentemailstored && <p style={{color:"green"}}>Student emails stored.</p>}
                 {selectalloptions && <p style={{color:"red"}}>Please fill in all fields.</p>}
+                {toomanyimages && <p style={{color:"red"}}>Maximum 2 images.</p> }
             </div>
         </div>
                 

@@ -90,7 +90,7 @@ export default function ManageRevisionCards(props:any){
             data[index]["color"] = color;
             data[index]["showpickedtrafficlightind"] = index;
             data[index]["pickedtrafficlightind"] = true;
-            console.log(data)
+            //console.log(data)
             const maxtrafficlight = showpickedtrafficlightind.map((items:any) => {if (items.color !== "none") {return(true)} else {return(false)}}).filter((v:boolean) => (v === true)).length;
             //console.log(maxtrafficlight,scheduledcards.revisioncards)
             if (scheduledcards.revisioncards.length + maxtrafficlight <= 5){
@@ -133,6 +133,7 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const response:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
         const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getaccountinfo`,config)
+        console.log(response.data)
         //console.log(responseaccount.data.subscription)
         if (responseaccount.data.subscription === "educational" || responseaccount.data.subscription === "premium" || responseaccount.data.subscription === "student educational" ){
             setAllowTrafficLights(true)
@@ -425,7 +426,7 @@ export default function ManageRevisionCards(props:any){
                                         {revisioncard.revisioncardimgname.map((val:any)=> {return(<th key={val} style={{textAlign:"left"}}>{val}</th>)})}
                                         </tr>
                                         <tr>
-                                        {revisioncard.revisioncardimage.map((val:any)=> {return(<td ><img key={val} style={{width:"75",height:"75%"}} src={val}></img></td>)})}
+                                        {revisioncard.revisioncardimage.map((val:any)=> {return(<td ><img key={val} style={{width:maxRowBased ? "55%": "755%" ,height: maxRowBased ? "55%" : "75%"}} src={val}></img></td>)})}
                                         </tr>
                                         </tbody>
                                     </table>
