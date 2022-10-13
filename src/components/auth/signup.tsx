@@ -115,7 +115,7 @@ function Signup() {
         //json["betatest"] = "true";
         //console.log(json)
         
-        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/signupapi`, json);
+        const response:any = await axios.post(`https://revisionbank.onrender.com/signupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
         //console.log(subscription)

@@ -13,11 +13,11 @@ export default function ManageAccounts(props:any){
     const deletestudentaccount = async (e:any,studentemail:any) => {
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
         //console.log(props.token)
-        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/deletestudentaccount`,{"studentemail":studentemail},config); // Send login post request.
-        const studentresponse:any = await axios.get(`https://revisionbankapi.herokuapp.com/getstudentsubscriptions`,config)
+        const response:any = await axios.post(`https://revisionbank.onrender.com/deletestudentaccount`,{"studentemail":studentemail},config); // Send login post request.
+        const studentresponse:any = await axios.get(`https://revisionbank.onrender.com/getstudentsubscriptions`,config)
         props.setStudentAccountInfo(studentresponse.data.result)
         //console.log(response.data)
-            //const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/setstudentsubscriptions`,json,config)
+            //const response:any = await axios.post(`https://revisionbank.onrender.com/setstudentsubscriptions`,json,config)
 
         }
     //console.log(newpassword)
@@ -25,8 +25,8 @@ export default function ManageAccounts(props:any){
         e.preventDefault();
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
         //console.log(newpassword)
-        const response:any = await axios.put(`https://revisionbankapi.herokuapp.com/changestudentpassword`,{"studentemail":studentemailchangepass,"password":newpassword},config); // Send login post request.
-        const studentresponse:any = await axios.get(`https://revisionbankapi.herokuapp.com/getstudentsubscriptions`,config)
+        const response:any = await axios.put(`https://revisionbank.onrender.com/changestudentpassword`,{"studentemail":studentemailchangepass,"password":newpassword},config); // Send login post request.
+        const studentresponse:any = await axios.get(`https://revisionbank.onrender.com/getstudentsubscriptions`,config)
         props.setStudentAccountInfo(studentresponse.data.result)
         setChangePassword({studentind:-1,clicked:false})
     }   

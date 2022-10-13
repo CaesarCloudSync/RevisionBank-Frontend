@@ -26,7 +26,7 @@ export default function CompleteFreeTrial(){
         const end_date_freetrial = new Date(start_date_freetrial.getFullYear(), start_date_freetrial.getMonth(),start_date_freetrial.getDate() + 7).toISOString()
         var json:any = {"subscription":subscription,"start_date_subscription":start_date_freetrial,"end_date_subscription":end_date_freetrial}
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const responseft:any = await axios.post(`https://revisionbankapi.herokuapp.com/storefreetrial`,json,config)
+        const responseft:any = await axios.post(`https://revisionbank.onrender.com/storefreetrial`,json,config)
         navigate("/revisionbank", { state: { token: token, subscription: subscription,email:email} });
         //navigate("/billing",{state:{token:token,subscription:subscription,price:price,email:email}})
         

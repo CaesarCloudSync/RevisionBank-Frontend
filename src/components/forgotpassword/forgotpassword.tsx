@@ -55,7 +55,7 @@ export default function ForgotPassword(){
     const [submitted,setSubmitted] = useState(false);
     const forgotpassword = async (event:any) => { 
         event.preventDefault();
-        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/forgotpassword`, {"email":email.toLowerCase()}); // Send login post request.
+        const response:any = await axios.post(`https://revisionbank.onrender.com/forgotpassword`, {"email":email.toLowerCase()}); // Send login post request.
         setSubmitted(true);
     }   
     const maxRowBased = useMediaQuery(maxRowBasedquery);

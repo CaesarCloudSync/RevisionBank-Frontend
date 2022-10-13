@@ -51,9 +51,9 @@ function RevisionBankOptions() {
   //console.log(statevalue)
   const getsubscription = async (token:string) => {
     const config = {headers: {Authorization: `Bearer ${token}`,}}
-    const responseget:any = await axios.get(`https://revisionbankapi.herokuapp.com/getsubscription`,config); // Send login post request.
+    const responseget:any = await axios.get(`https://revisionbank.onrender.com/getsubscription`,config); // Send login post request.
     if (responseget.data.end_date_subscription === undefined) {
-      const responsegetstudent:any = await axios.get(`https://revisionbankapi.herokuapp.com/checkstudentsubscriptions`,config);
+      const responsegetstudent:any = await axios.get(`https://revisionbank.onrender.com/checkstudentsubscriptions`,config);
       //console.log(responsegetstudent.data)
       if (responsegetstudent.data.student_subscription === "student educational") {
         setSubscriptionpresent(true)

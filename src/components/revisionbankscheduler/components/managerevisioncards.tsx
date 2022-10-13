@@ -60,8 +60,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
+                    const response:any = await axios.post(`https://revisionbank.onrender.com/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -85,7 +85,7 @@ export default function ManageRevisionCards(props:any){
         // When there is a color already selected
         if (revisioncardcolor !== false && (color !== "none" && color !== revisioncardcolor)){
             revisioncard["color"] = revisioncardcolor
-            const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`https://revisionbank.onrender.com/unschedulerevisioncard`,revisioncard,config)
             revisioncard["color"] = color
             data[index]["color"] = color;
             data[index]["showpickedtrafficlightind"] = index;
@@ -99,8 +99,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
+                    const response:any = await axios.post(`https://revisionbank.onrender.com/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -122,7 +122,7 @@ export default function ManageRevisionCards(props:any){
 
         }
         if (color === revisioncardcolor){
-            const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`https://revisionbank.onrender.com/unschedulerevisioncard`,revisioncard,config)
             window.location.reload()
 
         }
@@ -131,8 +131,8 @@ export default function ManageRevisionCards(props:any){
     const getrevisioncards = async (token:string) => {
         //console.log(token)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
-        const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getaccountinfo`,config)
+        const response:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getaccountinfo`,config)
         console.log(response.data)
         //console.log(responseaccount.data.subscription)
         if (responseaccount.data.subscription === "educational" || responseaccount.data.subscription === "premium" || responseaccount.data.subscription === "student educational" ){
@@ -170,9 +170,9 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/schedulerevisioncard`,json,config)
+        const response:any = await axios.post(`https://revisionbank.onrender.com/schedulerevisioncard`,json,config)
         ////console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -188,7 +188,7 @@ export default function ManageRevisionCards(props:any){
     }
     const unscheduleallrevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbankapi.herokuapp.com/unscheduleallrevisioncard`,config)
+        const response:any = await axios.delete(`https://revisionbank.onrender.com/unscheduleallrevisioncard`,config)
         window.location.reload()
         //console.log(response.data)
     }
@@ -196,7 +196,7 @@ export default function ManageRevisionCards(props:any){
         setManualScheduling(true);
         window.location.reload()
         //const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://revisionbankapi.herokuapp.com/checkschedulerevisioncard`,config)
+        //const response:any = await axios.get(`https://revisionbank.onrender.com/checkschedulerevisioncard`,config)
         //console.log(response.data)
         //setScheduledCardState(response.data)
     }
@@ -204,9 +204,9 @@ export default function ManageRevisionCards(props:any){
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/unschedulerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`https://revisionbank.onrender.com/unschedulerevisioncard`,revisioncard,config)
         ////console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -220,7 +220,7 @@ export default function ManageRevisionCards(props:any){
     }
     const checkschedulerevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbankapi.herokuapp.com/checkschedulerevisioncard`,config)
+        const response:any = await axios.get(`https://revisionbank.onrender.com/checkschedulerevisioncard`,config)
         //console.log(response.data)
         setScheduledCardState(response.data)
         ////console.log(response.data)
@@ -234,9 +234,9 @@ export default function ManageRevisionCards(props:any){
             const newrevisioncardjson = {"revisioncard":prevrevisioncard.revisioncard,"newrevisioncard": newrevisioncard.newrevisoncard,"revisioncardtitle": prevrevisioncard.revisioncardtitle,"subject": prevrevisioncard.subject}
             //console.log(newrevisioncardjson)
             const config = {headers: {Authorization: `Bearer ${token}`,}}
-            const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/changerevisioncard`,newrevisioncardjson,config)
+            const response:any = await axios.post(`https://revisionbank.onrender.com/changerevisioncard`,newrevisioncardjson,config)
             ////console.log(response.data)
-            const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
+            const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
             var newrevisioncarddata = responseaccount.data
             //console.log(newrevisioncarddata)
             
@@ -257,8 +257,8 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         var json = {"sendtoemail":newsendtoemail}
         //console.log(json)
-        const response:any = await axios.put(`https://revisionbankapi.herokuapp.com/changesendtoemail`,json,config)
-        const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
+        const response:any = await axios.put(`https://revisionbank.onrender.com/changesendtoemail`,json,config)
+        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         ////console.log(responseaccount)
         
@@ -278,7 +278,7 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/sendnowrevisioncard`,json,config)
+        const response:any = await axios.post(`https://revisionbank.onrender.com/sendnowrevisioncard`,json,config)
         ////console.log(response.data)
 
     }
@@ -287,9 +287,9 @@ export default function ManageRevisionCards(props:any){
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //var json = {"removerevisioncard":revisioncard}
-        const response:any = await axios.post(`https://revisionbankapi.herokuapp.com/removerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`https://revisionbank.onrender.com/removerevisioncard`,revisioncard,config)
         //console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbankapi.herokuapp.com/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         

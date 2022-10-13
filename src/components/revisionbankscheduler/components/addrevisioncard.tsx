@@ -54,8 +54,42 @@ export default function AddRevisionCard(props:any){
                 reader.readAsText(event.target.files[0])
                 
             }
-            else if (event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".PNG") || event.target.files[0].name.includes(".jpg") || event.target.files[0].name.includes(".jpeg")){
+            else if (event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".PNG") ){
                
+                let ocrfilenamedata:any = [...ocrfilename];
+                ocrfilenamedata[index]["filename"] = event.target.files[0].name;
+                setOCRFilename(ocrfilenamedata);
+
+                let ocrrecogloadingdata:any = [...ocrfilename];
+                ocrrecogloadingdata[index]["ocrloading"] = true;
+                setOcrRecogLoading(ocrrecogloadingdata);
+                
+                const reader=new FileReader();
+                reader.onload=(tessevent:any)=>{
+                const image= tessevent.target.result;
+                console.log(image)
+                const revisioncardimagename = event.target.files[0].name
+                let data:any = [...revisioncardimage];
+
+                
+                data[index]["revisioncardimgname"].push(revisioncardimagename);
+                data[index]["revisioncardimage"].push(image);
+                //console.log(data.length)
+                //if (data.)
+                
+                if (revisioncardimage[index].revisioncardimgname.length <= 4){
+                    setRevisionCardImage(data);
+                }
+                else if (revisioncardimage[index].revisioncardimgname.length > 4){
+                    revisioncardimage[index].revisioncardimgname.pop()
+                    revisioncardimage[index].revisioncardimage.pop()
+                    reactalert.show("Maximum 4 images in cards.")
+                }
+            }
+                reader.readAsDataURL(event.target.files[0]);
+            }
+            // images
+            else if (event.target.files[0].name.includes(".jpg") || event.target.files[0].name.includes(".jpeg")){
                 let ocrfilenamedata:any = [...ocrfilename];
                 ocrfilenamedata[index]["filename"] = event.target.files[0].name;
                 setOCRFilename(ocrfilenamedata);
@@ -76,16 +110,17 @@ export default function AddRevisionCard(props:any){
                 //console.log(data.length)
                 //if (data.)
                 
-                if (revisioncardimage[index].revisioncardimgname.length <= 2){
+                if (revisioncardimage[index].revisioncardimgname.length <= 1){
                     setRevisionCardImage(data);
                 }
-                else if (revisioncardimage[index].revisioncardimgname.length > 2){
+                else if (revisioncardimage[index].revisioncardimgname.length > 1){
                     revisioncardimage[index].revisioncardimgname.pop()
                     revisioncardimage[index].revisioncardimage.pop()
-                    reactalert.show("Maximum 2 images in cards.")
+                    reactalert.show("Maximum 1 image in cards.")
                 }
             }
                 reader.readAsDataURL(event.target.files[0]);
+
             }
             
             else{
@@ -125,7 +160,7 @@ export default function AddRevisionCard(props:any){
             var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval.label.match(getdigitregex)[0]),"revisioncards":formFields}}
             console.log(json)
             
-            const response = await axios.post("https://revisionbankapi.herokuapp.com/storerevisioncards",json,config)
+            const response = await axios.post("https://revisionbank.onrender.com/storerevisioncards",json,config)
             //console.log(response.data)
             setSubmitting(false)
             //window.location.reload();
@@ -177,9 +212,9 @@ export default function AddRevisionCard(props:any){
         let ocrfilenamedata = [...ocrfilename];
         ocrfilenamedata.splice(index, 1)
         setOCRFilename(ocrfilenamedata)
-        //let revisioncardimagedata = [...revisioncardimage];
-        //revisioncardimagedata.splice(index,1)
-        //setRevisionCardImage(revisioncardimagedata)
+        let revisioncardimagedata = [...revisioncardimage];
+        revisioncardimagedata.splice(index,1)
+        setRevisionCardImage(revisioncardimagedata)
         
         //props.setAccountInfo((accountinfo:any)=> ({...props.accountinfo,numofaccounts:props.accountinfo.numofaccounts+1}))
         }

@@ -76,7 +76,7 @@ export default function FmathQP (){
     //console.log(topicselect)
     const getemailcount = async () => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbankapi.herokuapp.com/getemailcount",config)
+      const responsecount = await axios.get("https://revisionbank.onrender.com/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setHideEmailPrompt(false);
@@ -99,7 +99,7 @@ export default function FmathQP (){
       setFillAllFields(false);
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
       //console.log(email)
-      const response = await axios.post("https://revisionbankapi.herokuapp.com/fmathsqp",{"furthermaths":{"email":email,"furthermathsbook": bookidselect,"furthermathstopic":topicselect.label,"platform": "web"}},config)
+      const response = await axios.post("https://revisionbank.onrender.com/fmathsqp",{"furthermaths":{"email":email,"furthermathsbook": bookidselect,"furthermathstopic":topicselect.label,"platform": "web"}},config)
       console.log(response.data)
       if ('error' in response.data){
         setIsLoading(false);

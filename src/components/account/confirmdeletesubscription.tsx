@@ -16,7 +16,7 @@ export default function ConfirmDeleteSubscription(){
     const maxRowBased = useMediaQuery(maxRowBasedquery)
     const deletesubscription = async (token:any) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbankapi.herokuapp.com/deletesubscription`,config); 
+        const response:any = await axios.delete(`https://revisionbank.onrender.com/deletesubscription`,config); 
         //navigate('/account',{state:{token:token}})
         navigate('/')
       }

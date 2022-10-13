@@ -66,7 +66,7 @@ export default function AddRevisionCard(props:any){
                 //console.log(image)
                 var json = {"revisioncardscreenshot":image};
 
-                const tessresponse = ocr === true ? axios.post("https://revisionbankapi.herokuapp.com/revisionbanktranslate",json) : axios.post("https://revisionbanktensorflow.herokuapp.com/revisionbankhandtranslate",{"img":image})  
+                const tessresponse = ocr === true ? axios.post("https://revisionbank.onrender.com/revisionbanktranslate",json) : axios.post("https://revisionbanktensorflow.herokuapp.com/revisionbankhandtranslate",{"img":image})  
                 tessresponse.then(response=>{
     
                     console.log(response.data)
@@ -116,7 +116,7 @@ export default function AddRevisionCard(props:any){
             var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
             var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval.label.match(getdigitregex)[0]),"revisioncards":formFields}}
             //console.log(json)
-            const response = await axios.post("https://revisionbankapi.herokuapp.com/storerevisioncards",json,config)
+            const response = await axios.post("https://revisionbank.onrender.com/storerevisioncards",json,config)
             //console.log(response.data)
             setSubmitting(false)
             //window.location.reload();

@@ -49,7 +49,7 @@ export default function RevisionBankScheduler(){
     const [emailcount,setEmailCount] = useState(0);
     const getemailcount = async (token:any) => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbankapi.herokuapp.com/getemailcount",config)
+      const responsecount = await axios.get("https://revisionbank.onrender.com/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setShowEmailPrompt(false);
