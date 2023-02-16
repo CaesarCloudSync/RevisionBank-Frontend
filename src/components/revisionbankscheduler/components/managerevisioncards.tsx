@@ -348,6 +348,7 @@ export default function ManageRevisionCards(props:any){
 
       //console.log(email)
       var revisionscheduleinterval = (revisioncarddata !== "") ? revisioncarddata.revisioncarddata.revisionscheduleinterval : "No Revision Cards"
+      console.log(revisioncarddata.revisioncarddata)
       var sendtoemail = (revisioncarddata !== "") ? revisioncarddata.revisioncarddata.sendtoemail : "No Revision  Cards"
       var revisioncards = (revisioncarddata !== "") ? revisioncarddata.revisioncarddata.revisioncards : []
       var scheduledcards = (scheduledcardstate !== "") ? scheduledcardstate : []
@@ -426,7 +427,7 @@ export default function ManageRevisionCards(props:any){
                                         {revisioncard.revisioncardimgname.map((val:any)=> {return(<th key={val} style={{textAlign:"left"}}>{val}</th>)})}
                                         </tr>
                                         <tr>
-                                        {revisioncard.revisioncardimage.map((val:any)=> {return(<td ><img key={val} style={{width:maxRowBased ? "55%": "755%" ,height: maxRowBased ? "55%" : "75%"}} src={val}></img></td>)})}
+                                        {revisioncard.revisioncardimage.map((val:any)=> {return(<td ><img key={val} style={{width:maxRowBased ? "55%": "75%" ,height: maxRowBased ? "55%" : "75%"}} src={val}></img></td>)})}
                                         </tr>
                                         </tbody>
                                     </table>

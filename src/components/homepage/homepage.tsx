@@ -4,10 +4,16 @@ import AboutSection from "./components/aboutsection"
 import InfoSection from "./components/infosection"
 import Policies from "./components/policies"
 import { Helmet } from 'react-helmet'
+import { useEffect} from "react"
+import axios from "axios"
 //import './style.css'
 //https://dev.to/ananiket/create-a-responsive-landing-page-using-html-css-js-b7m
 export default function HomePage(){
     //<footer></footer>
+    useEffect(() => {
+        // Update the document title using the browser API
+        axios.get("https://revisionbank.onrender.com").then(resp => {})
+      },[]);
     return(
         <div>
         <Helmet>

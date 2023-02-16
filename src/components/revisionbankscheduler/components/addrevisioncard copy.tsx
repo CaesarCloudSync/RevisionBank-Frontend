@@ -166,7 +166,7 @@ export default function AddRevisionCard(props:any){
         else if (speecrecog === true){
            
             let data:any = [...formFields];
-            data[index]["revisioncard"] = `${data[index]["revisioncard"]} ${event}`;
+            data[index]["revisioncard"] = event;
             setFormFields(data);
         }
 

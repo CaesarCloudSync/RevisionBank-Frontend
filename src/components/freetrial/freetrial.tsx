@@ -23,7 +23,8 @@ export default function CompleteFreeTrial(){
     //console.log(statevalue)
     const navbank = async () => {
         let start_date_freetrial:any = new Date()
-        const end_date_freetrial = new Date(start_date_freetrial.getFullYear(), start_date_freetrial.getMonth(),start_date_freetrial.getDate() + 7).toISOString()
+        const end_date_freetrial = new Date(start_date_freetrial.getFullYear(), start_date_freetrial.getMonth()+1,start_date_freetrial.getDate() ).toISOString()
+        //
         var json:any = {"subscription":subscription,"start_date_subscription":start_date_freetrial,"end_date_subscription":end_date_freetrial}
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const responseft:any = await axios.post(`https://revisionbank.onrender.com/storefreetrial`,json,config)

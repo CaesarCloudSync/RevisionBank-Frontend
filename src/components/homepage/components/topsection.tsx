@@ -24,7 +24,7 @@ export default function TopSection(){
                 <p style={{fontSize:"13px"}}>RevisionBanks</p> <i className="ri-arrow-right-line"></i>
                 </button>
                 <button onClick={() => {navigate('/freetrialauth')}} className="btn view_more_btn" style={{backgroundColor:"#666666"}}>
-                  <p style={{fontSize:"13px"}}>Try Free trial (1 week)</p><i className="ri-arrow-right-line"></i>
+                  <p style={{fontSize:"13px"}}>Try Free trial (1 month)</p><i className="ri-arrow-right-line"></i>
                 </button>                
               </div>
             </div>
