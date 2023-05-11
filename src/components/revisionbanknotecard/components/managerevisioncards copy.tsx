@@ -34,7 +34,6 @@ export default function ManageRevisionCards(props:any){
     const [allowedmaximumscheduledcards,setAllowedMaximumScheduledCards] = useState(3)
     const [shareshow,setShareShow] = useState(false)
     const [shareurl,setShareURL] = useState("")
-    const [revisioncardswebsocket,setRevisionCardWebSocket] = useState<any>([])
     
     
 
@@ -137,24 +136,10 @@ export default function ManageRevisionCards(props:any){
     const getrevisioncards = async (token:string) => {
         //console.log(token)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
+        const response:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
         const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getaccountinfo`,config)
-        const ws = new WebSocket("wss://palondomus-revb-backend.hf.space/getrevisioncardsws");
-
-
-        ws.onopen = (event) => {
-            ws.send(JSON.stringify(config));
-        };
-
-        ws.onmessage = function (event) {
-            try {
-                const response = JSON.parse(event.data);
-                //var revisioncardslarge = {"revisioncards":[response]}
-                const respobj = JSON.parse(response)
-                revisioncardswebsocket.push(respobj)
-                var revisioncarddata = {"revisioncards":revisioncardswebsocket,"revisionscheduleinterval": respobj["revisionscheduleinterval"],"sendtoemail":respobj["sendtoemail"]}
-
-        
+        //console.log(response.data)
+        //console.log(responseaccount.data.subscription)
         if (responseaccount.data.subscription === "educational" || responseaccount.data.subscription === "premium" || responseaccount.data.subscription === "student educational" ){
             setAllowTrafficLights(true)
             setAllowedMaximumScheduledCards(5)
@@ -162,13 +147,14 @@ export default function ManageRevisionCards(props:any){
         setEmail(responseaccount.data.email)
         //setStudentAccountInfo(response.data.result)
         ////console.log(response.data)
-        
-
+        var revisioncarddata = response.data
+        //console.log(revisioncarddata)
+        //setRevisionCarddata(response.data)
+        //console.log(revisioncarddata)
         const trafficlightinit = Array.from({length:revisioncarddata.revisioncards.length}, (_,i) => {return({color:"none",showpickedtrafficlightind:-1,pickedtrafficlightind:false})})
         //console.log(trafficlightinit)
         setShowPickedTrafficLightind(trafficlightinit)
-        
-        if (!(Object.keys(revisioncarddata).includes("message"))){
+        if (!(Object.keys(response.data).includes("message"))){
             //console.log(response.data)
             setRevisionCarddata((previousState:any) => {
                 //revisioncarddata.revisioncards.reverse()
@@ -179,10 +165,6 @@ export default function ManageRevisionCards(props:any){
               });
             
         }
-    } catch (err) {
-        console.log(err);
-        }
-    };
 
     }
     // TODO : Each Button reqiures an api to do the following

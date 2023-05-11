@@ -8,3 +8,4 @@ declare module "react-speech-recognition";
 declare module "react-canvas-paint";
 declare module "react-canvas-draw";
 declare module "draft-js";
+declare module "react-infinite-scroller";
