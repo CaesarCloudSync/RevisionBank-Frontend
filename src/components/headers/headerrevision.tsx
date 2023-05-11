@@ -39,11 +39,11 @@ export default function HeaderRevision(props:any){
               <a style={{cursor:"pointer"}} id="navHello" onClick={() => navigate('/revisionbank',{state:{"token":props.token}})} >RevisionBank</a>
              </div>
             <div style={{position:"absolute", left:"80%",top:"8%"}}>
-            {location.pathname  === "/revisionbankscheduler" &&
+            {location.pathname  === "/revisionbanknotecard" &&
               <a href="/revisioncards" className="nav_menu_link"><FolderIcon onClick={() => navigate('/revisioncards',{state:{"token":props.token}})} style={{fontSize:"40px",color:"white"}}/></a>
            }
            { location.pathname === "/revisioncards" &&
-           <a  className="nav_menu_link"><NotesIcon onClick={() => navigate('/revisionbankscheduler',{state:{"token":props.token}})} style={{fontSize:"40px",color:"white"}}/></a>
+           <a  className="nav_menu_link"><NotesIcon onClick={() => navigate('/revisionbanknotecard',{state:{"token":props.token}})} style={{fontSize:"40px",color:"white"}}/></a>
            }
             </div>
             </div>
@@ -63,14 +63,14 @@ export default function HeaderRevision(props:any){
                     <a id="navHello" >Revision Cards</a>
                 </li>
                   */}
-                {location.pathname  === "/revisionbankscheduler" &&
+                {location.pathname  === "/revisionbanknotecard" &&
                <li className="nav_menu_item">
                  <a className="nav_menu_link" style={{cursor:"pointer"}} onClick={() => navigate('/revisioncards',{state:{"token":props.token}})} >Revision Cards</a>
                </li>
                }
               { location.pathname === "/revisioncards" &&
                 <li className="nav_menu_item">
-                <a  className="nav_menu_link" style={{cursor:"pointer"}} onClick={() => navigate('/revisionbankscheduler',{state:{"token":props.token}})} >RevisonBank Notecard Scheduler</a>
+                <a  className="nav_menu_link" style={{cursor:"pointer"}} onClick={() => navigate('/revisionbanknotecard',{state:{"token":props.token}})} >Create Revision Card</a>
               </li>
               }               
              </ul>

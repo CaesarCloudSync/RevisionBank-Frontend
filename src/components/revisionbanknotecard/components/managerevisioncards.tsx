@@ -6,8 +6,10 @@ import { maxRowBasedquery } from "../../mediahooks/mediamax";
 import axios from "axios";
 import { useAlert } from 'react-alert'
 import CloseIcon from '@mui/icons-material/Close';
-import { Button } from "react-bootstrap"
+import { Alert, Button } from "react-bootstrap"
+
 import LensIcon from '@mui/icons-material/Lens';
+import ShareAlert from "./sharealert";
 export default function ManageRevisionCards(props:any){
     let location = useLocation();
     const reactalert = useAlert()
@@ -30,6 +32,9 @@ export default function ManageRevisionCards(props:any){
     const [showpickedtrafficlightind,setShowPickedTrafficLightind] = useState<any>([{color:"none",showpickedtrafficlightind:-1,pickedtrafficlightind:false}])
     const [allowtrafficlights,setAllowTrafficLights] = useState(false)
     const [allowedmaximumscheduledcards,setAllowedMaximumScheduledCards] = useState(3)
+    const [shareshow,setShareShow] = useState(false)
+    const [shareurl,setShareURL] = useState("")
+    
     
 
     //console.log(manualpagecookie)
@@ -60,8 +65,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbank.onrender.com/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+                    const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -85,7 +90,7 @@ export default function ManageRevisionCards(props:any){
         // When there is a color already selected
         if (revisioncardcolor !== false && (color !== "none" && color !== revisioncardcolor)){
             revisioncard["color"] = revisioncardcolor
-            const response:any = await axios.post(`https://revisionbank.onrender.com/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/unschedulerevisioncard`,revisioncard,config)
             revisioncard["color"] = color
             data[index]["color"] = color;
             data[index]["showpickedtrafficlightind"] = index;
@@ -99,8 +104,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbank.onrender.com/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+                    const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -122,7 +127,7 @@ export default function ManageRevisionCards(props:any){
 
         }
         if (color === revisioncardcolor){
-            const response:any = await axios.post(`https://revisionbank.onrender.com/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/unschedulerevisioncard`,revisioncard,config)
             window.location.reload()
 
         }
@@ -131,9 +136,9 @@ export default function ManageRevisionCards(props:any){
     const getrevisioncards = async (token:string) => {
         //console.log(token)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
-        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getaccountinfo`,config)
-        console.log(response.data)
+        const response:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getaccountinfo`,config)
+        //console.log(response.data)
         //console.log(responseaccount.data.subscription)
         if (responseaccount.data.subscription === "educational" || responseaccount.data.subscription === "premium" || responseaccount.data.subscription === "student educational" ){
             setAllowTrafficLights(true)
@@ -170,9 +175,9 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbank.onrender.com/schedulerevisioncard`,json,config)
+        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/schedulerevisioncard`,json,config)
         ////console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -188,7 +193,7 @@ export default function ManageRevisionCards(props:any){
     }
     const unscheduleallrevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbank.onrender.com/unscheduleallrevisioncard`,config)
+        const response:any = await axios.delete(`https://palondomus-revb-backend.hf.space/unscheduleallrevisioncard`,config)
         window.location.reload()
         //console.log(response.data)
     }
@@ -196,7 +201,7 @@ export default function ManageRevisionCards(props:any){
         setManualScheduling(true);
         window.location.reload()
         //const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://revisionbank.onrender.com/checkschedulerevisioncard`,config)
+        //const response:any = await axios.get(`https://palondomus-revb-backend.hf.space/checkschedulerevisioncard`,config)
         //console.log(response.data)
         //setScheduledCardState(response.data)
     }
@@ -204,9 +209,9 @@ export default function ManageRevisionCards(props:any){
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbank.onrender.com/unschedulerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/unschedulerevisioncard`,revisioncard,config)
         ////console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -220,7 +225,7 @@ export default function ManageRevisionCards(props:any){
     }
     const checkschedulerevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbank.onrender.com/checkschedulerevisioncard`,config)
+        const response:any = await axios.get(`https://palondomus-revb-backend.hf.space/checkschedulerevisioncard`,config)
         //console.log(response.data)
         setScheduledCardState(response.data)
         ////console.log(response.data)
@@ -234,9 +239,9 @@ export default function ManageRevisionCards(props:any){
             const newrevisioncardjson = {"revisioncard":prevrevisioncard.revisioncard,"newrevisioncard": newrevisioncard.newrevisoncard,"revisioncardtitle": prevrevisioncard.revisioncardtitle,"subject": prevrevisioncard.subject}
             //console.log(newrevisioncardjson)
             const config = {headers: {Authorization: `Bearer ${token}`,}}
-            const response:any = await axios.post(`https://revisionbank.onrender.com/changerevisioncard`,newrevisioncardjson,config)
-            ////console.log(response.data)
-            const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+            const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/changerevisioncard`,newrevisioncardjson,config)
+            //console.log(response.data)
+            const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
             var newrevisioncarddata = responseaccount.data
             //console.log(newrevisioncarddata)
             
@@ -248,6 +253,7 @@ export default function ManageRevisionCards(props:any){
                 
               });
             setNewRevisionCard("")
+            window.location.reload()
         }
           
     }
@@ -257,8 +263,8 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         var json = {"sendtoemail":newsendtoemail}
         //console.log(json)
-        const response:any = await axios.put(`https://revisionbank.onrender.com/changesendtoemail`,json,config)
-        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+        const response:any = await axios.put(`https://palondomus-revb-backend.hf.space/changesendtoemail`,json,config)
+        const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         ////console.log(responseaccount)
         
@@ -278,8 +284,20 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbank.onrender.com/sendnowrevisioncard`,json,config)
+        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/sendnowrevisioncard`,json,config)
         ////console.log(response.data)
+
+    }
+    const sharerevisioncard = async (revisioncard:any) => {
+        //console.log(revisioncard)
+        revisioncard["email"] = email
+        const responseshare:any = await axios.post("https://palondomus-revisionbankcard.hf.space/hashnotecard",revisioncard)
+        const revisioncardurl = `https://palondomus-revisionbankcard.hf.space/notecard?h=${responseshare.data.message}&u=${email}`
+        //reactalert.show(revisioncardurl)
+        //console.log(revisioncardurl)
+        setShareURL(revisioncardurl)
+        setShareShow(true)
+
 
     }
     const removerevisioncard = async (revisioncard:any,token:string) => {
@@ -287,9 +305,9 @@ export default function ManageRevisionCards(props:any){
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //var json = {"removerevisioncard":revisioncard}
-        const response:any = await axios.post(`https://revisionbank.onrender.com/removerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/removerevisioncard`,revisioncard,config)
         //console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbank.onrender.com/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://palondomus-revb-backend.hf.space/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -348,7 +366,7 @@ export default function ManageRevisionCards(props:any){
 
       //console.log(email)
       var revisionscheduleinterval = (revisioncarddata !== "") ? revisioncarddata.revisioncarddata.revisionscheduleinterval : "No Revision Cards"
-      console.log(revisioncarddata.revisioncarddata)
+      //console.log(revisioncarddata.revisioncarddata)
       var sendtoemail = (revisioncarddata !== "") ? revisioncarddata.revisioncarddata.sendtoemail : "No Revision  Cards"
       var revisioncards = (revisioncarddata !== "") ? revisioncarddata.revisioncarddata.revisioncards : []
       var scheduledcards = (scheduledcardstate !== "") ? scheduledcardstate : []
@@ -357,19 +375,34 @@ export default function ManageRevisionCards(props:any){
     //console.log(scheduled)
     //console.log(scheduledcardstate)
     //console.log(showpickedtrafficlightind)
+    //console.log(email)
     return(
         <div>
+            
             {statebool ?
             <div>
             {props.splitscreen == true ? null: <HeaderRevision token={token}/> }
+            {/*email === "amari.lawal05@gmail.com" && 
+            <div style={{position:"absolute",top:maxRowBased ? "20px":"330px",left:maxRowBased ? "30px" : "197px",width:"250px",zIndex:1 ,color:maxRowBased ? "white" : "black"}}>
+            <p>
+                Amari Hussey Lawal Affirmation: The more you give, the more you have. The more you take the less you have. God has given me everything and giving to God is a never-ending beauty. Give friendship, love comradery and more.
+            </p>
+            </div>*/ }
+           
             
+
             <div style={{display:props.splitscreen ? "relative":"flex",flexDirection:"column",alignItems:"center",width:"100%",marginTop:props.splitscreen ? "0px":"50px"}}>
+            
+            
                 {props.splitscreen == true ? null: 
                 <div>
                 <h1 style={{color:"white",marginBottom:"20px"}}>Revision Cards</h1>
+                
                 </div>
                 }
-
+                { shareshow === true &&
+                <ShareAlert setShareURL={setShareURL} shareshow={shareshow} shareurl={shareurl} setShareShow={setShareShow} maxRowBased={maxRowBased}></ShareAlert>
+                    }
                 <div style={{position:"relative",border:"3px white solid",borderRadius: props.splitscreen ? "0px":"10px",backgroundColor:"white",width: maxRowBased ? props.splitscreen ? "70vh":"100vh" : "60vh"}}>
                     {allowtrafficlights &&
                     <div style={{display:"flex",justifyContent:"end"}}>
@@ -379,6 +412,8 @@ export default function ManageRevisionCards(props:any){
                     </div>
                         }
                     <div style={{position:"relative",left:"10%",top:"10%",width: "80%",border:"1px grey solid",borderRadius:"5px"}}>
+ 
+                    
                         <div style={{margin:"20px"}}>
                             <div style={{display:"flex",gap:"7%",borderBottom:"1px grey solid",flexDirection:maxRowBased ? "row":"column"}}>
                                 <p style={{color:"grey"}}>Email to send to:</p>
@@ -411,6 +446,7 @@ export default function ManageRevisionCards(props:any){
                                 const revisioncardcolor =  weirdboole !== undefined && weirdboole[1] !== undefined && "color" in weirdboole[1]  && weirdboole[1].color   
                                 //console.log(revisioncardcolor)
                                 //console.log(revisioncard.revisioncardimage)
+                                //console.log(newrevisioncard.newrevisoncard)
                                 return(
                                 <div>
                                     <div key={index} style={{display:"flex",marginTop:"50px",flexDirection:maxRowBased ? "row":"column",justifyContent: "space-between"}}>
@@ -435,11 +471,14 @@ export default function ManageRevisionCards(props:any){
                                         
                                     
                                     <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
+                                  
                                     {newrevisioncard.revisioncardind === index && newrevisioncard.newrevisoncard  !== "" && 
-                                    
-                                    <Button onClick={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} style={{backgroundColor:"#00008B",width:"100px",border:"1px solid #00008B",height:"30px",fontSize:"13px"}}>Submit</Button>}
-                                    <Button onClick={() => {removerevisioncard(revisioncard,token)}} style={{backgroundColor:"#dc3545",width:"100px",border:"1px solid #dc3545",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Remove</Button>
 
+                                    <Button onTouchStart={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} onClick={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} style={{backgroundColor:"#00008B",width:"100px",border:"1px solid #00008B",height:"30px",fontSize:"13px"}}>Submit</Button>}
+                                    <Button onClick={() => {removerevisioncard(revisioncard,token)}} style={{backgroundColor:"#dc3545",width:"100px",border:"1px solid #dc3545",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Remove</Button>
+                                    <Button onTouchStart={() => {sharerevisioncard(revisioncard)}} onClick={() => {sharerevisioncard(revisioncard)}} style={{backgroundColor:"#fa0095",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px",marginTop:maxRowBased ? "auto" : "5px" }}>Share</Button>
+                                    {/*<ShareAlert shareshow={shareshow} sharerevisioncard={sharerevisioncard} revisioncard={revisioncard} maxRowBased={maxRowBased}></ShareAlert>*/}
+                                    
                                     </div>
                                     {/*|| scheduledcards.revisioncards.includes(revisioncard) */ }
                                     

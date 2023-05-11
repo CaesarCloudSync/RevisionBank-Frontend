@@ -45,7 +45,7 @@ export default function RevisionBankSpeechRecognition(props:any) {
     
   }
   
-  console.log(props.transcript)
+  ///console.log(props.transcript)
   /*
   if (transcript !== ""){
     props.handleFormChange(transcript,props.index,true)

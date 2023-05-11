@@ -33,14 +33,16 @@ import ResetPassword from './components/forgotpassword/resetpassword';
 import FreeTrialAuth from './components/freetrial/freetrialauth';
 import EdexcelMaths from './components/edxecelmaths/edexcelmaths';
 import EdexcelPdf from './components/edxecelmaths/edexcelpdf';
-import RevisionBankScheduler from './components/revisionbankscheduler/revisionbankscheduler';
-import ManageRevisionCards from './components/revisionbankscheduler/components/managerevisioncards'
+import RevisionBankScheduler from './components/revisionbanknotecard/revisionbanknotecard';
+import ManageRevisionCards from './components/revisionbanknotecard/components/managerevisioncards'
 import ComputerScienceAQA from './components/computerscience/computerscienceaqa';
 import ComputerSciencePDF from './components/computerscience/computersciencepdf';
 import PhysicsOCR from './components/physicsocr/physicsocr';
 import ChemistryAQA from './components/chemistry/chemistry';
 import { Helmet } from "react-helmet";
 import BiologyAQA from './components/biologyaqa/biologyaqa';
+import AmariTimeTable from './components/amarialevelTimetable/amaritimetable';
+import FeedBackPage from './components/fmaths/feedback';
 const App = () => {
 return(
   <Router>
@@ -58,6 +60,8 @@ return(
   <Routes>
   <Route path="/" element={<HomePage/>}/>
   <Route path="/contactus" element={<ContactUs/>}/>
+  <Route path="/amaritimetable" element={<AmariTimeTable/>}></Route>
+  <Route path="/feedback" element={<FeedBackPage/>}></Route>
   
   <Route path="/termsofservice" element={<TermsOfServices/>}/>
   <Route path="/privacypolicy" element={<PrivacyPolicy/>}/>
@@ -79,7 +83,7 @@ return(
   <Route path="/completefreetrial" element={<CompleteFreeTrial/>}></Route>
   
   <Route path="/revisionbanktools" element={<RevisionBankTools/>}/>
-  <Route path="/revisionbankscheduler" element={<RevisionBankScheduler/>}/>
+  <Route path="/revisionbanknotecard" element={<RevisionBankScheduler/>}/>
   <Route path="/revisioncards" element={<ManageRevisionCards/>}/>
   <Route path="/fmathqp" element={<FmathQP/>}/>
   <Route path="/edexcelmaths" element={<EdexcelMaths/>}/>
@@ -89,7 +93,6 @@ return(
   <Route path="/physicsocr" element={<PhysicsOCR/>}/>
   <Route path="/chemistryaqa" element={<ChemistryAQA/>}/>
   <Route path="/biologyaqa" element={<BiologyAQA/>}/>
-
   
   <Route path="/fmathsb" element={<FmathSB/>}/>
   <Route path="/physicsaqa" element={<PhysicsAqa/>}/>

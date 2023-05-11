@@ -10,10 +10,14 @@ import axios from "axios"
 //https://dev.to/ananiket/create-a-responsive-landing-page-using-html-css-js-b7m
 export default function HomePage(){
     //<footer></footer>
+    /*
     useEffect(() => {
         // Update the document title using the browser API
-        axios.get("https://revisionbank.onrender.com").then(resp => {})
+        //const newuserjson = {"email":"revisionbankedu@gmail.com","subject":"RevisionBank New User","message":"RevisionBank New User"}
+                
+        //axios.post("https://palondomus-revb-backend.hf.space/revisionbanksendemail",newuserjson)
       },[]);
+      */
     return(
         <div>
         <Helmet>

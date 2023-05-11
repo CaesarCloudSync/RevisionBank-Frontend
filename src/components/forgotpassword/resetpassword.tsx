@@ -48,7 +48,7 @@ export default function ResetPassword(){
             const config = {headers: {Authorization: `Bearer ${token}`,}}
             console.log(config)
             console.log(newpassword)
-            const response:any = await axios.put(`https://revisionbank.onrender.com/resetpassword`, {"password":newpassword},config); // Send login post request.
+            const response:any = await axios.put(`https://palondomus-revb-backend.hf.space/resetpassword`, {"password":newpassword},config); // Send login post request.
             console.log(response)
             navigate("/signin");
             setSubmitted(true);
@@ -123,5 +123,5 @@ export default function ResetPassword(){
     )
 }
 
-//const responsegettoken:any = await axios.get(`https://revisionbank.onrender.com/getforgotpasswordtoken`,config); // Send login post request.
+//const responsegettoken:any = await axios.get(`https://palondomus-revb-backend.hf.space/getforgotpasswordtoken`,config); // Send login post request.
 //console.log(responsegettoken.data.token)

@@ -49,7 +49,7 @@ export default function RevisionBankScheduler(){
     const [emailcount,setEmailCount] = useState(0);
     const getemailcount = async (token:any) => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbank.onrender.com/getemailcount",config)
+      const responsecount = await axios.get("https://palondomus-revb-backend.hf.space/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setShowEmailPrompt(false);
@@ -70,7 +70,7 @@ export default function RevisionBankScheduler(){
         <div>
         <HeaderRevision token = {token.token}></HeaderRevision>
         <div style={Object.assign({},styles.containercenter,styles.title)}>
-          <h2 style={styles.textcolor}>RevisonBank Notecard Scheduler</h2>
+          <h2 style={{position:"relative",top:"30px",color:"white"}}>RevisionBank Notecards</h2>
         </div>
         <div style={styles.largecontainer}>
           

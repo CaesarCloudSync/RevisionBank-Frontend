@@ -282,17 +282,17 @@ export default function PricingPage(){
 						{(maxRowBased || !arrowClicked.educational) ? "":<CloseIcon sx={{ fontSize: 30 }} style={{color:"white"}} onClick={() => setArrowClicked({...arrowClicked,educational:false})}></CloseIcon>}
 					</div>
 				</footer> 
-				{ (maxRowBased || !arrowClicked.educational) ? "":<PricingDetailsEducational numsubj={"Unlimited Range"} accounts={educationalaccounts}/>}
+				{/* (maxRowBased || !arrowClicked.educational) ? "":<PricingDetailsEducational numsubj={"Unlimited Range"} accounts={educationalaccounts}/>*/}
 			</li>
 			}
-			{ !HideEducational &&
-			<PricingDetailsEducationalSubscription subscriptiontrial = {prices.educationalthreemonths} timeperiod={3}/>
+			{/* !HideEducational &&
+			<PricingDetailsEducationalSubscription subscriptiontrial = {prices.educationalthreemonths} timeperiod={3}/>*/
 			}
-			{ !HideEducational &&
-			<PricingDetailsEducationalSubscription subscriptiontrial = {prices.educationalsixmonths} timeperiod={6}/>
+			{ /*!HideEducational &&
+			<PricingDetailsEducationalSubscription subscriptiontrial = {prices.educationalsixmonths} timeperiod={6}/>*/
 			}
-			{ !HideEducational &&
-			<PricingDetailsEducationalSubscription subscriptiontrial = {prices.educationalyear} timeperiod={12}/>
+			{ /* !HideEducational &&
+			<PricingDetailsEducationalSubscription subscriptiontrial = {prices.educationalyear} timeperiod={12}/>*/
 			}
 		</ul> 
 	</div> 	

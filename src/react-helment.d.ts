@@ -5,3 +5,6 @@ declare module 'crypto-js';
 declare module 'react-alert';
 declare module "react-alert-template-basic";
 declare module "react-speech-recognition";
+declare module "react-canvas-paint";
+declare module "react-canvas-draw";
+declare module "draft-js";

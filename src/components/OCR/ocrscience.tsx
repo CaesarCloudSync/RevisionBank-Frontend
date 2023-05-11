@@ -55,7 +55,7 @@ export default function OCRScience (){
             chapter = `chapter ${chapter}`;
         }
         const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const response = await axios.post("https://revisionbank.onrender.com/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha.toUpperCase(),"year":bookyear,"platform": "web"}},config)
+      const response = await axios.post("https://palondomus-revb-backend.hf.space/ocrsciencebookanswers",{"physicsocr":{"email":email,"subject": ocrsubject.toLowerCase(),"chapter":chapter,"physicsocralph":bookalpha.toUpperCase(),"year":bookyear,"platform": "web"}},config)
 ;     if (email !== "" && ocrsubject !== "" && chapter !== "" && bookalpha !== "" && bookyear !== ""){
       if (!Object.keys(response.data).includes("error")){   
       setIsLoading(false);

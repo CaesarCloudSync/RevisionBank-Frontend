@@ -11,13 +11,15 @@ import './headerhome.css'
 import RevisionBankLogo from '../static/RevisionBankLogo.svg';
 import { maxRowBasedquery } from '../mediahooks/mediamax';
 import useMediaQuery from '../mediahooks/useMedia';
+import { useNavigate } from 'react-router-dom';
 //https://alvarotrigo.com/blog/hamburger-menu-css/
 //https://javascript.plainenglish.io/how-to-create-a-responsive-navbar-with-react-bb9ce4cebddd
 // https://codepen.io/rares-lungescu/pen/KLbMvo
 
-function HeaderComponent(){       
+function HeaderComponent(props:any){       
   //<h2>STEMTutorBank.</h2>
   const maxRowBased =useMediaQuery(maxRowBasedquery)
+  let navigate:any = useNavigate(); // use navigate hook to navigate to different pages
     return(
     <div>
         <header className="container header">
@@ -37,9 +39,14 @@ function HeaderComponent(){
               </label>
 
               <ul className="menu__box">
-                <li><a className="menu__item" href="/signup">Signup</a></li>
+                {props.hashedvalue !== null && props.externalrevcardusername !== null ?
+                  <li><a className="menu__item"  onClick={() => {navigate(`/signup?h=${props.hashedvalue}&u=${props.externalrevcardusername}`)}} >Signup</a></li>
+                  :
+                  <li><a className="menu__item" href="/signup">Signup</a></li>
+                  }
+                
                 <li><a className="menu__item" href="/signin">Signin</a></li>
-                <li><a className="menu__item" href="/pricing">Pricing</a></li>
+                {/*<li><a className="menu__item" href="/pricing">Pricing</a></li>*/}
                 <li><a className="menu__item" href="/contactus">Contact Us</a></li>
               </ul>
             </div>
@@ -51,14 +58,19 @@ function HeaderComponent(){
              </button>
    
              <ul className="nav_menu_list">
+              { /*
                <li className="nav_menu_item">
                  <a href="/pricing" className="nav_menu_link"><p>Pricing</p></a>
-               </li>
+            </li>*/}
                <li className="nav_menu_item">
                  <a href="/signin" className="nav_menu_link"><p>Signin</p></a>
                </li>
                <li className="nav_menu_item">
+                  {props.hashedvalue !== null && props.externalrevcardusername !== null ?
+                  <a style={{cursor:"pointer"}} onClick={() => {navigate(`/signup?h=${props.hashedvalue}&u=${props.externalrevcardusername}`)}} className="nav_menu_link"><p>Signup</p></a>
+                  :
                  <a href="/signup" className="nav_menu_link"><p>Signup</p></a>
+                  }
                </li>
                <li className="nav_menu_item">
                  <a href="/contactus" className="nav_menu_link"><p>Contact Us</p></a>

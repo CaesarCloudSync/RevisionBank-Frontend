@@ -14,6 +14,9 @@ import Policies from "../homepage/components/policies";
 import useMediaQuery from "../mediahooks/useMedia";
 import { maxRowBasedquery } from "../mediahooks//mediamax";
 import { Helmet } from "react-helmet"
+import {
+  useSearchParams
+} from "react-router-dom"
 //import './signin.css'
 // https://javascript.plainenglish.io/creating-a-sign-up-form-in-react-with-typescript-516b1a172913
 // TODO Next to collect specific data from database send requests to api with jwttoken in the axios header.
@@ -100,6 +103,9 @@ function Signin(){
     let current_date = new Date().toISOString();
     const maxRowBased = useMediaQuery(maxRowBasedquery);
     let location:any = useLocation();
+    const [queryParameters] = useSearchParams()
+    const hashedvalue = queryParameters.get("h")
+    const externalrevcardusername = queryParameters.get("u")
     let statevalue = location.state;
     const subscription = (statevalue !== null) ? statevalue.subscription : "" 
     const price = (statevalue !== null) ? statevalue.price : ""
@@ -118,19 +124,31 @@ function Signin(){
     }
     const checkSubscriptionEndDate = async (token:string,json:any,subscription:any) => {
       const config = {headers: {Authorization: `Bearer ${token}`,}}
-      const responseget:any = await axios.get(`https://revisionbank.onrender.com/getsubscription`,config); // Send login post request.
+      const responseget:any = await axios.get(`https://palondomus-revb-backend.hf.space/getsubscription`,config); // Send login post request.
       //console.log(responseget.data);
       let end_date = responseget.data.end_date_subscription
-      const responsegetft:any = await axios.get(`https://revisionbank.onrender.com/getfreetrial`,config);  
-      const responsegetstudent:any = await axios.get(`https://revisionbank.onrender.com/checkstudentsubscriptions`,config);
+      const responsegetft:any = await axios.get(`https://palondomus-revb-backend.hf.space/getfreetrial`,config);  
+      const responsegetstudent:any = await axios.get(`https://palondomus-revb-backend.hf.space/checkstudentsubscriptions`,config);
       //console.log(su)
 
       if (responsegetft.data.freetrial !== undefined || responseget.data.end_date_subscription !== undefined || responsegetstudent.data.student_subscription !== "student_educational" ){       
-        if (end_date < current_date) {
+        // Storing from external revision card
+        if (hashedvalue !== null && externalrevcardusername !== null){
+          setIsLoadingLogin(true)
+          const responsecard:any = await axios.get(`https://palondomus-revisionbankcard.hf.space/getcard?h=${hashedvalue}&u=${externalrevcardusername}`);
+          const revisioncard = responsecard.data
+          var notecardjson = {"revisioncardscheduler":{"sendtoemail":json.email,"revisionscheduleinterval":60,"revisioncards":[revisioncard]}}
+          //console.log(json)
+          
+          const responsestore:any = await axios.post("https://palondomus-revb-backend.hf.space/storerevisioncards",notecardjson,config)
+          
+          navigate("/revisioncards",{state:{"token":token}})
+        }
+        else if (end_date < current_date) {
           console.log("Subscription has expired")
           navigate("/pricing",{state:{"token":token,"pre_subscription_expiration":"expired","email":json.email}})
           const config = {headers: {Authorization: `Bearer ${token}`,}}
-          const responsedel:any = await axios.delete(`https://revisionbank.onrender.com/deletesubscription`,config);
+          const responsedel:any = await axios.delete(`https://palondomus-revb-backend.hf.space/deletesubscription`,config);
           // TODO Test this by looking on whether it works if the dates are in the future.
         }
         else if (end_date === current_date) {
@@ -178,7 +196,7 @@ function Signin(){
         try{
         var json = JSON.parse(JSON.stringify(data)); // Converts data to json
         json.email = json.email.toLowerCase();
-        const response:any = await axios.post(`https://revisionbank.onrender.com/loginapi`, json); // Send login post request.
+        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/loginapi`, json); // Send login post request.
         if (response.data !== undefined){
           if ("access_token" in response.data){
             if (maxRowBased === true){
@@ -210,7 +228,6 @@ function Signin(){
       };
     
 
-
     return(
       <div>
           <Helmet>
@@ -224,7 +241,7 @@ function Signin(){
               content="Revision,revisionbank signin,revision bank signin,solution bank signin,revision bank,revisionbank,Revision Bank,RevisionBank,solutionbank,solution bank year 1,solution bank pure maths year 1,revision village,solution bank year 1 stats,solution bank year 2,solution bank,Solutionbank,Solution Bank,A Level revision, Practice Papers, Revision Bank, Revision Bank Scraper, Revision Bank Scraper for A Level, Revision Bank Scraper for O Level, Revision Bank Scraper for GCSE, Revision Bank Scraper for IB, Revision Bank Scraper for A Level Practice Papers, Revision Bank Scraper for O Level Practice Papers, Revision Bank Scraper for GCSE Practice Papers, Revision Bank Scraper for IB Practice Papers, Revision Bank Scraper for A Level Revision Cards, Revision Bank Scraper for O Level Revision Cards, Revision Bank Scraper for GCSE Revision Cards, Revision Bank Scraper for IB Revision Cards, Revision Bank Scraper for A Level Revision Practice Papers, Revision Bank Scraper for O Level Revision Practice Papers, Revision Bank Scraper for GCSE Revision Practice Papers, Revision Bank Scraper for IB Revision Practice Papers, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB Revision Practice Cards, Revision Bank Scraper for A Level Revision Practice Cards, Revision Bank Scraper for O Level Revision Practice Cards, Revision Bank Scraper for GCSE Revision Practice Cards, Revision Bank Scraper for IB"
           />
           </Helmet>
-      <HeaderComponent/>
+      <HeaderComponent hashedvalue={hashedvalue} externalrevcardusername={externalrevcardusername}/>
       <SigninContainer>
         <HeaderTitle variant="h2">
           Sign in

@@ -1,7 +1,7 @@
 import { useLocation } from "react-router";
 import useMediaQuery from "../mediahooks/useMedia";
 import { maxRowBasedquery } from "../mediahooks/mediamax";
-import ManageRevisionCards from "../revisionbankscheduler/components/managerevisioncards";
+import ManageRevisionCards from "../revisionbanknotecard/components/managerevisioncards";
 export default function ComputerSciencePDF() {
     const maxRowBased = useMediaQuery(maxRowBasedquery)
     try{

@@ -16,7 +16,7 @@ export default function ConfirmDeleteSubscription(){
     const maxRowBased = useMediaQuery(maxRowBasedquery)
     const deletesubscription = async (token:any) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbank.onrender.com/deletesubscription`,config); 
+        const response:any = await axios.delete(`https://palondomus-revb-backend.hf.space/deletesubscription`,config); 
         //navigate('/account',{state:{token:token}})
         navigate('/')
       }

@@ -14,6 +14,9 @@ import {useNavigate,useLocation} from 'react-router-dom';
 import HeaderComponent from "../headers/headerhome";
 import { Helmet } from "react-helmet"
 import Policies from "../homepage/components/policies";
+import {
+  useSearchParams
+} from "react-router-dom"
 interface IFormInput {
     email: string;
     password: string;
@@ -96,6 +99,9 @@ function Signup() {
     const [notSignedUp,setNotSignedup] = useState<Boolean>(false);
     let navigate:any = useNavigate();
     let location:any = useLocation();
+    const [queryParameters] = useSearchParams()
+    const hashedvalue = queryParameters.get("h")
+    const externalrevcardusername = queryParameters.get("u")
     let statevalue = location.state;
     const subscription = (statevalue !== null) ? statevalue.subscription : "" 
     const price = (statevalue !== null) ? statevalue.price : "" 
@@ -115,29 +121,43 @@ function Signup() {
         //json["betatest"] = "true";
         //console.log(json)
         
-        const response:any = await axios.post(`https://revisionbank.onrender.com/signupapi`, json);
+        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/signupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
+        const config = {headers: {Authorization: `Bearer ${response.data.access_token}`,}}
         //console.log(subscription)
         if (response.data !== undefined){
           if ("status" in response.data){
             setJwttoken(true)
+            if (hashedvalue !== null && externalrevcardusername !== null){
+            setIsLoadingSignup(true)
+            const responsecard:any = await axios.get(`https://palondomus-revisionbankcard.hf.space/getcard?h=${hashedvalue}&u=${externalrevcardusername}`);
+            const revisioncard = responsecard.data
+            var notecardjson = {"revisioncardscheduler":{"sendtoemail":json.email,"revisionscheduleinterval":60,"revisioncards":[revisioncard]}}
+            //console.log(json)
+          
+            const responsestore:any = await axios.post("https://palondomus-revb-backend.hf.space/storerevisioncards",notecardjson,config)
+          
+            navigate("/revisioncards",{state:{"token":response.data.access_token}})
+            }
             
-            if (subscription === ""){
-              navigate("/pricing",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
+            else if (subscription === "" && (hashedvalue === null && externalrevcardusername === null)){
+              // TODO Free version
+              navigate("/revisionbank",{state:{"token":response.data.access_token,"email":json.email}})
+              //navigate("/pricing",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
               
             }
-            else if (subscription === "basic") {
+            else if (subscription === "basic" && (hashedvalue === null && externalrevcardusername === null)) {
               navigate("/revisionbank",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
             }
-            else if (subscription === "freetrial"){
+            else if (subscription === "freetrial" && (hashedvalue === null && externalrevcardusername === null)){
               // Free trial
               // navigate to 
               navigate("/completefreetrial", { state: { token: response.data.access_token, subscription: subscription,email:json.email} });
               // TODO  send to freetrial api
               // then navigate to stemcraper
             }
-            else if (subscription !== ""){
+            else if (subscription !== "" && (hashedvalue === null && externalrevcardusername === null)){
               navigate("/payment",{state:{"token":response.data.access_token,"subscription":subscription,"price":price,"email":json.email}}) // Navigate to home page
 
             }
@@ -154,7 +174,7 @@ function Signup() {
       if (signupResponse !== undefined){
       if ("status" in signupResponse){
         setJwttoken(true)
-        if (subscription !== "freetrial"){
+        if (subscription !== "freetrial" && (hashedvalue === null && externalrevcardusername === null)){
           navigate("/revisionbank",{state: {token: jwttoken}})
         }
       }
@@ -216,7 +236,7 @@ function Signup() {
           {isLoadingSignup ? <LoadingSpinner /> : null}
           {noResultsSignup ? <p>No Results Found</p> : null}
           {errorMessageSignup && <div className="error">{errorMessageSignup}</div>}
-          {jwttoken && <p>Signed up!</p>}
+          {/*jwttoken && <p>Signed up!</p>*/}
           {notSignedUp && <p>Email already exists.</p>}
           <SigninButton 
             type="submit"

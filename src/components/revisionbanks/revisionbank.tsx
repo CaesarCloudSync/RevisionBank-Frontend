@@ -9,6 +9,8 @@ import Policies from '../homepage/components/policies';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import DownloadIcon from '@mui/icons-material/Download';
+import FeedIcon from '@mui/icons-material/Feed';
+import "./revisionbank.css"
 class RevisionBankOptionsStyles{
   containercenter:Object;
   rowitem:Object;
@@ -51,10 +53,12 @@ function RevisionBankOptions() {
   //console.log(statevalue)
   const getsubscription = async (token:string) => {
     const config = {headers: {Authorization: `Bearer ${token}`,}}
-    const responseget:any = await axios.get(`https://revisionbank.onrender.com/getsubscription`,config); // Send login post request.
+    const responseget:any = await axios.get(`https://palondomus-revb-backend.hf.space/getsubscription`,config); // Send login post request.
     if (responseget.data.end_date_subscription === undefined) {
-      const responsegetstudent:any = await axios.get(`https://revisionbank.onrender.com/checkstudentsubscriptions`,config);
+      const responsegetstudent:any = await axios.get(`https://palondomus-revb-backend.hf.space/checkstudentsubscriptions`,config);
       //console.log(responsegetstudent.data)
+      // TODO This allows the free version
+      setSubscriptionpresent(true)
       if (responsegetstudent.data.student_subscription === "student educational") {
         setSubscriptionpresent(true)
       }
@@ -97,6 +101,12 @@ function RevisionBankOptions() {
       <div style={styles.titlecontainer}>
         <h2 style={styles.title}>RevisionBank</h2>
       </div>
+      <div onClick={() => {navigate("/feedback")}} style={{position:"absolute",right:"130px"}}>
+        <div  className='feedbackformbutton' style={{position:"absolute",top:"-10px",right:"-13px",width: "30px",transform: "rotate(45deg)",height: "30px",background: "conic-gradient(at 50% 50%,transparent 135deg,#161e79 0,#161e79 225deg, transparent 0)"}}></div>
+        
+        <FeedIcon style={{color:"white"}} sx={{ fontSize: 70 }} ></FeedIcon>
+        <h2  style={{position:"absolute",fontSize:"15px"}} >Complete FeedBack Form</h2>
+      </div>
 
       {maxRowBased ? 
             <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:maxRowBased ? "10px" : "2px",flexDirection: maxRowBased ? "row" : "column"}}>
@@ -114,7 +124,7 @@ function RevisionBankOptions() {
                   <Card.Text>
                   
                   <div style={styles.buttonflex}>
-                    {subscriptionpresent && <Button style={styles.button} onClick={() => sendTokenBool(token,'/revisionbankscheduler')} variant="contained"><p style={styles.buttontxt}>RevisionBank Notecard Scheduler</p></Button>}
+                    {subscriptionpresent && <Button style={styles.button} onClick={() => sendTokenBool(token,'/revisionbanknotecard')} variant="contained"><p style={styles.buttontxt}>RevisionBank Notecards</p></Button>}
                     <Button style={styles.button} onClick={() => sendTokenBool(token,'/physicsocr')} variant="contained"><p style={styles.buttontxt}>Physics OCR</p></Button>
                     
                     <Button style={styles.button} onClick={() => sendTokenBool(token,'/edexcelmaths')}  variant="contained"><p style={styles.buttontxt}>Edexcel Maths Papers</p></Button>
@@ -170,7 +180,7 @@ function RevisionBankOptions() {
               <Card.Text>
               
               <div style={styles.buttonflex}>
-                {subscriptionpresent && <Button style={styles.button} onClick={() => sendTokenBool(token,'/revisionbankscheduler')} variant="contained"><p style={styles.buttontxt}>RevisionBank Notecard Scheduler</p></Button>}
+                {subscriptionpresent && <Button style={styles.button} onClick={() => sendTokenBool(token,'/revisionbanknotecard')} variant="contained"><p style={styles.buttontxt}>RevisionBank Notecards</p></Button>}
                 <Button style={styles.button} onClick={() => sendTokenBool(token,'/physicsocr')} variant="contained"><p style={styles.buttontxt}>Physics OCR</p></Button>
                 <Button style={styles.button} onClick={() => sendTokenBool(token,'/edexcelmaths')}  variant="contained"><p style={styles.buttontxt}>Edexcel Maths Papers</p></Button>
                 <Button style={styles.button} onClick={() => sendTokenBool(token,'/computerscienceaqa')} variant="contained"><p style={styles.buttontxt}>Computer Science AQA</p></Button>

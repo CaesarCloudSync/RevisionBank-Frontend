@@ -59,7 +59,7 @@ export default function PhysicsAqa (){
       e.preventDefault();
       setIsLoading(true);
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const response:any = await axios.post("https://revisionbank.onrender.com/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
+      const response:any = await axios.post("https://palondomus-revb-backend.hf.space/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
       console.log(response.data)
       if ('error' in response.data){
         setIsLoading(false);
