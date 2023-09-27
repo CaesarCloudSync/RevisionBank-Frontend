@@ -97,7 +97,7 @@ function CheckoutForm(props:any) {
   const storeSubscriptionData = async (subscription:string,start_date:string,end_date:string,token:any) => {
     var json = {"subscription":subscription,"start_date_subscription":start_date,"end_date_subscription":end_date}
     const config = {headers: {Authorization: `Bearer ${token}`,}}
-    const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/storesubscription`, json,config); // Send login post request.
+    const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storesubscription`, json,config); // Send login post request.
   }
   const payMoney = async (e:any) => {
     e.preventDefault();
@@ -108,7 +108,7 @@ function CheckoutForm(props:any) {
     const getClientSecret = async (price:any) => { 
         const json = {"price":price}
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
-        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/revisionbankstripepayment`, json,config); // Send login post request.
+        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/revisionbankstripepayment`, json,config); // Send login post request.
         //console.log(response.data)
         return response.data.clientsecret
         

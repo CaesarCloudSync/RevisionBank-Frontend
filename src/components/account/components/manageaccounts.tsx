@@ -13,11 +13,11 @@ export default function ManageAccounts(props:any){
     const deletestudentaccount = async (e:any,studentemail:any) => {
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
         //console.log(props.token)
-        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/deletestudentaccount`,{"studentemail":studentemail},config); // Send login post request.
-        const studentresponse:any = await axios.get(`https://palondomus-revb-backend.hf.space/getstudentsubscriptions`,config)
+        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/deletestudentaccount`,{"studentemail":studentemail},config); // Send login post request.
+        const studentresponse:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getstudentsubscriptions`,config)
         props.setStudentAccountInfo(studentresponse.data.result)
         //console.log(response.data)
-            //const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/setstudentsubscriptions`,json,config)
+            //const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/setstudentsubscriptions`,json,config)
 
         }
     //console.log(newpassword)
@@ -25,8 +25,8 @@ export default function ManageAccounts(props:any){
         e.preventDefault();
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
         //console.log(newpassword)
-        const response:any = await axios.put(`https://palondomus-revb-backend.hf.space/changestudentpassword`,{"studentemail":studentemailchangepass,"password":newpassword},config); // Send login post request.
-        const studentresponse:any = await axios.get(`https://palondomus-revb-backend.hf.space/getstudentsubscriptions`,config)
+        const response:any = await axios.put(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changestudentpassword`,{"studentemail":studentemailchangepass,"password":newpassword},config); // Send login post request.
+        const studentresponse:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getstudentsubscriptions`,config)
         props.setStudentAccountInfo(studentresponse.data.result)
         setChangePassword({studentind:-1,clicked:false})
     }   

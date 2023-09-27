@@ -121,7 +121,7 @@ function Signup() {
         //json["betatest"] = "true";
         //console.log(json)
         
-        const response:any = await axios.post(`https://palondomus-revb-backend.hf.space/signupapi`, json);
+        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/signupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
         const config = {headers: {Authorization: `Bearer ${response.data.access_token}`,}}
@@ -131,12 +131,12 @@ function Signup() {
             setJwttoken(true)
             if (hashedvalue !== null && externalrevcardusername !== null){
             setIsLoadingSignup(true)
-            const responsecard:any = await axios.get(`https://palondomus-revisionbankcard.hf.space/getcard?h=${hashedvalue}&u=${externalrevcardusername}`);
+            const responsecard:any = await axios.get(`https://revisionbankcardlink-aoz2m6et2a-uc.a.run.app/getcard?h=${hashedvalue}&u=${externalrevcardusername}`);
             const revisioncard = responsecard.data
             var notecardjson = {"revisioncardscheduler":{"sendtoemail":json.email,"revisionscheduleinterval":60,"revisioncards":[revisioncard]}}
             //console.log(json)
           
-            const responsestore:any = await axios.post("https://palondomus-revb-backend.hf.space/storerevisioncards",notecardjson,config)
+            const responsestore:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",notecardjson,config)
           
             navigate("/revisioncards",{state:{"token":response.data.access_token}})
             }

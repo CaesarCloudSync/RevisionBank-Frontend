@@ -49,7 +49,7 @@ export default function RevisionBankScheduler(){
     const [emailcount,setEmailCount] = useState(0);
     const getemailcount = async (token:any) => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://palondomus-revb-backend.hf.space/getemailcount",config)
+      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setShowEmailPrompt(false);
