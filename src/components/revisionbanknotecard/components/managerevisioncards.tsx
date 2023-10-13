@@ -139,7 +139,7 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
         const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getaccountinfo`,config)
-        const ws = new WebSocket("wss://palondomus-revb-backend.hf.space/getrevisioncardsws");
+        const ws = new WebSocket("wss://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncardsws");
 
 
         ws.onopen = (event) => {
