@@ -38,7 +38,7 @@ export default function AddRevisionCard(props:any){
     const maxRowBased = useMediaQuery(maxRowBasedquery);
     //const numoaccounts = 200 - props.numstudentaccounts
     const getdigitregex = /\d+/g;
-    const revisionscheduleintervalselect = [{"label":"60 minutes","value":0}]//,{"label":"30 minutes","value":1}]
+    //const revisionscheduleintervalselect = [{"label":"60 minutes","value":0},{"label":"30 minutes","value":1}]//,{"label":"30 minutes","value":1}]
     const [revisionscheduleinterval,setRevisionScheduleInterval] = useState<any>("")
     const [studentemailstored,setStudentEmailStored] = useState(false)
     const [emptyfield,setEmptyField] = useState(false)
@@ -269,17 +269,17 @@ export default function AddRevisionCard(props:any){
         const checkrevisioncardimages:any = revisioncardimage.map((revisioncard:any) => { if (revisioncard.revisioncardimgname.length === 0 || revisioncard.revisioncardimage === 0){return("true")}else{return("false")} })
         //console.log(checkformfields)
         //console.log(checkformfields)
-        if ((checkformfields.includes("true") && checkrevisioncardimages.includes("true")) || (email  === '' || props.emailcount === 0 ) || (checkformfields.length === 0 && checkrevisioncardimages.length === 0)|| revisionscheduleinterval.label === undefined){
+        if ((checkformfields.includes("true") && checkrevisioncardimages.includes("true")) || (email  === '' || props.emailcount === 0 ) || (checkformfields.length === 0 && checkrevisioncardimages.length === 0)|| revisionscheduleinterval === ""){
             setSubmitting(false)
             setStudentEmailStored(false)
             setSelectAllOptions(true)
         }
-        else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' && revisionscheduleinterval.label !== undefined){
+        else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' && revisionscheduleinterval !== ""){
             var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
             // TODO Store the image in the database here using post request
             revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
-            var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval.label.match(getdigitregex)[0]),"revisioncards":formFields}}
-            //console.log(json)
+            formFields.map((card:any)=> {card["revisionscheduleinterval"] = parseInt(revisionscheduleinterval)})
+            var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval),"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
             
             const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
             //console.log(response.data)
@@ -429,7 +429,10 @@ export default function AddRevisionCard(props:any){
                                 onChange={event => handleFormChange(event, index)}
                                 value={form.revisioncardtitle}
                             />
-                            {index === 0 && <Select options={revisionscheduleintervalselect} value={revisionscheduleintervalselect.find((obj:any) => obj.value === revisionscheduleinterval)} onChange= {(e:any) => {setRevisionScheduleInterval(e);}}  ></Select>}
+                            {/*index === 0 && <Select options={revisionscheduleintervalselect} value={revisionscheduleintervalselect.find((obj:any) => obj.value === revisionscheduleinterval)} onChange= {(e:any) => {setRevisionScheduleInterval(e);}}  ></Select>*/}
+
+                            {index === 0 && <input placeholder="Time Interval" min="1" type="number" value={revisionscheduleinterval} onChange= {(e:any) => {setRevisionScheduleInterval(e.target.value)}}  ></input>}
+                            
                             <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]} className="form-control" style={{height: "200px",width:"100%"}} onChange={event => handleFormChange(event, index)}>
                             </textarea>
 

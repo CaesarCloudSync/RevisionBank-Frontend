@@ -189,8 +189,8 @@ export default function ManageRevisionCards(props:any){
     // TODO Allow change if Interval
     const schedulerevisioncard = async (revisioncard:any,token:string) => {
         //console.log(token)
-        //console.log(revisioncard)
-        var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
+        console.log(revisioncard.revisionscheduleinterval)
+        var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncard.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/schedulerevisioncard`,json,config)
@@ -254,9 +254,10 @@ export default function ManageRevisionCards(props:any){
             setCardNotChanged((items:any)=> ({...cardnotchanged,cardnotchangedind:revisioncardind,cardnotchanged:true}))
         }
         else if(newrevisioncard !== ""){
-            const newrevisioncardjson = {"revisioncard":prevrevisioncard.revisioncard,"newrevisioncard": newrevisioncard.newrevisoncard,"revisioncardtitle": prevrevisioncard.revisioncardtitle,"subject": prevrevisioncard.subject}
+            const newrevisioncardjson = {"revisioncard":prevrevisioncard.revisioncard,"newrevisioncard": newrevisioncard.newrevisoncard,"revisioncardtitle": prevrevisioncard.revisioncardtitle,"subject": prevrevisioncard.subject,"revisionscheduleinterval":prevrevisioncard.revisionscheduleinterval}
             //console.log(newrevisioncardjson)
             const config = {headers: {Authorization: `Bearer ${token}`,}}
+            console.log(newrevisioncardjson)
             const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changerevisioncard`,newrevisioncardjson,config)
             //console.log(response.data)
             const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
@@ -282,6 +283,7 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":newsendtoemail}
         //console.log(json)
         const response:any = await axios.put(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changesendtoemail`,json,config)
+        console.log(response.data)
         const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         ////console.log(responseaccount)
@@ -469,6 +471,7 @@ export default function ManageRevisionCards(props:any){
                                 <div>
                                     <div key={index} style={{display:"flex",marginTop:"50px",flexDirection:maxRowBased ? "row":"column",justifyContent: "space-between"}}>
                                         <p >{revisioncard.subject}</p>
+                                        <p >{revisioncard.revisionscheduleinterval} Minutes</p>
                                         <p style={{marginRight:"40px"}}>{revisioncard.revisioncardtitle}</p>
                                     </div>
                                     <textarea onChange={(e:any) => {setNewRevisionCard((items:any)=> ({...index,revisioncardind:index,newrevisoncard:e.target.value}))} } defaultValue={revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px"}}>
