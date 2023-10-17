@@ -325,6 +325,8 @@ export default function ManageRevisionCards(props:any){
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //var json = {"removerevisioncard":revisioncard}
+        console.log(revisioncard)
+        revisioncard["sendtoemail"] = sendtoemail
         const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/removerevisioncard`,revisioncard,config)
         //console.log(response.data)
         const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
