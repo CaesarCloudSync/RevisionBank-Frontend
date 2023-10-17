@@ -55,7 +55,10 @@ export default function ForgotPassword(){
     const [submitted,setSubmitted] = useState(false);
     const forgotpassword = async (event:any) => { 
         event.preventDefault();
+        
         const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/forgotpassword`, {"email":email.toLowerCase()}); // Send login post request.
+        //console.log(response.data)
+        // 10.11.27.212 
         setSubmitted(true);
     }   
     const maxRowBased = useMediaQuery(maxRowBasedquery);

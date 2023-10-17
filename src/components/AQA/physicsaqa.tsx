@@ -54,7 +54,7 @@ export default function PhysicsAqa (){
     const [errormessagebool,setErrorMessagebool] = useState(false);
     const sendApi = async (e:any) => {
       //&& physicsaqatopicms
-      if (physicsaqachapter && physicsaqatopic  !== {} && email !== '') {
+      if (physicsaqachapter && physicsaqatopic.length  !== 0 && email !== '') {
       setDataNotSet(false);
       e.preventDefault();
       setIsLoading(true);
