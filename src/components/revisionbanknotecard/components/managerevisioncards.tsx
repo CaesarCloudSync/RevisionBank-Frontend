@@ -139,7 +139,7 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
         const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getaccountinfo`,config)
-        const ws = new WebSocket("wss://revisionbankbackend-aoz2m6et2a-uc.a.run.app0/getrevisioncardsws");
+        const ws = new WebSocket("wss://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncardsws");
 
 
         ws.onopen = (event) => {
@@ -513,18 +513,29 @@ export default function ManageRevisionCards(props:any){
                                     scheduledcards.revisioncards.length < allowedmaximumscheduledcards ? /* 5  */
                                     <div>
                                     <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
+                                    {/*Send now 1 duplicate need*/}
                                     { 
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
                                     <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
                                     :
                                     <Button onClick={() => {sendnowrevisioncard(revisioncard,token);setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Send Now!</Button>
+                                    
                                     }
                                     </div>
                                     :
                                     <Button onClick={() => {reactalert.show(`Maximum ${allowedmaximumscheduledcards} scheduled cards.`)}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
                                     :
+                                    <div>
                                     <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
-                                
+                                    {/*Send now 2 duplicate also needed*/}
+                                    { 
+                                    sentnow.revisioncardind === index && sentnow.scheduled === true ?
+                                    <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
+                                    :
+                                    <Button onClick={() => {sendnowrevisioncard(revisioncard,token);setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Send Now!</Button>
+                                    
+                                    }
+                                    </div>
                                 :
                                 <div style={{display:"flex",justifyContent:"end",marginRight:"50px",marginTop:newrevisioncard.revisioncardind === index && newrevisioncard.newrevisoncard  !== "" ? "0px":"-30px"}}  >
                                     {/*( ( foo && !bar ) || ( !foo && bar ) )  */}
