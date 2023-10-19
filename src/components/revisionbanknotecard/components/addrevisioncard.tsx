@@ -461,7 +461,7 @@ export default function AddRevisionCard(props:any){
 
                             {index === 0 && <div><input placeholder="Time Interval" maxLength={4} type="text" value={revisionscheduleinterval} onChange= {(e:any) => {setRevisionScheduleInterval(e.target.value)}}  ></input><p>30MI | 10H | 6D | 6MO</p></div>}
                             
-                            <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]} className="form-control" style={{height: "200px",width:"100%"}} onChange={event => handleFormChange(event, index)}>
+                            <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]} className="form-control" style={{height: "200px",width:"100%",minHeight:maxRowBased ? "400px":"200px"}} onChange={event => handleFormChange(event, index)}>
                             </textarea>
 
                         
