@@ -319,7 +319,28 @@ export default function ManageRevisionCards(props:any){
 
 
     }
+    const showintervaldatetime = (interval:any) => {
+            if (typeof(interval) === "string"){
+                if (interval.includes("MI")) {
+                    return "Minutes"
+                }
+                else if (interval.includes("H")){
+                    return "Hours"
+                }
+                else if (interval.includes("D") ){
+                    return "Days"
+                }
+                else if (interval.includes("MO") ){
+                    return "Months"
+                }
+            }
+            else{
+                return "Minutes"
+            }
+    }
     const removerevisioncard = async (revisioncard:any,token:string) => {
+        var answer = window.confirm("Remove revisioncard!");
+        if (answer) {
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
@@ -339,6 +360,11 @@ export default function ManageRevisionCards(props:any){
             
           });*/
         window.location.reload()
+        }
+        else {
+            //some code
+        }
+
         
     }
     const checkrevisecard = (revisioncard:any,scheduledcards:any) => {
@@ -431,6 +457,11 @@ export default function ManageRevisionCards(props:any){
                         <Button style={{margin:"10px",fontSize:"13px",backgroundColor:"purple",border:"1px solid purple"}} onClick={(e:any) => {if (manualscheduling === true){setManualScheduling(false)} else if (manualscheduling === false){automaticschedulingcheck(token);window.localStorage.removeItem("manualstay")}}}>{manualscheduling === true ? "Manual Scheduling" :"Automatic Scheduling" }</Button>
                     </div>
                         }
+                    {/*This is for all to unschedule */}
+                   <div style={{display:"flex",justifyContent:"end"}}>
+                        {/**;unscheduleallrevisioncard(token) */}
+                        <Button style={{margin:"10px",fontSize:"13px",width:"100px",backgroundColor:"#dc3545",border:"1px solid #dc3545"}} onClick={(e:any) => {unscheduleallrevisioncard(token)}}>Unschedule All</Button>
+                    </div>
                     <div style={{position:"relative",left:"10%",top:"10%",width: "80%",border:"1px grey solid",borderRadius:"5px"}}>
  
                     
@@ -471,7 +502,7 @@ export default function ManageRevisionCards(props:any){
                                 <div>
                                     <div key={index} style={{display:"flex",marginTop:"50px",flexDirection:maxRowBased ? "row":"column",justifyContent: "space-between"}}>
                                         <p >{revisioncard.subject}</p>
-                                        <p >{revisioncard.revisionscheduleinterval} Minutes</p>
+                                        <p >{revisioncard.revisionscheduleinterval} {showintervaldatetime(revisioncard.revisionscheduleinterval)}</p>
                                         <p style={{marginRight:"40px"}}>{revisioncard.revisioncardtitle}</p>
                                     </div>
                                     <textarea onChange={(e:any) => {setNewRevisionCard((items:any)=> ({...index,revisioncardind:index,newrevisoncard:e.target.value}))} } defaultValue={revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px"}}>

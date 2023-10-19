@@ -259,6 +259,26 @@ export default function AddRevisionCard(props:any){
 
     }
     //console.log(revisionscheduleinterval)
+    const checkintervalvalid = (interval:any) =>{
+        if (interval.includes("MI") || interval.includes("H") || interval.includes("D") || interval.includes("MO")) {
+            if (interval.includes("MI") && (0 < parseInt(interval.replace("MI",""))  && parseInt(interval.replace("MI","")) < 60)){
+                return true
+            }
+            else if (interval.includes("H") && (0 < parseInt(interval.replace("H",""))  && parseInt(interval.replace("H","")) < 24)){
+                return true
+            }
+            else if (interval.includes("D") && (0 < parseInt(interval.replace("D",""))  && parseInt(interval.replace("D","")) < 31)){
+                return true
+            }
+            else if (interval.includes("MO") && (0 < parseInt(interval.replace("MO",""))  && parseInt(interval.replace("MO","")) < 12)){
+                return true
+            }
+        }
+        else{
+            return false
+        }
+
+    }
     const submitRevisionCard = async (e:any) => {
         setSelectAllOptions(false)
         //e.preventDefault();
@@ -275,17 +295,25 @@ export default function AddRevisionCard(props:any){
             setSelectAllOptions(true)
         }
         else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' && revisionscheduleinterval !== ""){
-            var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
-            // TODO Store the image in the database here using post request
-            revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
-            formFields.map((card:any)=> {card["revisionscheduleinterval"] = parseInt(revisionscheduleinterval)})
-            var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval),"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
-            
-            const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
-            //console.log(response.data)
-            setSubmitting(false)
-            //window.location.reload();
-            navigate('/revisioncards',{state:{"token":props.token.token}})
+            if (checkintervalvalid(revisionscheduleinterval) === true){
+                var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
+                // TODO Store the image in the database here using post request
+                revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
+                formFields.map((card:any)=> {card["revisionscheduleinterval"] = revisionscheduleinterval})
+                var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":revisionscheduleinterval,"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
+                
+                const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
+                //console.log(response.data)
+                setSubmitting(false)
+                //window.location.reload();
+                navigate('/revisioncards',{state:{"token":props.token.token}})
+            }
+            else{
+                setSubmitting(false)
+                setStudentEmailStored(false)
+                setSelectAllOptions(true)
+                alert("Time interval: 30MI | 10H | 6D | 6MO ")
+            }
         } 
         
     
@@ -431,7 +459,7 @@ export default function AddRevisionCard(props:any){
                             />
                             {/*index === 0 && <Select options={revisionscheduleintervalselect} value={revisionscheduleintervalselect.find((obj:any) => obj.value === revisionscheduleinterval)} onChange= {(e:any) => {setRevisionScheduleInterval(e);}}  ></Select>*/}
 
-                            {index === 0 && <input placeholder="Time Interval" min="1" type="number" value={revisionscheduleinterval} onChange= {(e:any) => {setRevisionScheduleInterval(e.target.value)}}  ></input>}
+                            {index === 0 && <div><input placeholder="Time Interval" maxLength={4} type="text" value={revisionscheduleinterval} onChange= {(e:any) => {setRevisionScheduleInterval(e.target.value)}}  ></input><p>30MI | 10H | 6D | 6MO</p></div>}
                             
                             <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]} className="form-control" style={{height: "200px",width:"100%"}} onChange={event => handleFormChange(event, index)}>
                             </textarea>
