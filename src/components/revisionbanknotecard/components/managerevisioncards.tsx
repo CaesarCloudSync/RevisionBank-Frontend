@@ -505,7 +505,7 @@ export default function ManageRevisionCards(props:any){
                                         <p >{revisioncard.revisionscheduleinterval} {showintervaldatetime(revisioncard.revisionscheduleinterval)}</p>
                                         <p style={{marginRight:"40px"}}>{revisioncard.revisioncardtitle}</p>
                                     </div>
-                                    <textarea onChange={(e:any) => {setNewRevisionCard((items:any)=> ({...index,revisioncardind:index,newrevisoncard:e.target.value}))} } defaultValue={revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px"}}>
+                                    <textarea onChange={(e:any) => {setNewRevisionCard((items:any)=> ({...index,revisioncardind:index,newrevisoncard:e.target.value}))} } defaultValue={revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px",minHeight:maxRowBased ? "500px":"200px"}}>
                                     </textarea>
                                     
                                     {revisioncard.revisioncardimage !== undefined &&
