@@ -23,7 +23,7 @@ export default function ManageRevisionCardsInfo(props:any){
             let revisionscheduleinterval = newinterval === "" ? props.revisioncard.revisionscheduleinterval : newinterval
             const json_data = {"oldsubject":props.revisioncard.subject,"oldrevisioncardtitle":props.revisioncard.revisioncardtitle,"oldrevisionscheduleinterval":props.revisioncard.revisionscheduleinterval,
             "newsubject":subject,"newrevisioncardtitle":revisioncardtitle,"newrevisionscheduleinterval":revisionscheduleinterval}
-            const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changerevisioncardmetadata",json_data,config)
+            const response = await axios.post("http://192.168.0.22:8080/changerevisioncardmetadata",json_data,config)
             const result = response.data
             if ("error" in result){
                 alert(`Error:${result.error}`)
@@ -77,7 +77,7 @@ export default function ManageRevisionCardsInfo(props:any){
     </textarea>
 
             <div style={{display:"flex"}}>
-            {props.revisioncard.revisioncardimage !== undefined && props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
+            {props.revisioncard.revisioncardimage !== undefined && props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames subject={props.revisioncard.subject} revisioncardtitle={props.revisioncard.revisioncardtitle} cardindex={props.index} index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
             
             </div>
     </div>

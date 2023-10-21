@@ -82,7 +82,7 @@ export default function BiologyAQA(){
     //console.log(topicselect)
     const getemailcount = async () => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getemailcount",config)
+      const responsecount = await axios.get("http://192.168.0.22:8080/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setHideEmailPrompt(false);
@@ -108,7 +108,7 @@ export default function BiologyAQA(){
       console.log(json)
 
       const config = {headers: {Authorization: `Bearer ${token.token}`}}
-      const responsaqaphysicsocrqp:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getphysicsocrqp",json,config)
+      const responsaqaphysicsocrqp:any =  await axios.post("http://192.168.0.22:8080/getphysicsocrqp",json,config)
       console.log(responsaqaphysicsocrqp.data)
       let physicsocrbase64pdf = responsaqaphysicsocrqp.data.questionpapersubject //[`${computerscienceselect.replace("qp","").replace(" ","")}`]
   
