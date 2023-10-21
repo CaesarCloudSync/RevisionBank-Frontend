@@ -7,9 +7,11 @@ import axios from "axios";
 import { useAlert } from 'react-alert'
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, Button } from "react-bootstrap"
-
+import ManageRevisionCardsInfo from "./managerevisioncardsinfo";
 import LensIcon from '@mui/icons-material/Lens';
 import ShareAlert from "./sharealert";
+import RevisionBankSpeechRecognition from "../../speechrecognition/speechrecognition";
+import ManageRevisionCardSpeechRecognition from "../managespeechrecognition";
 export default function ManageRevisionCards(props:any){
     let location = useLocation();
     const reactalert = useAlert()
@@ -66,8 +68,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+                    const response:any = await axios.post(`http://192.168.0.22:8080/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -91,7 +93,7 @@ export default function ManageRevisionCards(props:any){
         // When there is a color already selected
         if (revisioncardcolor !== false && (color !== "none" && color !== revisioncardcolor)){
             revisioncard["color"] = revisioncardcolor
-            const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`http://192.168.0.22:8080/unschedulerevisioncard`,revisioncard,config)
             revisioncard["color"] = color
             data[index]["color"] = color;
             data[index]["showpickedtrafficlightind"] = index;
@@ -105,8 +107,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+                    const response:any = await axios.post(`http://192.168.0.22:8080/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -128,7 +130,7 @@ export default function ManageRevisionCards(props:any){
 
         }
         if (color === revisioncardcolor){
-            const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`http://192.168.0.22:8080/unschedulerevisioncard`,revisioncard,config)
             window.location.reload()
 
         }
@@ -137,9 +139,9 @@ export default function ManageRevisionCards(props:any){
     const getrevisioncards = async (token:string) => {
         //console.log(token)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
-        const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getaccountinfo`,config)
-        const ws = new WebSocket("wss://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncardsws");
+        //const response:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getaccountinfo`,config)
+        const ws = new WebSocket("ws://192.168.0.22:8080/getrevisioncardsws");
 
 
         ws.onopen = (event) => {
@@ -193,9 +195,9 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncard.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/schedulerevisioncard`,json,config)
+        const response:any = await axios.post(`http://192.168.0.22:8080/schedulerevisioncard`,json,config)
         ////console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -211,7 +213,7 @@ export default function ManageRevisionCards(props:any){
     }
     const unscheduleallrevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/unscheduleallrevisioncard`,config)
+        const response:any = await axios.delete(`http://192.168.0.22:8080/unscheduleallrevisioncard`,config)
         window.location.reload()
         //console.log(response.data)
     }
@@ -219,7 +221,7 @@ export default function ManageRevisionCards(props:any){
         setManualScheduling(true);
         window.location.reload()
         //const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/checkschedulerevisioncard`,config)
+        //const response:any = await axios.get(`http://192.168.0.22:8080/checkschedulerevisioncard`,config)
         //console.log(response.data)
         //setScheduledCardState(response.data)
     }
@@ -227,9 +229,9 @@ export default function ManageRevisionCards(props:any){
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/unschedulerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`http://192.168.0.22:8080/unschedulerevisioncard`,revisioncard,config)
         ////console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -243,7 +245,7 @@ export default function ManageRevisionCards(props:any){
     }
     const checkschedulerevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/checkschedulerevisioncard`,config)
+        const response:any = await axios.get(`http://192.168.0.22:8080/checkschedulerevisioncard`,config)
         //console.log(response.data)
         setScheduledCardState(response.data)
         ////console.log(response.data)
@@ -258,9 +260,9 @@ export default function ManageRevisionCards(props:any){
             //console.log(newrevisioncardjson)
             const config = {headers: {Authorization: `Bearer ${token}`,}}
             //console.log(newrevisioncardjson)
-            const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changerevisioncard`,newrevisioncardjson,config)
+            const response:any = await axios.post(`http://192.168.0.22:8080/changerevisioncard`,newrevisioncardjson,config)
             //console.log(response.data)
-            const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+            const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
             var newrevisioncarddata = responseaccount.data
             //console.log(newrevisioncarddata)
             
@@ -282,8 +284,8 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         var json = {"sendtoemail":newsendtoemail}
         //console.log(json)
-        const response:any = await axios.put(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changesendtoemail`,json,config)
-        const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        const response:any = await axios.put(`http://192.168.0.22:8080/changesendtoemail`,json,config)
+        const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         ////console.log(responseaccount)
         
@@ -303,7 +305,7 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/sendnowrevisioncard`,json,config)
+        const response:any = await axios.post(`http://192.168.0.22:8080/sendnowrevisioncard`,json,config)
         ////console.log(response.data)
 
     }
@@ -346,9 +348,9 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //var json = {"removerevisioncard":revisioncard}
         revisioncard["sendtoemail"] = sendtoemail
-        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/removerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`http://192.168.0.22:8080/removerevisioncard`,revisioncard,config)
         //console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`http://192.168.0.22:8080/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         
@@ -500,26 +502,8 @@ export default function ManageRevisionCards(props:any){
                                 //console.log(newrevisioncard.newrevisoncard)
                                 return(
                                 <div>
-                                    <div key={index} style={{display:"flex",marginTop:"50px",flexDirection:maxRowBased ? "row":"column",justifyContent: "space-between"}}>
-                                        <p >{revisioncard.subject}</p>
-                                        <p >{revisioncard.revisionscheduleinterval} {showintervaldatetime(revisioncard.revisionscheduleinterval)}</p>
-                                        <p style={{marginRight:"40px"}}>{revisioncard.revisioncardtitle}</p>
-                                    </div>
-                                    <textarea onChange={(e:any) => {setNewRevisionCard((items:any)=> ({...index,revisioncardind:index,newrevisoncard:e.target.value}))} } defaultValue={revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px",minHeight:maxRowBased ? "500px":"200px"}}>
-                                    </textarea>
-                                    
-                                    {revisioncard.revisioncardimage !== undefined &&
-                                    <table>
-                                        <tbody >
-                                        <tr>
-                                        {revisioncard.revisioncardimgname.map((val:any)=> {return(<th key={val} style={{textAlign:"left"}}>{val}</th>)})}
-                                        </tr>
-                                        <tr>
-                                        {revisioncard.revisioncardimage.map((val:any)=> {return(<td ><img key={val} style={{width:maxRowBased ? "55%": "75%" ,height: maxRowBased ? "55%" : "75%"}} src={val}></img></td>)})}
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    }
+                                    <ManageRevisionCardsInfo index={index} maxRowBased={maxRowBased} revisioncard={revisioncard} showintervaldatetime={showintervaldatetime} setNewRevisionCard={setNewRevisionCard} token={token}/>
+
                                         
                                     
                                     <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
@@ -529,6 +513,8 @@ export default function ManageRevisionCards(props:any){
                                     <Button onTouchStart={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} onClick={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} style={{backgroundColor:"#00008B",width:"100px",border:"1px solid #00008B",height:"30px",fontSize:"13px"}}>Submit</Button>}
                                     <Button onClick={() => {removerevisioncard(revisioncard,token)}} style={{backgroundColor:"#dc3545",width:"100px",border:"1px solid #dc3545",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Remove</Button>
                                     <Button onTouchStart={() => {sharerevisioncard(revisioncard)}} onClick={() => {sharerevisioncard(revisioncard)}} style={{backgroundColor:"#fa0095",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px",marginTop:maxRowBased ? "auto" : "5px" }}>Share</Button>
+                                    
+                                
                                     {/*<ShareAlert shareshow={shareshow} sharerevisioncard={sharerevisioncard} revisioncard={revisioncard} maxRowBased={maxRowBased}></ShareAlert>*/}
                                     
                                     </div>
@@ -538,13 +524,20 @@ export default function ManageRevisionCards(props:any){
                                     (scheduled.revisioncardind === index && scheduled.scheduled === true )|| revboole === true ? //
 
                                     <Button onClick={() => {unschedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{backgroundColor:"#fa0095",marginTop:"10px",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Scheduled</Button>
+                                    
                                     :
                                      
                                     scheduledcards.revisioncards !== undefined ? 
                                     scheduledcards.revisioncards.length < allowedmaximumscheduledcards ? /* 5  */
                                     <div>
-                                    <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
+                                    <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
                                     {/*Send now 1 duplicate need*/}
+                                    <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
+                                    <div style={{marginRight:maxRowBased ?"17px":"10px"}}>
+                                        <ManageRevisionCardSpeechRecognition setNewRevisionCard={setNewRevisionCard} revisioncard={revisioncard} index={index}></ManageRevisionCardSpeechRecognition>
+                                    </div>
+                                    </div>
+                                    
                                     { 
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
                                     <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
@@ -557,8 +550,13 @@ export default function ManageRevisionCards(props:any){
                                     <Button onClick={() => {reactalert.show(`Maximum ${allowedmaximumscheduledcards} scheduled cards.`)}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
                                     :
                                     <div>
+                                    {/*Send now 2 duplicate also needed certain accounts for some reason.*/}
+                                    <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
                                     <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
-                                    {/*Send now 2 duplicate also needed*/}
+                                    <div style={{marginRight:maxRowBased ?"17px":"10px"}}>
+                                        <ManageRevisionCardSpeechRecognition setNewRevisionCard={setNewRevisionCard} revisioncard={revisioncard} index={index}></ManageRevisionCardSpeechRecognition>
+                                    </div>
+                                    </div>
                                     { 
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
                                     <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
@@ -577,7 +575,7 @@ export default function ManageRevisionCards(props:any){
                                 </div>
                                 }
                                     {cardnotchanged.cardnotchangedind === index && cardnotchanged.cardnotchanged === true && <p>Card Not changed.</p>}
-                                    
+
                                 </div>
                                 )
                             })}

@@ -56,7 +56,7 @@ export default function ForgotPassword(){
     const forgotpassword = async (event:any) => { 
         event.preventDefault();
         
-        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/forgotpassword`, {"email":email.toLowerCase()}); // Send login post request.
+        const response:any = await axios.post(`http://192.168.0.22:8080/forgotpassword`, {"email":email.toLowerCase()}); // Send login post request.
         //console.log(response.data)
         // 10.11.27.212 
         setSubmitted(true);
