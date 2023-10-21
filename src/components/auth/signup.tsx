@@ -121,7 +121,7 @@ function Signup() {
         //json["betatest"] = "true";
         //console.log(json)
         
-        const response:any = await axios.post(`http://192.168.0.22:8080/signupapi`, json);
+        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appsignupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
         const config = {headers: {Authorization: `Bearer ${response.data.access_token}`,}}
@@ -136,7 +136,7 @@ function Signup() {
             var notecardjson = {"revisioncardscheduler":{"sendtoemail":json.email,"revisionscheduleinterval":60,"revisioncards":[revisioncard]}}
             //console.log(json)
           
-            const responsestore:any = await axios.post("http://192.168.0.22:8080/storerevisioncards",notecardjson,config)
+            const responsestore:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appstorerevisioncards",notecardjson,config)
           
             navigate("/revisioncards",{state:{"token":response.data.access_token}})
             }

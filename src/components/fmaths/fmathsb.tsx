@@ -50,7 +50,7 @@ export default function FmathSB(){
     const bookyearoptions = [{"label":1,"value":0},{"label":2,"value":0}]
     const getemailcount = async () => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("http://192.168.0.22:8080/getemailcount",config)
+      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetemailcount",config)
       if (responsecount.data.emailcount === 0){
         setHideEmailPrompt(false);
         setEmailCount(0)
@@ -75,7 +75,7 @@ export default function FmathSB(){
 
           const config = {headers: {Authorization: `Bearer ${token.token}`,}}
           try{
-          const response:any = await axios.post("http://192.168.0.22:8080/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear.label,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
+          const response:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appfmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear.label,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
           
           if ('error' in response.data){
               console.log("error",response.data.error)
