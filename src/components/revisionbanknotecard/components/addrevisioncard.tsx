@@ -302,7 +302,7 @@ export default function AddRevisionCard(props:any){
                 formFields.map((card:any)=> {card["revisionscheduleinterval"] = revisionscheduleinterval})
                 var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":revisionscheduleinterval,"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
                 
-                const response = await axios.post("http://192.168.0.22:8080/storerevisioncards",json,config)
+                const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
                 //console.log(response.data)
                 setSubmitting(false)
                 //window.location.reload();
@@ -507,7 +507,6 @@ export default function AddRevisionCard(props:any){
                             {ocrprogress[index]["ocrprogress"] >  0 && ocrprogress[index]["ocrprogress"] <  100 &&<div >Loading text image: {ocrprogress[index]["ocrprogress"]}%</div>}
                             <div style={{display:"flex",flexDirection:showWebcam === true ? "column":"row",marginTop:formFields[index]["drawing"] === "true" ? "20px": "0px"}}>
                                 <RevisionBankSpeechRecognition resetTranscript={resetTranscript} transcript={transcript} setFormFields={setFormFields} formFields={formFields} handleFormChange={handleFormChange} index={index}></RevisionBankSpeechRecognition>
-                                
                                 {showWebcam === true ? 
                                 <WebcamImage setShowWebCam={setShowWebCam} setFormFields={setFormFields} formFields={formFields} handleFormChange={handleFormChange} index={index} marginLeft={{marginLeft:"auto"}} /> :
                                 <CameraAltIcon style={{position:"relative",top:"12px",left:"10px",fontSize:"15px","width":"50px","height":"50px"}} onClick={() => {setShowWebCam(true)}}/>

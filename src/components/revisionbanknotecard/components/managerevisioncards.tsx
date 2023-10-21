@@ -10,8 +10,6 @@ import { Alert, Button } from "react-bootstrap"
 import ManageRevisionCardsInfo from "./managerevisioncardsinfo";
 import LensIcon from '@mui/icons-material/Lens';
 import ShareAlert from "./sharealert";
-import RevisionBankSpeechRecognition from "../../speechrecognition/speechrecognition";
-import ManageRevisionCardSpeechRecognition from "../managespeechrecognition";
 export default function ManageRevisionCards(props:any){
     let location = useLocation();
     const reactalert = useAlert()
@@ -37,7 +35,7 @@ export default function ManageRevisionCards(props:any){
     const [shareshow,setShareShow] = useState(false)
     const [shareurl,setShareURL] = useState("")
     const [revisioncardswebsocket,setRevisionCardWebSocket] = useState<any>([])
-    
+
     
 
     //console.log(manualpagecookie)
@@ -504,6 +502,7 @@ export default function ManageRevisionCards(props:any){
                                 <div>
                                     <ManageRevisionCardsInfo index={index} maxRowBased={maxRowBased} revisioncard={revisioncard} showintervaldatetime={showintervaldatetime} setNewRevisionCard={setNewRevisionCard} token={token}/>
 
+                                    
                                         
                                     
                                     <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
@@ -513,8 +512,6 @@ export default function ManageRevisionCards(props:any){
                                     <Button onTouchStart={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} onClick={() => {changerevisioncard(index,revisioncard,newrevisioncard,token)}} style={{backgroundColor:"#00008B",width:"100px",border:"1px solid #00008B",height:"30px",fontSize:"13px"}}>Submit</Button>}
                                     <Button onClick={() => {removerevisioncard(revisioncard,token)}} style={{backgroundColor:"#dc3545",width:"100px",border:"1px solid #dc3545",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Remove</Button>
                                     <Button onTouchStart={() => {sharerevisioncard(revisioncard)}} onClick={() => {sharerevisioncard(revisioncard)}} style={{backgroundColor:"#fa0095",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px",marginTop:maxRowBased ? "auto" : "5px" }}>Share</Button>
-                                    
-                                
                                     {/*<ShareAlert shareshow={shareshow} sharerevisioncard={sharerevisioncard} revisioncard={revisioncard} maxRowBased={maxRowBased}></ShareAlert>*/}
                                     
                                     </div>
@@ -524,20 +521,13 @@ export default function ManageRevisionCards(props:any){
                                     (scheduled.revisioncardind === index && scheduled.scheduled === true )|| revboole === true ? //
 
                                     <Button onClick={() => {unschedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{backgroundColor:"#fa0095",marginTop:"10px",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Scheduled</Button>
-                                    
                                     :
                                      
                                     scheduledcards.revisioncards !== undefined ? 
                                     scheduledcards.revisioncards.length < allowedmaximumscheduledcards ? /* 5  */
                                     <div>
-                                    <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
-                                    {/*Send now 1 duplicate need*/}
                                     <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
-                                    <div style={{marginRight:maxRowBased ?"17px":"10px"}}>
-                                        <ManageRevisionCardSpeechRecognition setNewRevisionCard={setNewRevisionCard} revisioncard={revisioncard} index={index}></ManageRevisionCardSpeechRecognition>
-                                    </div>
-                                    </div>
-                                    
+                                    {/*Send now 1 duplicate need*/}
                                     { 
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
                                     <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
@@ -550,13 +540,8 @@ export default function ManageRevisionCards(props:any){
                                     <Button onClick={() => {reactalert.show(`Maximum ${allowedmaximumscheduledcards} scheduled cards.`)}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
                                     :
                                     <div>
-                                    {/*Send now 2 duplicate also needed certain accounts for some reason.*/}
-                                    <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
                                     <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
-                                    <div style={{marginRight:maxRowBased ?"17px":"10px"}}>
-                                        <ManageRevisionCardSpeechRecognition setNewRevisionCard={setNewRevisionCard} revisioncard={revisioncard} index={index}></ManageRevisionCardSpeechRecognition>
-                                    </div>
-                                    </div>
+                                    {/*Send now 2 duplicate also needed*/}
                                     { 
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
                                     <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
@@ -575,7 +560,7 @@ export default function ManageRevisionCards(props:any){
                                 </div>
                                 }
                                     {cardnotchanged.cardnotchangedind === index && cardnotchanged.cardnotchanged === true && <p>Card Not changed.</p>}
-
+                                    
                                 </div>
                                 )
                             })}

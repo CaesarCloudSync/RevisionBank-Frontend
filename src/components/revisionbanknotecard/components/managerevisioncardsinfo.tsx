@@ -2,14 +2,15 @@ import { useState } from "react";
 import axios from "axios";
 import {Button } from "react-bootstrap"
 import UploadIcon from '@mui/icons-material/Upload';
-import RevisionCardImages from "./revisioncardimages";
+
+import RevisionCardImageNames from "./revisioncardimagenames";
 export default function ManageRevisionCardsInfo(props:any){
     const [loading,setLoading] = useState(false);
     const [newsubject,setNewSubject] = useState("");
     const [changesubject,setChangeSubject] = useState(false);
     const [newinterval,setNewInterval] = useState("")
     const [changeinterval,setChangeInterval] = useState(false);
-    
+
     const [newrevisioncardtitle,setNewRevisionCardTitle] = useState("")
     const [changerevisioncardtitle,setChangeRevisionCardTitle] = useState(false);
 
@@ -38,6 +39,8 @@ export default function ManageRevisionCardsInfo(props:any){
         }
     }
     //console.log(props.token)
+
+
     return(
         <div>
         <div key={props.index} style={{display:"flex",marginTop:"50px",flexDirection:props.maxRowBased ? "row":"column",justifyContent: "space-between"}}>
@@ -72,18 +75,10 @@ export default function ManageRevisionCardsInfo(props:any){
     <textarea onChange={(e:any) => {props.setNewRevisionCard((items:any)=> ({...props.index,revisioncardind:props.index,newrevisoncard:e.target.value}))} } defaultValue={props.revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px",minHeight:props.maxRowBased ? "500px":"200px"}}>
     </textarea>
 
-    {props.revisioncard.revisioncardimage !== undefined &&
-        <table>
-            <tbody >
-            <tr>
-            {props.revisioncard.revisioncardimgname.map((val:any,ind:number)=> {return(<RevisionCardImages ind={ind} revisioncardimgname ={props.revisioncard.revisioncardimgname} revisioncardimage ={props.revisioncard.revisioncardimage}  currentuse={"names"}></RevisionCardImages>)})}
-            </tr>
-            <tr>
-            {props.revisioncard.revisioncardimage.map((val:any,ind:number)=> {return(<RevisionCardImages ind={ind} revisioncardimgname ={props.revisioncard.revisioncardimgname} revisioncardimage ={props.revisioncard.revisioncardimage} currentuse={"image"}></RevisionCardImages>)})}
-            </tr>
-            </tbody>
-        </table>
-        }
+            <div style={{display:"flex"}}>
+            {props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
+            
+            </div>
     </div>
     )
 }
