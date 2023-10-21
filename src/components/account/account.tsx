@@ -35,7 +35,7 @@ export default function AccountPage(){
 
     const getaccountinfo = async (token:any) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetaccountinfo`,config); // Send login post request.
+        const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getaccountinfo`,config); // Send login post request.
         if ("subscription" in response.data){
             const emailsleft = (response.data.emailsleft > 40) ? "Unlimited" : response.data.emailsleft
             if (response.data.subscription === "educational"){
@@ -51,7 +51,7 @@ export default function AccountPage(){
     
     const getstudentsubscriptions = async (token:any) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetstudentsubscriptions`,config)
+        const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getstudentsubscriptions`,config)
         setStudentAccountInfo(response.data.result)
         //console.log(response.data)
         

@@ -82,7 +82,7 @@ export default function PhysicsOCR(){
     //console.log(topicselect)
     const getemailcount = async () => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetemailcount",config)
+      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setHideEmailPrompt(false);
@@ -108,7 +108,7 @@ export default function PhysicsOCR(){
       //console.log(json)
 
       const config = {headers: {Authorization: `Bearer ${token.token}`}}
-      const responsaqaphysicsocrqp:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetphysicsocrqp",json,config)
+      const responsaqaphysicsocrqp:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getphysicsocrqp",json,config)
       //console.log(responsaqaphysicsocrqp.data)
       let physicsocrbase64pdf = responsaqaphysicsocrqp.data.questionpapersubject//.physicsocr //[`${computerscienceselect.replace("qp","").replace(" ","")}`]
   
