@@ -25,7 +25,7 @@ export default function RevisionCardImageNames(props:any){
 
     }
     reader.readAsDataURL(event.target.files[0]);
-	};
+	}
     
     return(
         <div style={{display:"flex",flexDirection:"column"}}>
