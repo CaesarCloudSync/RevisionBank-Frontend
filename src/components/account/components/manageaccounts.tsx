@@ -13,11 +13,11 @@ export default function ManageAccounts(props:any){
     const deletestudentaccount = async (e:any,studentemail:any) => {
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
         //console.log(props.token)
-        const response:any = await axios.post(`http://192.168.0.22:8080/deletestudentaccount`,{"studentemail":studentemail},config); // Send login post request.
-        const studentresponse:any = await axios.get(`http://192.168.0.22:8080/getstudentsubscriptions`,config)
+        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appdeletestudentaccount`,{"studentemail":studentemail},config); // Send login post request.
+        const studentresponse:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetstudentsubscriptions`,config)
         props.setStudentAccountInfo(studentresponse.data.result)
         //console.log(response.data)
-            //const response:any = await axios.post(`http://192.168.0.22:8080/setstudentsubscriptions`,json,config)
+            //const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appsetstudentsubscriptions`,json,config)
 
         }
     //console.log(newpassword)
@@ -25,8 +25,8 @@ export default function ManageAccounts(props:any){
         e.preventDefault();
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
         //console.log(newpassword)
-        const response:any = await axios.put(`http://192.168.0.22:8080/changestudentpassword`,{"studentemail":studentemailchangepass,"password":newpassword},config); // Send login post request.
-        const studentresponse:any = await axios.get(`http://192.168.0.22:8080/getstudentsubscriptions`,config)
+        const response:any = await axios.put(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appchangestudentpassword`,{"studentemail":studentemailchangepass,"password":newpassword},config); // Send login post request.
+        const studentresponse:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetstudentsubscriptions`,config)
         props.setStudentAccountInfo(studentresponse.data.result)
         setChangePassword({studentind:-1,clicked:false})
     }   
