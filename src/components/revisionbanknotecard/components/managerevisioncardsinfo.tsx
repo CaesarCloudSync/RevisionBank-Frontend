@@ -2,8 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import {Button } from "react-bootstrap"
 import UploadIcon from '@mui/icons-material/Upload';
-
-import RevisionCardImageNames from "./revisioncardimagenames";
+import ManageAddImages from "./manageaddimages";
+import ManageRevisionCardsChange from "./managerevisioncardimagechange";
 export default function ManageRevisionCardsInfo(props:any){
     const [loading,setLoading] = useState(false);
     const [newsubject,setNewSubject] = useState("");
@@ -76,10 +76,12 @@ export default function ManageRevisionCardsInfo(props:any){
     <textarea onChange={(e:any) => {props.setNewRevisionCard((items:any)=> ({...props.index,revisioncardind:props.index,newrevisoncard:e.target.value}))} } defaultValue={props.revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px",minHeight:props.maxRowBased ? "500px":"200px"}}>
     </textarea>
 
-            <div style={{display:"flex"}}>
-            {props.revisioncard.revisioncardimage !== undefined && props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames token={props.token} subject={props.revisioncard.subject} revisioncardtitle={props.revisioncard.revisioncardtitle} cardindex={props.index} index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
-            
-            </div>
+            <div style={{display:"flex",flexDirection:props.maxRowBased ? "row": "column"}}>
+            {props.revisioncard.revisioncardimage !== undefined && props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<ManageRevisionCardsChange revisioncard={props.revisioncard} token={props.token} subject={props.revisioncard.subject} revisioncardtitle={props.revisioncard.revisioncardtitle} cardindex={props.index} index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></ManageRevisionCardsChange>)})}
+            </div> 
+
+            {props.revisioncard.revisioncardimage.length < 3 && <ManageAddImages cardindex={props.index}  maxRowBased={props.maxRowBased} revisioncard={props.revisioncard} token={props.token} subject={props.revisioncard.subject} revisioncardtitle={props.revisioncard.revisioncardtitle}/>}
+
     </div>
     )
 }

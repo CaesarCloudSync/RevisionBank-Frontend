@@ -2,13 +2,14 @@ import { useEffect, useState } from "react"
 import { Button } from "react-bootstrap";
 import UploadIcon from '@mui/icons-material/Upload';
 import axios from "axios";
-export default function RevisionCardImageNames(props:any){
+export default function ManageRevisionCardsChange(props:any){
     const [oldimagename,setOldImageName] = useState(props.revisioncardimgname[props.index])
     const [oldimage,setOldImage] = useState(props.revisioncardimage[props.index])
     const [newimage,setNewImage] = useState("")
     const[newimagename,setNewImageName] = useState("");
     const [editingimage,setEditingImage] = useState(false);
     const [loading,setLoading] = useState(false)
+    const [crossColor,setCrossColor] = useState("black") 
 
 	const changeHandler = (event:any,index:number) => {
 
@@ -45,8 +46,8 @@ export default function RevisionCardImageNames(props:any){
         console.log(newimage)*/
         let json_data = {"subject":subject,"revisioncardtitle":revisioncardtitle,"oldimagename":oldimagename,"newimagename":newimagename,"newimage":newimage}
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
-        const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changecardimage",json_data,config)
-        console.log(response.data)
+        const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/managechangecardimage",json_data,config)
+        //console.log(response.data)
         // All data here that is neededd to change image in backend is here. Just make the axios api call here.
         // TODO Next set up adding new images do that in managerevisioncardsinfo.tsx
         window.location.reload();
@@ -54,11 +55,34 @@ export default function RevisionCardImageNames(props:any){
 
         
     }
+    const removeImage = async () =>{
+        let subject = props.subject
+        let revisioncardtitle = props.revisioncardtitle
+        let json_data = {"subject":subject,"revisioncardtitle":revisioncardtitle,"oldimagename":oldimagename}
+        var answer = window.confirm("Remove image!");
+        if (answer) {
+        setLoading(true)
+        //console.log(token)
+        //console.log(revisioncard)
+        const config = {headers: {Authorization: `Bearer ${props.token}`}}
+
+        const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/manageremovecardimage",json_data,config)
+        console.log(response.data)
+
+        window.location.reload()
+        }
+        else {
+            //some code
+        }
+
+
+    }
     
     return(
         <div style={{display:"flex",flexDirection:"column"}}>
             {editingimage === false ?
-            <div style={{display:"flex"}}>
+            loading === false ?
+            <div style={{display:"flex",gap:"3px"}}>
             
                 <p>{oldimagename}</p>
                 <input  type="file" id={`actual-btn_${props.cardindex}_${props.index}`} accept=".png,.jpg,.jpeg,.gif" onChange={(e) =>{changeHandler(e,props.index)}}/>
@@ -66,7 +90,12 @@ export default function RevisionCardImageNames(props:any){
                 <label style={{cursor:"pointer"}} htmlFor={`actual-btn_${props.cardindex}_${props.index}`} >
                 <UploadIcon sx={{ "&:hover": { color: "blue" } }} style={{fontSize:"20px"}}/> 
                 </label>
+                <a onMouseLeave={(event) =>setCrossColor("black")} onMouseEnter={(event) =>setCrossColor("red")}onClick={()=>{removeImage()}} onTouchStart={() =>{removeImage()}} style={{cursor:"pointer",color:crossColor}}>x</a>
+            </div>:
+            <div>
+                 <p>{oldimagename}</p>
             </div>
+
             :
             loading === false ?
             <div style={{display:"flex",gap:"10px",margin:"10px"}}>
@@ -79,7 +108,7 @@ export default function RevisionCardImageNames(props:any){
     
             </div>
             :
-            <div></div>
+            <div><p>{newimagename}</p></div>
 
             }
 
