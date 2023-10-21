@@ -65,7 +65,7 @@ export default function EdexcelMaths(){
     //console.log(topicselect)
     const getemailcount = async () => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetemailcount",config)
+      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setHideEmailPrompt(false);
@@ -90,7 +90,7 @@ export default function EdexcelMaths(){
       var edexcelpapername = `A Level ${bookidselect} ${scheme.replace('Paper','')}`
       const json =  {"edexcelpaper":edexcelpapername}
       const config = {headers: {Authorization: `Bearer ${token.token}`}}
-      const responsedexcelqp:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetedexcelqp",json,config)
+      const responsedexcelqp:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getedexcelqp",json,config)
       //console.log(responsedexcelqp.data)
       let edexcelbase64pdf = responsedexcelqp.data.edexcelpaper[`${edexcelpapername}`]
       let edexcelpaperpdflinkname = `alevel${bookidselect.replace(/ /g, "")}${scheme.replace(/ /g, "")}.pdf`

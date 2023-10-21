@@ -124,11 +124,11 @@ function Signin(){
     }
     const checkSubscriptionEndDate = async (token:string,json:any,subscription:any) => {
       const config = {headers: {Authorization: `Bearer ${token}`,}}
-      const responseget:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetsubscription`,config); // Send login post request.
+      const responseget:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getsubscription`,config); // Send login post request.
       //console.log(responseget.data);
       let end_date = responseget.data.end_date_subscription
-      const responsegetft:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetfreetrial`,config);  
-      const responsegetstudent:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appcheckstudentsubscriptions`,config);
+      const responsegetft:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getfreetrial`,config);  
+      const responsegetstudent:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/checkstudentsubscriptions`,config);
       //console.log(su)
 
       if (responsegetft.data.freetrial !== undefined || responseget.data.end_date_subscription !== undefined || responsegetstudent.data.student_subscription !== "student_educational" ){       
@@ -140,7 +140,7 @@ function Signin(){
           var notecardjson = {"revisioncardscheduler":{"sendtoemail":json.email,"revisionscheduleinterval":60,"revisioncards":[revisioncard]}}
           //console.log(json)
           
-          const responsestore:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appstorerevisioncards",notecardjson,config)
+          const responsestore:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",notecardjson,config)
           
           navigate("/revisioncards",{state:{"token":token}})
         }
@@ -148,7 +148,7 @@ function Signin(){
           console.log("Subscription has expired")
           navigate("/pricing",{state:{"token":token,"pre_subscription_expiration":"expired","email":json.email}})
           const config = {headers: {Authorization: `Bearer ${token}`,}}
-          const responsedel:any = await axios.delete(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appdeletesubscription`,config);
+          const responsedel:any = await axios.delete(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/deletesubscription`,config);
           // TODO Test this by looking on whether it works if the dates are in the future.
         }
         else if (end_date === current_date) {
@@ -196,7 +196,7 @@ function Signin(){
         try{
         var json = JSON.parse(JSON.stringify(data)); // Converts data to json
         json.email = json.email.toLowerCase();
-        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.apploginapi`, json); // Send login post request.
+        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/loginapi`, json); // Send login post request.
         if (response.data !== undefined){
           if ("access_token" in response.data){
             if (maxRowBased === true){

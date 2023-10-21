@@ -16,7 +16,7 @@ export default function ConfirmDeleteSubscription(){
     const maxRowBased = useMediaQuery(maxRowBasedquery)
     const deletesubscription = async (token:any) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.appdeletesubscription`,config); 
+        const response:any = await axios.delete(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/deletesubscription`,config); 
         //navigate('/account',{state:{token:token}})
         navigate('/')
       }

@@ -45,7 +45,7 @@ export default function RevisionCardImageNames(props:any){
         console.log(newimage)*/
         let json_data = {"subject":subject,"revisioncardtitle":revisioncardtitle,"oldimagename":oldimagename,"newimagename":newimagename,"newimage":newimage}
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
-        const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appchangecardimage",json_data,config)
+        const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/changecardimage",json_data,config)
         console.log(response.data)
         // All data here that is neededd to change image in backend is here. Just make the axios api call here.
         // TODO Next set up adding new images do that in managerevisioncardsinfo.tsx

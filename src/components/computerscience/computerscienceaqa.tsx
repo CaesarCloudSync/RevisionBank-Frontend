@@ -70,7 +70,7 @@ export default function ComputerScienceAQA(){
     //console.log(topicselect)
     const getemailcount = async () => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetemailcount",config)
+      const responsecount = await axios.get("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getemailcount",config)
       //console.log(responsecount.data)
       if (responsecount.data.emailcount === 0){
         setHideEmailPrompt(false);
@@ -97,7 +97,7 @@ export default function ComputerScienceAQA(){
 
       const config = {headers: {Authorization: `Bearer ${token.token}`}}
       //console.log(config)
-      const responsaqacompscienceqp:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetcomputerscienceqp",json,config)
+      const responsaqacompscienceqp:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getcomputerscienceqp",json,config)
       //console.log(responsaqacompscienceqp.data)
       let computersciencebase64pdf = responsaqacompscienceqp.data[`${computerscienceselect.replace("qp","").replace(" ","")}`]
       console.log(computersciencebase64pdf)
@@ -123,7 +123,7 @@ export default function ComputerScienceAQA(){
 
       const config = {headers: {Authorization: `Bearer ${token.token}`}}
       //console.log(config)
-      const responsaqacompsciencems:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.appgetcomputersciencems",json,config)
+      const responsaqacompsciencems:any =  await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getcomputersciencems",json,config)
       //console.log(responsaqacompsciencems.data)
       let computersciencebase64pdf = responsaqacompsciencems.data[`${computerscienceselectmarkscheme.replace("qp","").replace(" ","")}`]
       //console.log(computersciencebase64pdf)
