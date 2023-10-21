@@ -30,8 +30,9 @@ export default function ManageRevisionCardsInfo(props:any){
 
             }
             else{
-                setLoading(false)
+                
                 window.location.reload();
+                setLoading(false)
             }
         }
         else{
@@ -76,7 +77,7 @@ export default function ManageRevisionCardsInfo(props:any){
     </textarea>
 
             <div style={{display:"flex"}}>
-            {props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
+            {props.revisioncard.revisioncardimage !== undefined && props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
             
             </div>
     </div>
