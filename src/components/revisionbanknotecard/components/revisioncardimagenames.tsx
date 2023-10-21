@@ -76,7 +76,7 @@ export default function RevisionCardImageNames(props:any){
     
             </div>
             :
-            <Button style={{backgroundColor:"grey",width:"100px",border:"1px solid grey",height:"30px",fontSize:"13px"}}>Submit</Button>
+            <div></div>
 
             }
 
