@@ -77,7 +77,7 @@ export default function ManageRevisionCardsInfo(props:any){
     </textarea>
 
             <div style={{display:"flex"}}>
-            {props.revisioncard.revisioncardimage !== undefined && props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames subject={props.revisioncard.subject} revisioncardtitle={props.revisioncard.revisioncardtitle} cardindex={props.index} index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
+            {props.revisioncard.revisioncardimage !== undefined && props.revisioncard.revisioncardimage.map((imagedata:any,index:number)=> {return(<RevisionCardImageNames token={props.token} subject={props.revisioncard.subject} revisioncardtitle={props.revisioncard.revisioncardtitle} cardindex={props.index} index={index} revisioncardimage ={props.revisioncard.revisioncardimage} revisioncardimgname={props.revisioncard.revisioncardimgname} ></RevisionCardImageNames>)})}
             
             </div>
     </div>

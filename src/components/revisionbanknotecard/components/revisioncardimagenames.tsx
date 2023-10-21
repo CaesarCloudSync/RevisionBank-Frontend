@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "react-bootstrap";
 import UploadIcon from '@mui/icons-material/Upload';
+import axios from "axios";
 export default function RevisionCardImageNames(props:any){
     const [oldimagename,setOldImageName] = useState(props.revisioncardimgname[props.index])
     const [oldimage,setOldImage] = useState(props.revisioncardimage[props.index])
@@ -8,6 +9,7 @@ export default function RevisionCardImageNames(props:any){
     const[newimagename,setNewImageName] = useState("");
     const [editingimage,setEditingImage] = useState(false);
     const [loading,setLoading] = useState(false)
+
 	const changeHandler = (event:any,index:number) => {
 
                 
@@ -32,22 +34,23 @@ export default function RevisionCardImageNames(props:any){
         setNewImage("")
         setNewImageName("");
     }
-    const changeImage = () =>{
+    const changeImage = async () =>{
         setLoading(true)
         let subject = props.subject
         let revisioncardtitle = props.revisioncardtitle
-        console.log(subject)
+        /*console.log(subject)
         console.log(revisioncardtitle)
         console.log(oldimagename)
         console.log(newimagename)
-        console.log(newimage)
+        console.log(newimage)*/
+        let json_data = {"subject":subject,"revisioncardtitle":revisioncardtitle,"oldimagename":oldimagename,"newimagename":newimagename,"newimage":newimage}
+        const config = {headers: {Authorization: `Bearer ${props.token}`,}}
+        const response = await axios.post("http://192.168.0.22:8080/changecardimage",json_data,config)
+        console.log(response.data)
         // All data here that is neededd to change image in backend is here. Just make the axios api call here.
         // TODO Next set up adding new images do that in managerevisioncardsinfo.tsx
-        // setLoading(false)
-        // setOldImageName(newimagename)
-        // setOldImage(newimage)
-        // setNewImagename("");
-        // setNewImage("")
+        window.location.reload();
+
 
         
     }
