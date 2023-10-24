@@ -195,16 +195,11 @@ export default function ManageRevisionCards(props:any){
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const response:any = await axios.post(`http://127.0.0.1:8080/schedulerevisioncard`,json,config)
-        ////console.log(response.data)
-        const responseaccount:any = await axios.get(`http://127.0.0.1:8080/getrevisioncards`,config)
-        var newrevisioncarddata = responseaccount.data
-        //console.log(responseaccount)
-        
-        //console.log(config)
+
         setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-            return { ...previousState, newrevisioncarddata}
+            return { ...previousState, previousState}
             
           });
           
@@ -213,6 +208,7 @@ export default function ManageRevisionCards(props:any){
     const unscheduleallrevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const response:any = await axios.delete(`http://127.0.0.1:8080/unscheduleallrevisioncard`,config)
+
         window.location.reload()
         //console.log(response.data)
     }
@@ -228,17 +224,13 @@ export default function ManageRevisionCards(props:any){
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
+        //console.log(revisioncard,"gy")
         const response:any = await axios.post(`http://127.0.0.1:8080/unschedulerevisioncard`,revisioncard,config)
-        ////console.log(response.data)
-        const responseaccount:any = await axios.get(`http://127.0.0.1:8080/getrevisioncards`,config)
-        var newrevisioncarddata = responseaccount.data
-        //console.log(responseaccount)
-        
-        //console.log(config)
+
         setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-            return { ...previousState, newrevisioncarddata}
+            return { ...previousState, previousState}
             
           });
     }
@@ -260,20 +252,16 @@ export default function ManageRevisionCards(props:any){
             const config = {headers: {Authorization: `Bearer ${token}`,}}
             //console.log(newrevisioncardjson)
             const response:any = await axios.post(`http://127.0.0.1:8080/changerevisioncard`,newrevisioncardjson,config)
-            //console.log(response.data)
-            const responseaccount:any = await axios.get(`http://127.0.0.1:8080/getrevisioncards`,config)
-            var newrevisioncarddata = responseaccount.data
-            //console.log(newrevisioncarddata)
-            
-            //console.log(config)
+
             setRevisionCarddata((previousState:any) => {
                 //revisioncarddata.revisioncards.reverse()
                 //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-                return { ...previousState, newrevisioncarddata}
+                previousState["revisioncarddata"]["revisioncards"][revisioncardind]["revisioncard"] = newrevisioncard.newrevisoncard
+                return { ...previousState, previousState}
                 
               });
             setNewRevisionCard("")
-            window.location.reload()
+            //window.location.reload()
         }
           
     }
@@ -284,19 +272,18 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":newsendtoemail}
         //console.log(json)
         const response:any = await axios.put(`http://127.0.0.1:8080/changesendtoemail`,json,config)
-        const responseaccount:any = await axios.get(`http://127.0.0.1:8080/getrevisioncards`,config)
-        var newrevisioncarddata = responseaccount.data
-        ////console.log(responseaccount)
-        
-        //console.log(config)
         setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-            return { ...previousState, newrevisioncarddata}
+            //console.log(previousState)
+            
+            previousState["revisioncarddata"]["sendtoemail"] = newsendtoemail
+            return { ...previousState, previousState }
             
           });
-        ////console.log(response.data)
-        window.location.reload();
+          setNewSendToEmail("")
+          setChangeEmail(false)
+        
 
     }
           
