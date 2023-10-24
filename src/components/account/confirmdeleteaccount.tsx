@@ -15,7 +15,7 @@ export default function ConfirmDeleteAccount(){
     const maxRowBased = useMediaQuery(maxRowBasedquery)
     const deleteaccount = async (token:any) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/deleteaccount`,config); 
+        const response:any = await axios.delete(`http://127.0.0.1:8080/deleteaccount`,config); 
         navigate('/')
     }
     return(

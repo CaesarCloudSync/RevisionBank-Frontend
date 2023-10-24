@@ -230,7 +230,7 @@ export default function ManageRevisionCards(props:any){
         setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-            return { ...previousState, previousState}
+            return {previousState}
             
           });
     }

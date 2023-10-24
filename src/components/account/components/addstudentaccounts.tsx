@@ -28,8 +28,8 @@ export default function AddStudentAccounts(props:any){
     const setStudentCSV = async (resultarray:any) => {
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
     var json = {hostemail:props.accountinfo.email,studentemails:resultarray,studentsubscription:`student ${props.accountinfo.subscription}`,studentemailsleft:20}
-    const response = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/setstudentsubscriptions`,json,config)
-    const studentresponse:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getstudentsubscriptions`,config)
+    const response = await axios.post(`http://127.0.0.1:8080/setstudentsubscriptions`,json,config)
+    const studentresponse:any = await axios.get(`http://127.0.0.1:8080/getstudentsubscriptions`,config)
     props.setStudentAccountInfo(studentresponse.data.result)
 
   
@@ -99,10 +99,10 @@ export default function AddStudentAccounts(props:any){
         const config = {headers: {Authorization: `Bearer ${props.token}`,}}
             var json = {hostemail:props.accountinfo.email,studentemails:formFields,studentsubscription:`student ${props.accountinfo.subscription}`,studentemailsleft:20}
             console.log(json)
-            const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/setstudentsubscriptions`,json,config)
+            const response:any = await axios.post(`http://127.0.0.1:8080/setstudentsubscriptions`,json,config)
             setSubmitting(false)
             setStudentEmailStored(true)
-            const studentresponse:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getstudentsubscriptions`,config)
+            const studentresponse:any = await axios.get(`http://127.0.0.1:8080/getstudentsubscriptions`,config)
             props.setStudentAccountInfo(studentresponse.data.result)
             if ("message" in response.data){
                 if (response.data.message === "all students exist."){

@@ -124,11 +124,11 @@ function Signin(){
     }
     const checkSubscriptionEndDate = async (token:string,json:any,subscription:any) => {
       const config = {headers: {Authorization: `Bearer ${token}`,}}
-      const responseget:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getsubscription`,config); // Send login post request.
+      const responseget:any = await axios.get(`http://127.0.0.1:8080/getsubscription`,config); // Send login post request.
       //console.log(responseget.data);
       let end_date = responseget.data.end_date_subscription
-      const responsegetft:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getfreetrial`,config);  
-      const responsegetstudent:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/checkstudentsubscriptions`,config);
+      const responsegetft:any = await axios.get(`http://127.0.0.1:8080/getfreetrial`,config);  
+      const responsegetstudent:any = await axios.get(`http://127.0.0.1:8080/checkstudentsubscriptions`,config);
       //console.log(su)
 
       if (responsegetft.data.freetrial !== undefined || responseget.data.end_date_subscription !== undefined || responsegetstudent.data.student_subscription !== "student_educational" ){       
@@ -140,7 +140,7 @@ function Signin(){
           var notecardjson = {"revisioncardscheduler":{"sendtoemail":json.email,"revisionscheduleinterval":60,"revisioncards":[revisioncard]}}
           //console.log(json)
           
-          const responsestore:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",notecardjson,config)
+          const responsestore:any = await axios.post("http://127.0.0.1:8080/storerevisioncards",notecardjson,config)
           
           navigate("/revisioncards",{state:{"token":token}})
         }
@@ -148,7 +148,7 @@ function Signin(){
           console.log("Subscription has expired")
           navigate("/pricing",{state:{"token":token,"pre_subscription_expiration":"expired","email":json.email}})
           const config = {headers: {Authorization: `Bearer ${token}`,}}
-          const responsedel:any = await axios.delete(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/deletesubscription`,config);
+          const responsedel:any = await axios.delete(`http://127.0.0.1:8080/deletesubscription`,config);
           // TODO Test this by looking on whether it works if the dates are in the future.
         }
         else if (end_date === current_date) {

@@ -59,7 +59,7 @@ export default function PhysicsAqa (){
       e.preventDefault();
       setIsLoading(true);
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const response:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
+      const response:any = await axios.post("http://127.0.0.1:8080/physicsaqa",{"physicsaqa":{"email":email,"chapter":physicsaqachapter.label ,"topic":physicsaqatopic.label,"platform":"web"}},config)
       console.log(response.data)
       if ('error' in response.data){
         setIsLoading(false);

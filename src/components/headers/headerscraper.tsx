@@ -20,7 +20,7 @@ export default function HeaderScraper(props:any){
   const maxRowBased =useMediaQuery(maxRowBasedquery)
   const getEmail = async (token:any) => {
     const config = {headers: {Authorization: `Bearer ${token}`,}}
-    const response:any = await axios.get(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/getemail`,config); // Send login post request.
+    const response:any = await axios.get(`http://127.0.0.1:8080/getemail`,config); // Send login post request.
     const email = response.data.email
     setEmail(email)
   }

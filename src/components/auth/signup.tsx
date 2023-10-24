@@ -136,7 +136,7 @@ function Signup() {
             var notecardjson = {"revisioncardscheduler":{"sendtoemail":json.email,"revisionscheduleinterval":60,"revisioncards":[revisioncard]}}
             //console.log(json)
           
-            const responsestore:any = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",notecardjson,config)
+            const responsestore:any = await axios.post("http://127.0.0.1:8080/storerevisioncards",notecardjson,config)
           
             navigate("/revisioncards",{state:{"token":response.data.access_token}})
             }
