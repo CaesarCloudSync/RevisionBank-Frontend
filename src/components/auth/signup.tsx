@@ -121,7 +121,7 @@ function Signup() {
         //json["betatest"] = "true";
         //console.log(json)
         
-        const response:any = await axios.post(`https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/signupapi`, json);
+        const response:any = await axios.post(`http://127.0.0.1:8080/signupapi`, json);
         setsignupResponse(response.data);
         setIsLoadingSignup(false);
         const config = {headers: {Authorization: `Bearer ${response.data.access_token}`,}}

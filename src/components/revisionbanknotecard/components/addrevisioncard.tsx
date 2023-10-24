@@ -301,9 +301,9 @@ export default function AddRevisionCard(props:any){
                 revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
                 formFields.map((card:any)=> {card["revisionscheduleinterval"] = revisionscheduleinterval})
                 var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":revisionscheduleinterval,"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
-                
-                const response = await axios.post("https://revisionbankbackend-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
-                //console.log(response.data)
+                console.log(json)
+                const response = await axios.post("http://127.0.0.1:8080/storerevisioncards",json,config)
+                console.log(response.data)
                 setSubmitting(false)
                 //window.location.reload();
                 navigate('/revisioncards',{state:{"token":props.token.token}})
