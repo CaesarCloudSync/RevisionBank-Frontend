@@ -151,7 +151,7 @@ export default function ManageRevisionCards(props:any){
                 const response = JSON.parse(event.data);
                 //var revisioncardslarge = {"revisioncards":[response]}
                 const respobj = JSON.parse(response)
-                console.log(respobj)
+                //console.log(respobj)
                 revisioncardswebsocket.push(respobj)
                 var revisioncarddata = {"revisioncards":revisioncardswebsocket,"revisionscheduleinterval": respobj["revisionscheduleinterval"],"sendtoemail":respobj["sendtoemail"]}
 
@@ -188,20 +188,16 @@ export default function ManageRevisionCards(props:any){
     }
     // TODO : Each Button reqiures an api to do the following
     // TODO Allow change if Interval
-    const schedulerevisioncard = async (revisioncard:any,token:string) => {
+    const schedulerevisioncard = async (index:any,revisioncard:any,token:string) => {
         //console.log(token)
         //console.log(revisioncard.revisionscheduleinterval)
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncard.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const response:any = await axios.post(`http://127.0.0.1:8080/schedulerevisioncard`,json,config)
-
-        setRevisionCarddata((previousState:any) => {
-            //revisioncarddata.revisioncards.reverse()
-            //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-            return { ...previousState, previousState}
-            
-          });
+        await checkschedulerevisioncard(token)
+        //window.location.reload();
+        //setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))
           
         
     }
@@ -220,19 +216,22 @@ export default function ManageRevisionCards(props:any){
         //console.log(response.data)
         //setScheduledCardState(response.data)
     }
-    const unschedulerevisioncard = async (revisioncard:any,token:string) => {
+    const unschedulerevisioncard = async (index:any,revisioncard:any,token:string) => {
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //console.log(revisioncard,"gy")
         const response:any = await axios.post(`http://127.0.0.1:8080/unschedulerevisioncard`,revisioncard,config)
+        setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))
+        //window.location.reload()
+        await checkschedulerevisioncard(token)
 
-        setRevisionCarddata((previousState:any) => {
+        /*setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
             return {previousState}
             
-          });
+          });*/
     }
     const checkschedulerevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
@@ -393,7 +392,7 @@ export default function ManageRevisionCards(props:any){
         //Runs only on the first render
         getrevisioncards(token)
         checkschedulerevisioncard(token)
-      },[scheduled]);
+      },[]); //scheduled
 
 
 
@@ -510,13 +509,13 @@ export default function ManageRevisionCards(props:any){
                                     {manualscheduling === true ?
                                     (scheduled.revisioncardind === index && scheduled.scheduled === true )|| revboole === true ? //
 
-                                    <Button onClick={() => {unschedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{backgroundColor:"#fa0095",marginTop:"10px",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Scheduled</Button>
+                                    <Button onClick={() => {unschedulerevisioncard(index,revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{backgroundColor:"#fa0095",marginTop:"10px",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Scheduled</Button>
                                     :
                                      
                                     scheduledcards.revisioncards !== undefined ? 
                                     scheduledcards.revisioncards.length < allowedmaximumscheduledcards ? /* 5  */
                                     <div>
-                                    <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
+                                    <Button onClick={() => {schedulerevisioncard(index,revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
                                     {/*Send now 1 duplicate need*/}
                                     { 
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
@@ -530,7 +529,7 @@ export default function ManageRevisionCards(props:any){
                                     <Button onClick={() => {reactalert.show(`Maximum ${allowedmaximumscheduledcards} scheduled cards.`)}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
                                     :
                                     <div>
-                                    <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
+                                    <Button onClick={() => {schedulerevisioncard(index,revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
                                     {/*Send now 2 duplicate also needed*/}
                                     { 
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
