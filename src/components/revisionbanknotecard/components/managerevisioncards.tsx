@@ -139,7 +139,7 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //const response:any = await axios.get(`http://127.0.0.1:8080/getrevisioncards`,config)
         const responseaccount:any = await axios.get(`http://127.0.0.1:8080/getaccountinfo`,config)
-        const ws = new WebSocket("ws://127.0.0.1:8080/getrevisioncardsws");
+        const ws = new WebSocket(`ws://127.0.0.1:8080/getrevisioncardsws/${token}`);
 
 
         ws.onopen = (event) => {
@@ -153,7 +153,7 @@ export default function ManageRevisionCards(props:any){
                 const respobj = JSON.parse(response)
                 //console.log(respobj)
                 revisioncardswebsocket.push(respobj)
-                var revisioncarddata = {"revisioncards":revisioncardswebsocket,"revisionscheduleinterval": respobj["revisionscheduleinterval"],"sendtoemail":respobj["sendtoemail"]}
+                var revisioncarddata:any = {"revisioncards":revisioncardswebsocket,"revisionscheduleinterval": respobj["revisionscheduleinterval"],"sendtoemail":respobj["sendtoemail"]}
 
         
         if (responseaccount.data.subscription === "educational" || responseaccount.data.subscription === "premium" || responseaccount.data.subscription === "student educational" ){
@@ -169,7 +169,7 @@ export default function ManageRevisionCards(props:any){
         //console.log(trafficlightinit)
         setShowPickedTrafficLightind(trafficlightinit)
         
-        if (!(Object.keys(revisioncarddata).includes("message"))){
+        if (!(Object.keys(respobj).includes("message"))){
             //console.log(response.data)
             setRevisionCarddata((previousState:any) => {
                 //revisioncarddata.revisioncards.reverse()
@@ -179,6 +179,13 @@ export default function ManageRevisionCards(props:any){
                 
               });
             
+        }
+        else{
+            if (respobj["message"] === "all sent."){
+                console.log(respobj["message"])
+                ws.close()
+            }
+
         }
     } catch (err) {
         console.log(err);
