@@ -15,7 +15,7 @@ export default function HomePage(){
         // Update the document title using the browser API
         //const newuserjson = {"email":"revisionbankedu@gmail.com","subject":"RevisionBank New User","message":"RevisionBank New User"}
                 
-        //axios.post("http://127.0.0.1:8080/revisionbanksendemail",newuserjson)
+        //axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/revisionbanksendemail",newuserjson)
       },[]);
       */
     return(
