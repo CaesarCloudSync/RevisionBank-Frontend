@@ -16,7 +16,7 @@ export default function ManageAddImage(props:any){
         const imagefile= tessevent.target.result;
         //console.log(image)
         const imagenamefile = event.target.files[0].name
-        console.log(imagefile)
+        //console.log(imagefile)
         setNewAddImage(imagefile)
         setNewAddImageName(imagenamefile)
 
@@ -48,6 +48,7 @@ export default function ManageAddImage(props:any){
 
             const response = await axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/manageaddcardimage",json_data,config)
             const result = response.data
+            console.log(result)
             if ("error" in result){
                 alert(`Error:${result.error}`)
 

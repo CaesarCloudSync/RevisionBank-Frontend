@@ -50,7 +50,7 @@ export default function ManageRevisionCardsChange(props:any){
         console.log(response.data)
         // All data here that is neededd to change image in backend is here. Just make the axios api call here.
         // TODO Next set up adding new images do that in managerevisioncardsinfo.tsx
-        //window.location.reload();
+        window.location.reload();
 
 
         
