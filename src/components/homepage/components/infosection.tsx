@@ -48,9 +48,9 @@ export default function InfoSection(){
             </svg>
           </div>
           <div className="featured_info">
-            <span>Accessible Exam Papers</span>
+            <span>Schedule Revision Cards</span>
             <p>
-              Accessible question papers and mark schemes for AS Level and A Level subjects, including Further Maths, Physics, Biology, Chemistry and more.
+              Struggle to remember something from a few months ago. Schedule Revisioncards to be sent to your email. Every day,week,month. Use them personal, for work or school. 
             </p>
           </div>
         </div>
@@ -73,9 +73,9 @@ export default function InfoSection(){
             </svg>
           </div>
           <div className="featured_info">
-            <span>Revision Bank Snapshot</span>
+            <span>Upload Images, Gifs and Share </span>
             <p>
-              Take a snapshot of revision material on the web, saved straight to your RevisionBank revision cards. Using the RevisionBankSnapshot chrome extension.
+              Upload images or gifs to your revision cards and share them to your friends as a joke or for missing notes. Have a friend you need to remind for a project? Schedule cards to be sent to them.
 
             </p>
           </div>
@@ -88,7 +88,7 @@ export default function InfoSection(){
     <p>
     We use cookies to ensure you have the best browsing experience on our website. By using our site, you acknowledge that you have read and understood our <a href="/cookiepolicy">Cookie Policy</a> & <a href="/privacypolicy">Privacy Policy</a>
       </p>
-    <button color='black' className="close" onClick={() => setCloseCookie("none")}>&times;</button>
+    <button style={{cursor:"pointer"}} color='black' className="close" onClick={() => setCloseCookie("none")}>&times;</button>
     </div>
   </section>
     )

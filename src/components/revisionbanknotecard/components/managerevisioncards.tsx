@@ -403,8 +403,10 @@ export default function ManageRevisionCards(props:any){
       },[]);
     useEffect(() => {
         //Runs only on the first render
+        if (token !== ""){
         getrevisioncards(token)
         checkschedulerevisioncard(token)
+        }
       },[]); //scheduled
 
 
@@ -421,7 +423,7 @@ export default function ManageRevisionCards(props:any){
     //console.log(scheduled)
     //console.log(scheduledcardstate)
     //console.log(showpickedtrafficlightind)
-    //console.log(email)
+
     return(
         <div>
             

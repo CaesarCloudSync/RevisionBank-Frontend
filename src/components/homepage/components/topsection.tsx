@@ -20,11 +20,11 @@ export default function TopSection(){
               </p>
   
               <div className="btn_wrapper">
-                <button onClick={() => {navigate('/revisionbanktools')}} className="btn view_more_btn">
-                <p style={{fontSize:"13px"}}>RevisionBanks</p> <i className="ri-arrow-right-line"></i>
+                <button  className="btn view_more_btn">
+                <p style={{fontSize:"13px"}}>RevisionBank</p> <i className="ri-arrow-right-line"></i>
                 </button>
-                <button onClick={() => {navigate('/freetrialauth')}} className="btn view_more_btn" style={{backgroundColor:"#666666"}}>
-                  <p style={{fontSize:"13px"}}>Try Free trial (1 month)</p><i className="ri-arrow-right-line"></i>
+                <button  className="btn view_more_btn" style={{backgroundColor:"#666666"}}>
+                  <p style={{fontSize:"13px"}}>Schedule Cards</p><i className="ri-arrow-right-line"></i>
                 </button>                
               </div>
             </div>

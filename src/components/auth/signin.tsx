@@ -153,14 +153,14 @@ function Signin(){
         }
         else if (end_date === current_date) {
           console.log("Subscription will expire today")
-          navigate("/revisionbank",{state:{"token":token,"email":json.email}})
+          navigate("/revisioncards",{state:{"token":token,"email":json.email}})
         }
         else if (end_date > current_date) {
           console.log("Subscription will expire on " + end_date)
-          navigate("/revisionbank",{state:{"token":token,"email":json.email}})
+          navigate("/revisioncards",{state:{"token":token,"email":json.email}})
         }
         else if (responseget.data.subscription === undefined && subscription === "basic"){
-          navigate("/revisionbank",{state:{"token":token,"email":json.email}})
+          navigate("/revisioncards",{state:{"token":token,"email":json.email}})
         }
         else if (responseget.data.end_date_subscription === undefined && (subscription === "standard"|| subscription === "premium" || subscription === "educational" )) {
         //console.log(token)
@@ -174,7 +174,7 @@ function Signin(){
           navigate("/completefreetrial", { state: { token: token, subscription: subscription,email:json.email} });
         }
         else if (responseget.data.end_date_subscription === undefined ) {
-            navigate("/revisionbank",{state:{"token":token,"email":json.email}})
+            navigate("/revisioncards",{state:{"token":token,"email":json.email}})
             setSetSubdoesnotexist(true)
             //
   

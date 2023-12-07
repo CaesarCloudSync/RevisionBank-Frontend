@@ -95,7 +95,8 @@ function Signup() {
     const [isLoadingSignup, setIsLoadingSignup] = useState<Boolean>(false);
     const [errorMessageSignup, setErrorMessageSignup] = useState<string>("");
     const [noResultsSignup, setNoResultsSignup] = useState<Boolean>(false);
-    const [jwttoken,setJwttoken] = useState<Boolean>(false);
+    const [jwttoken,setJwttoken] = useState<any>("");
+    const [email,setEmail] = useState("");
     const [notSignedUp,setNotSignedup] = useState<Boolean>(false);
     let navigate:any = useNavigate();
     let location:any = useLocation();
@@ -114,10 +115,11 @@ function Signup() {
         setErrorMessageSignup("")
         setNoResultsSignup(false);
         setIsLoadingSignup(true);
-        setJwttoken(false)
+        setJwttoken("")
         setNotSignedup(false)
         var json = JSON.parse(JSON.stringify(data));
         json.email = json.email.toLowerCase();
+        setEmail(json.email)
         //json["betatest"] = "true";
         //console.log(json)
         
@@ -128,7 +130,7 @@ function Signup() {
         //console.log(subscription)
         if (response.data !== undefined){
           if ("status" in response.data){
-            setJwttoken(true)
+            
             if (hashedvalue !== null && externalrevcardusername !== null){
             setIsLoadingSignup(true)
             const responsecard:any = await axios.get(`https://revisionbankcardlink-aoz2m6et2a-uc.a.run.app/getcard?h=${hashedvalue}&u=${externalrevcardusername}`);
@@ -137,18 +139,18 @@ function Signup() {
             //console.log(json)
           
             const responsestore:any = await axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/storerevisioncards",notecardjson,config)
-          
+            setJwttoken(response.data.access_token)
             navigate("/revisioncards",{state:{"token":response.data.access_token}})
             }
             
             else if (subscription === "" && (hashedvalue === null && externalrevcardusername === null)){
               // TODO Free version
-              navigate("/revisionbank",{state:{"token":response.data.access_token,"email":json.email}})
+              navigate("/revisioncards",{state:{"token":response.data.access_token,"email":json.email}})
               //navigate("/pricing",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
               
             }
             else if (subscription === "basic" && (hashedvalue === null && externalrevcardusername === null)) {
-              navigate("/revisionbank",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
+              navigate("/revisioncards",{state:{"token":response.data.access_token,"email":json.email}}) // Navigate to home page
             }
             else if (subscription === "freetrial" && (hashedvalue === null && externalrevcardusername === null)){
               // Free trial
@@ -173,9 +175,9 @@ function Signup() {
     useEffect(() => {
       if (signupResponse !== undefined){
       if ("status" in signupResponse){
-        setJwttoken(true)
         if (subscription !== "freetrial" && (hashedvalue === null && externalrevcardusername === null)){
-          navigate("/revisionbank",{state: {token: jwttoken}})
+          console.log("hom")
+          navigate("/revisioncards",{state: {token: jwttoken,"email":email}})
         }
       }
     else if ("message" in signupResponse){

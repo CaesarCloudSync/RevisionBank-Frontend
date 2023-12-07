@@ -11,6 +11,7 @@ import { send } from 'emailjs-com';
 import { maxRowBasedquery } from "../mediahooks/mediamax";
 import useMediaQuery from "../mediahooks/useMedia";
 import Policies from "../homepage/components/policies";
+import axios from "axios";
 //import './contactus.css';
 //https://dev.to/daliboru/how-to-send-emails-from-a-form-in-react-emailjs-27d1
 function BootCard(props:any){
@@ -34,11 +35,8 @@ export default function ContactUs(){
 	const [formnotcompleted,setFormNotCompleted] = useState<Boolean>(false);
 	const [formcompleted,setFormCompleted] = useState<Boolean>(false);
 	const maxRowBased = useMediaQuery(maxRowBasedquery)
-	const [toSend, setToSend] = useState({
-		Name: '',
-		message: '',
-		reply_to: '',
-	  });
+
+
 	class ContactUsStyles{
 		contactustitle:Object;
 		contactuscont:Object;
@@ -56,48 +54,10 @@ export default function ContactUs(){
 	let styles = new ContactUsStyles()
 
 	
-	  const onSubmit = (e:any) => {
-		setIsLoadingLogin(true);
-		setFormNotCompleted(false);
-		e.preventDefault();
-		e.preventDefault();
-		var senddata:any = toSend
-		//console.log(senddata)
-		if (senddata.Name === "" || senddata.message === "" || senddata.reply_to === ""){
-			setIsLoadingLogin(false);
-			setFormNotCompleted(true)
-			console.log(senddata)
-			console.log("Please Complete")
-		}
-		else{
-			send(
-				'service_pm06bff',
-				'template_9tuj84h',
-				senddata,
-				'MliRjz_sCPs_ysAVV'
-			  )
-				.then((response:any) => {
-				  console.log('SUCCESS!', response.status, response.text);
-				  setIsLoadingLogin(false); 
-				  setFormCompleted(true)
-				})
-				.catch((err) => {
-				  console.log('FAILED...', err);
-				  setIsLoadingLogin(false); 
-				});
-		}
 
-
-
-
-		  
-	  };
 
 	
-	  const handleChange = (e:any) => {
-		setToSend({ ...toSend, [e.target.name]: e.target.value });
-	  };
-	
+
 	/*								
 	<div style={{display:"flex"}}>
 	<PhoneIcon style={props.styles.contactsubcont}></PhoneIcon>
@@ -145,78 +105,77 @@ export default function ContactUs(){
 		)
 	}
 	function EmailPrompt(props:any){
+	  const [name,setName] = useState("");
+	  const [message,setMessage] = useState("");
+	  const [reply_to,setReplyTo] = useState("");
+	  const [loading,setLoading] =useState(false);
+	  const onSubmit = async () =>{	
+		setLoading(true)
+		if (name === "" || message === "" || reply_to === ""){
+			alert("Fill in all fields please")
+			setLoading(false)
+		}
+		else{
+			const response = await axios.post("https://caesaraicronemail-qqbn26mgpa-uc.a.run.app/sendemail",{"email":"revisionbankedu@gmail.com","message":message,"subject":`RevisionBank Customer Support - ${name} | ${reply_to}`})
+			let result = response.data
+			if ("message" in result){
+				alert(result.message)
+				setLoading(false)
+			}
+			else{
+				alert("Please email revisionbankedu@gmail.com directly with your query.")
+			}
+			
+		}
+	  }
 		return(
-			<div >
-				<div className="contact row">
-					<div style={{height:"60vh",width:"400px",backgroundColor:"white",borderRadius:"10px",position: "relative" ,left: maxRowBased ? "none" :"20px"}}>
-						<div style={{display:"flex",position:"relative",top:"40px",left:"15%"}}>
-							<div style={{display:"flex",flexDirection:"column",gap:"20px"}}>
-								<h1 style={{color:"black",fontSize:"20px"}}>Get In Touch</h1>
-								<input
-									type='text'
-									name='Name'
-									placeholder='Name'
-									value={toSend.Name}
-									onChange={handleChange}
-								/>
+			<div style={{height:"60vh",width:maxRowBased ? "1000px" :"400px",backgroundColor:"white",borderRadius:"10px",position: "relative" }}>
+				<div style={{display:"flex",flexDirection:"column",gap:"20px",justifyContent:"center",alignItems:"center",marginTop:"40px"}}>
+					<h1 style={{color:"black",fontSize:"20px"}}>Contact us</h1>
+					<input
+						type='text'
+						name='Name'
+						placeholder='Name'
+						value={name}
+						onChange={(e) =>{setName(e.target.value)}}
+					/>
 
-								<input
-									type='text'
-									name='reply_to'
-									placeholder='Your email'
-									value={toSend.reply_to}
-									onChange={handleChange}
-								/>
-								<textarea
-								style={{height:"100px",border:"0px"}}
-									name='message'
-									placeholder='Your message'
-									value={toSend.message}
-									onChange={handleChange}
-								/>
-								
-								<Button variant="contained" onClick={onSubmit}>Submit</Button>
-								{isLoadingLogin ? <LoadingSpinner /> : null}
-								{formnotcompleted && <p>Please Complete Form!</p>}
-								{formcompleted && <p>Email Sent!</p>}
+					<input
+						type='text'
+						name='reply_to'
+						placeholder='Your email'
+						value={reply_to}
+						onChange={(e) =>{setReplyTo(e.target.value)}}
+						style={{border:"1px solid black",borderRadius:"3px"}}
+					/>
+					<textarea
+					style={{width:maxRowBased ? "700px":"300px",height:maxRowBased ? "500px" :"200px",border:"1px solid black",borderRadius:"3px"}}
+						name='message'
+						placeholder=' Your message'
+						defaultValue={message}
+						onChange={(e) =>{setMessage(e.target.value)}}
+					/>
+					
+					
+					{loading === false ? 
+					<Button variant="contained" style={{fontSize:"15px",width:"100px"}} onClick={onSubmit}>Submit</Button> :
+					<Button variant="contained" style={{backgroundColor:"grey",fontSize:"15px",width:"100px"}}>Submit</Button>}
 
-							</div>
-						</div>
-					</div>
 				</div>
-				
-			</div>
+		</div>
 		)
 	}
 	return(
 		<div>
-			{ maxRowBased ? 
 			<div>
 			<HeaderComponent/>
-			<div style={styles.contactustitle} className="ContactusTitlecont">
+			<div style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column",gap:"80px"}}>
 				<h1 style={{color:"white"}}>Contact Us</h1>
-			</div>
-			<div style={styles.contactuscont} className="ContactusTitlecont">
-					<ContactDetails styles= {styles}/>
-					<EmailPrompt/>
-					
+				<EmailPrompt/>
 			</div>
 			<Policies></Policies>
 			</div>
-			: 
-			<div>
-				<HeaderComponent/>
-				<div style={styles.contactustitle} className="ContactusTitlecont">
-					<h1 style={{color:"white"}}>Contact Us</h1>
-				</div>
-				<div style={styles.contactuscont} className="ContactusTitlecont">
-						<EmailPrompt/>
-						<ContactDetails styles= {styles}/>
-						
-						
-				</div>
-			</div>
-			}
+			
 
 
 		</div>

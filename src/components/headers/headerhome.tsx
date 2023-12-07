@@ -20,6 +20,7 @@ function HeaderComponent(props:any){
   //<h2>STEMTutorBank.</h2>
   const maxRowBased =useMediaQuery(maxRowBasedquery)
   let navigate:any = useNavigate(); // use navigate hook to navigate to different pages
+  console.log(props.hashedvalue)
     return(
     <div>
         <header className="container header">
@@ -39,7 +40,7 @@ function HeaderComponent(props:any){
               </label>
 
               <ul className="menu__box">
-                {props.hashedvalue !== null && props.externalrevcardusername !== null ?
+                {(props.hashedvalue !== null  && props.hashedvalue !== undefined) && (props.externalrevcardusername !== null && props.externalrevcardusername !== undefined) ?
                   <li><a className="menu__item"  onClick={() => {navigate(`/signup?h=${props.hashedvalue}&u=${props.externalrevcardusername}`)}} >Signup</a></li>
                   :
                   <li><a className="menu__item" href="/signup">Signup</a></li>
@@ -66,7 +67,7 @@ function HeaderComponent(props:any){
                  <a href="/signin" className="nav_menu_link"><p>Signin</p></a>
                </li>
                <li className="nav_menu_item">
-                  {props.hashedvalue !== null && props.externalrevcardusername !== null ?
+                  {(props.hashedvalue !== null  && props.hashedvalue !== undefined) && (props.externalrevcardusername !== null && props.externalrevcardusername !== undefined) ?
                   <a style={{cursor:"pointer"}} onClick={() => {navigate(`/signup?h=${props.hashedvalue}&u=${props.externalrevcardusername}`)}} className="nav_menu_link"><p>Signup</p></a>
                   :
                  <a href="/signup" className="nav_menu_link"><p>Signup</p></a>
