@@ -23,6 +23,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import { CanvasdefaultProps } from "./drawingcanvas"
 import CanvasDraw from "react-canvas-draw";
 import DragHandleIcon from '@mui/icons-material/DragHandle';
+import './calendar.css'
+import Calendar from 'react-calendar'
+import EventIcon from '@mui/icons-material/Event';
+import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+
 
 //import 'react-canvas-paint/dist/index.css'
 export default function AddRevisionCard(props:any){
@@ -30,8 +40,12 @@ export default function AddRevisionCard(props:any){
     const canvasRef  = useRef<any>([]);
     //const [canvasheight, setCanvasHeight] = useState(0);
     //const [canvaswidth, setCanvasWeight] = useState(0)
+    const [specificdate, setSpecificDate] = useState<any>(new Date());
+    const [specifictime, setSpecificTime] = useState<any>(dayjs(new Date().toISOString()));
+    const [showCalendar,setShowCalendar] = useState(false)
+    const [showtimeinterval,setShowTimeInterval] = useState(false)
     const [size, setSize] = useState([{ x: 400, y: 500 }])
-    const canvasrefdim = useRef<any>(null)
+    const canvasrefdim = useRef<any>(null);
     const reactalert = useAlert()
     const [submitting,setSubmitting] = useState<Boolean>(false)
     const navigate = useNavigate();
@@ -39,10 +53,11 @@ export default function AddRevisionCard(props:any){
     //const numoaccounts = 200 - props.numstudentaccounts
     const getdigitregex = /\d+/g;
     //const revisionscheduleintervalselect = [{"label":"60 minutes","value":0},{"label":"30 minutes","value":1}]//,{"label":"30 minutes","value":1}]
-    const [revisionscheduleinterval,setRevisionScheduleInterval] = useState<any>("")
+    const [revisionscheduleinterval,setRevisionScheduleInterval] = useState<any>("0MI")
     const [studentemailstored,setStudentEmailStored] = useState(false)
     const [emptyfield,setEmptyField] = useState(false)
     const [selectalloptions,setSelectAllOptions] = useState(false)
+    
     const [email,setEmail] = useState('');
     const [emailisset,setEmailIsSet] = useState(false);
     const [ocrrecogloading,setOcrRecogLoading] = useState<any>([{ocrloading:false}])
@@ -62,6 +77,18 @@ export default function AddRevisionCard(props:any){
     const resizeFile = (file:any) => new Promise(resolve =>{
         Resizer.imageFileResizer(file,700,700,"JPEG",100,0,uri=>{resolve(uri);},'base64')
     })
+    /*
+                            {date.length > 0 ? (
+                            <p>
+                                <span>Start:</span>{' '} {date[0].toDateString()}
+                                &nbsp; to &nbsp;
+                                <span>End:</span> {date[1].toDateString()}
+                            </p>
+                                    ) : (
+                            <p>
+                                <span>Default selected date:</span>{' '} {date.toDateString()}
+                            </p>
+                                    )} */
     const submitCanvas:any = (canvas:any,index:any) => {
         const image=  canvas.getDataURL()
         //console.log(image)
@@ -261,16 +288,16 @@ export default function AddRevisionCard(props:any){
     //console.log(revisionscheduleinterval)
     const checkintervalvalid = (interval:any) =>{
         if (interval.includes("MI") || interval.includes("H") || interval.includes("D") || interval.includes("MO")) {
-            if (interval.includes("MI") && (0 < parseInt(interval.replace("MI",""))  && parseInt(interval.replace("MI","")) < 60)){
+            if (interval.includes("MI") && (0 <= parseInt(interval.replace("MI",""))  && parseInt(interval.replace("MI","")) < 60)){
                 return true
             }
-            else if (interval.includes("H") && (0 < parseInt(interval.replace("H",""))  && parseInt(interval.replace("H","")) < 24)){
+            else if (interval.includes("H") && (0 <= parseInt(interval.replace("H",""))  && parseInt(interval.replace("H","")) < 24)){
                 return true
             }
-            else if (interval.includes("D") && (0 < parseInt(interval.replace("D",""))  && parseInt(interval.replace("D","")) < 31)){
+            else if (interval.includes("D") && (0 <= parseInt(interval.replace("D",""))  && parseInt(interval.replace("D","")) < 31)){
                 return true
             }
-            else if (interval.includes("MO") && (0 < parseInt(interval.replace("MO",""))  && parseInt(interval.replace("MO","")) < 12)){
+            else if (interval.includes("MO") && (0 <= parseInt(interval.replace("MO",""))  && parseInt(interval.replace("MO","")) < 12)){
                 return true
             }
         }
@@ -294,19 +321,20 @@ export default function AddRevisionCard(props:any){
             setStudentEmailStored(false)
             setSelectAllOptions(true)
         }
-        else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' && revisionscheduleinterval !== ""){
+        else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' ){
             if (checkintervalvalid(revisionscheduleinterval) === true){
                 var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
                 // TODO Store the image in the database here using post request
                 revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
-                formFields.map((card:any)=> {card["revisionscheduleinterval"] = revisionscheduleinterval})
-                var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":revisionscheduleinterval,"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
+                let revschedinterval =  specificdate.getDate() === new Date().getDate() ? revisionscheduleinterval === "0MI" ? "30MI" : revisionscheduleinterval : revisionscheduleinterval
+                formFields.map((card:any)=> {card["revisionscheduleinterval"] = revschedinterval; card["scheduledate"] = specificdate.toLocaleDateString("");card["scheduletime"] = new Date(specifictime["$d"]).toLocaleTimeString()})
+                var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":revschedinterval,"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
                 console.log(json)
-                const response = await axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
-                console.log(response.data)
-                setSubmitting(false)
+                //const response = await axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
+                //console.log(response.data)
+                //setSubmitting(false)
                 //window.location.reload();
-                navigate('/revisioncards',{state:{"token":props.token.token}})
+                //navigate('/revisioncards',{state:{"token":props.token.token}})
             }
             else{
                 setSubmitting(false)
@@ -458,9 +486,55 @@ export default function AddRevisionCard(props:any){
                                 value={form.revisioncardtitle}
                             />
                             {/*index === 0 && <Select options={revisionscheduleintervalselect} value={revisionscheduleintervalselect.find((obj:any) => obj.value === revisionscheduleinterval)} onChange= {(e:any) => {setRevisionScheduleInterval(e);}}  ></Select>*/}
+                            <div style={{display:"flex",flexDirection:showCalendar === true ? "column" : "row"}}>
+                            { index === 0 ? showCalendar === false  ? 
+                            <a style={{position:"relative",cursor:"pointer"}} onClick={() =>{setShowCalendar(true)}}><EventIcon style={{fontSize:"30px"}}></EventIcon></a>
+                            :
+                            <div>
+                                <div style={{display:"flex",gap:"10px",width:maxRowBased ? "auto": "270px"}}>
+                                <Calendar minDate={new Date()} onChange={setSpecificDate} value={specificdate} selectRange={false}/>
+                                
+                                
+                                <a style={{cursor:"pointer"}} onClick={() => {setShowCalendar(false);setSpecificDate(new Date())}}><p>x</p></a>
+                            </div>
+                            <a style={{position:"relative",cursor:"pointer"}} onClick={() =>{setShowCalendar(true)}}>
+                       
+                       
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']}>
+                                    <TimePicker
+                                    label="Uncontrolled picker"
+                                    value={specifictime}
+                                    onChange={setSpecificTime}
+                                    />
+                                </DemoContainer>
+                                </LocalizationProvider>
+                            </a>
 
-                            {index === 0 && <div><input placeholder="Time Interval" maxLength={4} type="text" value={revisionscheduleinterval} onChange= {(e:any) => {setRevisionScheduleInterval(e.target.value)}}  ></input><p>30MI | 10H | 6D | 6MO</p></div>}
+                            </div>
+            :
+                            <div></div>
+                            }
+                                
                             
+    
+                            {index === 0 ? showtimeinterval === true ? 
+                            <div style={{position:"relative",top:showCalendar === true? "0px":"0px"}}>
+                                <div style={{display:"flex"}}>
+                                    <div style={{width:"200px"}}>
+                                    <input placeholder="Time Interval" maxLength={4} type="text" value={revisionscheduleinterval}  onChange= {(e:any) => {setRevisionScheduleInterval(e.target.value)}}  ></input><p>30MI | 10H | 6D | 6MO</p>
+                                    </div>
+                                    <a style={{cursor:"pointer"}} onClick={() => {setShowTimeInterval(false);setRevisionScheduleInterval("0MI")}}><p>x</p></a>
+                                </div>
+
+                            </div>
+                            :
+                            <a style={{position:"relative",cursor:"pointer"}} onClick={() =>{setShowTimeInterval(true)}}><ScheduleSendIcon style={{fontSize:"30px"}}></ScheduleSendIcon></a>
+                            :
+                            <div></div>
+                            }
+
+                            </div>
                             <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]} className="form-control" style={{height: "200px",width:"100%",minHeight:maxRowBased ? "400px":"200px"}} onChange={event => handleFormChange(event, index)}>
                             </textarea>
 
