@@ -45,6 +45,13 @@ export default function HeaderRevision(props:any){
            { location.pathname === "/revisioncards" &&
            <a  className="nav_menu_link"><NotesIcon onClick={() => navigate('/revisionbanknotecard',{state:{"token":props.token}})} style={{fontSize:"40px",color:"white"}}/></a>
            }
+           {/* Workspace Membership */}
+           {location.pathname  === "/revisionbanknotecardworkspace" &&
+              <a href="/revisioncards" className="nav_menu_link"><FolderIcon onClick={() => navigate('/revisioncardsworkspace',{state:{"token":props.token}})} style={{fontSize:"40px",color:"white"}}/></a>
+           }
+           { location.pathname === "/revisioncardsworkspace" &&
+           <a  className="nav_menu_link"><NotesIcon onClick={() => navigate('/revisionbanknotecardworkspace',{state:{"token":props.token}})} style={{fontSize:"40px",color:"white"}}/></a>
+           }
             </div>
             </div>
               }
@@ -71,6 +78,17 @@ export default function HeaderRevision(props:any){
               { location.pathname === "/revisioncards" &&
                 <li className="nav_menu_item">
                 <a  className="nav_menu_link" style={{cursor:"pointer"}} onClick={() => navigate('/revisionbanknotecard',{state:{"token":props.token}})} >Create Revision Card</a>
+              </li>
+              }    
+              {/* Workspace */}
+              {location.pathname  === "/revisionbanknotecardworkspace" &&
+               <li className="nav_menu_item">
+                 <a className="nav_menu_link" style={{cursor:"pointer"}} onClick={() => navigate('/revisioncardsworkspace',{state:{"token":props.token}})} >Revision Cards</a>
+               </li>
+               }
+              { location.pathname === "/revisioncardsworkspace" &&
+                <li className="nav_menu_item">
+                <a  className="nav_menu_link" style={{cursor:"pointer"}} onClick={() => navigate('/revisionbanknotecardworkspace',{state:{"token":props.token}})} >Create Revision Card</a>
               </li>
               }               
              </ul>

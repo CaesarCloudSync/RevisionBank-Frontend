@@ -1,8 +1,8 @@
 
 
 import { useEffect, useState,useRef } from "react";
-import useMediaQuery from "../../mediahooks/useMedia";
-import { maxRowBasedquery } from "../../mediahooks/mediamax";
+import useMediaQuery from "../../../mediahooks/useMedia";
+import { maxRowBasedquery } from "../../../mediahooks/mediamax";
 import axios from 'axios'
 import Select from "react-select";
 import { useNavigate } from "react-router";
@@ -11,9 +11,9 @@ import "./addrevisioncard.css";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Button } from "react-bootstrap";
 import Jimp from "jimp";
-import LoadingSpinner from "../../../animations/Loadingspinner";
+import LoadingSpinner from "../../../../animations/Loadingspinner";
 import { useAlert } from 'react-alert'
-import RevisionBankSpeechRecognition from "../../speechrecognition/speechrecognition";
+import RevisionBankSpeechRecognition from "../../../speechrecognition/speechrecognition";
 import Resizer from "react-image-file-resizer"
 import {useSpeechRecognition} from "react-speech-recognition"
 import WebcamImage from "./WebCamImage";
@@ -23,14 +23,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import { CanvasdefaultProps } from "./drawingcanvas"
 import CanvasDraw from "react-canvas-draw";
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-
+import AddIcon from '@mui/icons-material/Add';
 //import 'react-canvas-paint/dist/index.css'
 export default function AddRevisionCard(props:any){
     const { transcript, resetTranscript } = useSpeechRecognition();
     const canvasRef  = useRef<any>([]);
     //const [canvasheight, setCanvasHeight] = useState(0);
     //const [canvaswidth, setCanvasWeight] = useState(0)
-    const [size, setSize] = useState({ x: 400, y: 300 })
+    const [size, setSize] = useState([{ x: 400, y: 500 }])
     const canvasrefdim = useRef<any>(null)
     const reactalert = useAlert()
     const [submitting,setSubmitting] = useState<Boolean>(false)
@@ -38,11 +38,12 @@ export default function AddRevisionCard(props:any){
     const maxRowBased = useMediaQuery(maxRowBasedquery);
     //const numoaccounts = 200 - props.numstudentaccounts
     const getdigitregex = /\d+/g;
-    const revisionscheduleintervalselect = [{"label":"60 minutes","value":0}]//,{"label":"30 minutes","value":1}]
+    //const revisionscheduleintervalselect = [{"label":"60 minutes","value":0},{"label":"30 minutes","value":1}]//,{"label":"30 minutes","value":1}]
     const [revisionscheduleinterval,setRevisionScheduleInterval] = useState<any>("")
     const [studentemailstored,setStudentEmailStored] = useState(false)
     const [emptyfield,setEmptyField] = useState(false)
     const [selectalloptions,setSelectAllOptions] = useState(false)
+    const [workspacemails,setWorkSpaceEmails] = useState([]);
     const [email,setEmail] = useState('');
     const [emailisset,setEmailIsSet] = useState(false);
     const [ocrrecogloading,setOcrRecogLoading] = useState<any>([{ocrloading:false}])
@@ -97,15 +98,21 @@ export default function AddRevisionCard(props:any){
         }
         //console.log()
     }
-    const handler = (mouseDownEvent:any) => {
-        const startSize = size;
+    const handler = (mouseDownEvent:any,index:number) => {
+        const sizedata = [...size]
         const startPosition = { x: mouseDownEvent.pageX, y: mouseDownEvent.pageY };
         
         function onMouseMove(mouseMoveEvent:any) {
-          setSize(currentSize => ({ 
+            console.log(sizedata[index].y - startPosition.y + mouseMoveEvent.pageY )
+            sizedata[index]["x"] = canvasrefdim.current.clientWidth 
+            sizedata[index]["y"] = sizedata[index].y - startPosition.y + mouseMoveEvent.pageY 
+            console.log(sizedata,":end")
+            setSize(sizedata)
+
+          /*setSize(currentSize => ({ 
             x:canvasrefdim.current.clientWidth ,//startSize.x - startPosition.x + mouseMoveEvent.pageX 
             y: startSize.y - startPosition.y + mouseMoveEvent.pageY 
-          }));
+          }));*/
         }
         function onMouseUp() {
           document.body.removeEventListener("mousemove", onMouseMove);
@@ -135,7 +142,7 @@ export default function AddRevisionCard(props:any){
                 reader.readAsText(event.target.files[0])
                 
             }
-            else if (event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".PNG") ){
+            else if (event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".PNG") || event.target.files[0].name.includes(".gif") ) {
                
                 let ocrfilenamedata:any = [...ocrfilename];
                 ocrfilenamedata[index]["filename"] = event.target.files[0].name;
@@ -253,32 +260,61 @@ export default function AddRevisionCard(props:any){
 
     }
     //console.log(revisionscheduleinterval)
+    const checkintervalvalid = (interval:any) =>{
+        if (interval.includes("MI") || interval.includes("H") || interval.includes("D") || interval.includes("MO")) {
+            if (interval.includes("MI") && (0 < parseInt(interval.replace("MI",""))  && parseInt(interval.replace("MI","")) < 60)){
+                return true
+            }
+            else if (interval.includes("H") && (0 < parseInt(interval.replace("H",""))  && parseInt(interval.replace("H","")) < 24)){
+                return true
+            }
+            else if (interval.includes("D") && (0 < parseInt(interval.replace("D",""))  && parseInt(interval.replace("D","")) < 31)){
+                return true
+            }
+            else if (interval.includes("MO") && (0 < parseInt(interval.replace("MO",""))  && parseInt(interval.replace("MO","")) < 12)){
+                return true
+            }
+        }
+        else{
+            return false
+        }
+
+    }
     const submitRevisionCard = async (e:any) => {
         setSelectAllOptions(false)
         //e.preventDefault();
         setSubmitting(true)
         //console.log(revisionscheduleinterval.label)
+        formFields.map((revisioncard:any) => {delete revisioncard["drawing"]})
         const checkformfields:any = formFields.map((revisioncard:any) => { if (revisioncard.subject === '' || revisioncard.revisioncardtitle === '' || revisioncard.revisioncard === ''){return("true")}else{return("false")} })
         const checkrevisioncardimages:any = revisioncardimage.map((revisioncard:any) => { if (revisioncard.revisioncardimgname.length === 0 || revisioncard.revisioncardimage === 0){return("true")}else{return("false")} })
         //console.log(checkformfields)
         //console.log(checkformfields)
-        if ((checkformfields.includes("true") && checkrevisioncardimages.includes("true")) || (email  === '' || props.emailcount === 0 ) || (checkformfields.length === 0 && checkrevisioncardimages.length === 0)|| revisionscheduleinterval.label === undefined){
+        if ((checkformfields.includes("true") && checkrevisioncardimages.includes("true")) || (email  === '' || props.emailcount === 0 ) || (checkformfields.length === 0 && checkrevisioncardimages.length === 0)|| revisionscheduleinterval === ""){
             setSubmitting(false)
             setStudentEmailStored(false)
             setSelectAllOptions(true)
         }
-        else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' && revisionscheduleinterval.label !== undefined){
-            var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
-            // TODO Store the image in the database here using post request
-            revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
-            var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval.label.match(getdigitregex)[0]),"revisioncards":formFields}}
-            //console.log(json)
-            
-            const response = await axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
-            //console.log(response.data)
-            setSubmitting(false)
-            //window.location.reload();
-            navigate('/revisioncards',{state:{"token":props.token.token}})
+        else if (!(checkformfields.includes("true") && checkrevisioncardimages.includes("true")) && email !== '' && revisionscheduleinterval !== ""){
+            if (checkintervalvalid(revisionscheduleinterval) === true){
+                var config = {headers: {Authorization: `Bearer ${props.token.token}`,}}
+                // TODO Store the image in the database here using post request
+                revisioncardimage.map((val,ind) => {Object.assign(formFields[ind],val)})
+                formFields.map((card:any)=> {card["revisionscheduleinterval"] = revisionscheduleinterval})
+                var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":revisionscheduleinterval,"revisioncards":formFields}} // parseInt(revisionscheduleinterval.label.match(getdigitregex)[0])
+                console.log(json)
+                const response = await axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/storerevisioncards",json,config)
+                console.log(response.data)
+                setSubmitting(false)
+                //window.location.reload();
+                navigate('/revisioncards',{state:{"token":props.token.token}})
+            }
+            else{
+                setSubmitting(false)
+                setStudentEmailStored(false)
+                setSelectAllOptions(true)
+                alert("Time interval: 30MI | 10H | 6D | 6MO ")
+            }
         } 
         
     
@@ -312,6 +348,9 @@ export default function AddRevisionCard(props:any){
         let revisioncardimageobject = {revisioncardimgname:[],revisioncardimage:[]}
         //console.log([...revisioncardimage])
         setRevisionCardImage([...revisioncardimage,revisioncardimageobject])
+        let sizeobject = { x: 400, y: 300 }
+        setSize([...size,sizeobject])
+        
         }
 
     
@@ -333,6 +372,9 @@ export default function AddRevisionCard(props:any){
         let revisioncardimagedata = [...revisioncardimage];
         revisioncardimagedata.splice(index,1)
         setRevisionCardImage(revisioncardimagedata)
+        let sizedata = [...size]
+        sizedata.splice(index,1)
+        setSize(sizedata)
         
         //props.setAccountInfo((accountinfo:any)=> ({...props.accountinfo,numofaccounts:props.accountinfo.numofaccounts+1}))
         }
@@ -360,10 +402,18 @@ export default function AddRevisionCard(props:any){
     }
     useEffect(() => {
         if (canvasrefdim.current !== null){
-            setSize(currentSize => ({ 
+            /*setSize(currentSize => ({ 
                 x: canvasrefdim.current.clientWidth, 
                 y: canvasrefdim.current.clientHeight
-              }));
+              }));*/
+              const sizedata = [...size];
+              formFields.map((data,index) => {
+                
+                sizedata[index]["x"] = canvasrefdim.current.clientWidth; 
+                sizedata[index]["y"] = canvasrefdim.current.clientHeight;
+                setSize(sizedata)
+              } )
+ 
             //setCanvasHeight(canvasrefdim.current.clientHeight)
            // setCanvasWeight(canvasrefdim.current.clientWidth)
         }
@@ -377,13 +427,27 @@ export default function AddRevisionCard(props:any){
 
                 <form onSubmit={submitRevisionCard}>
                     {props.showemailprompt &&
-                    <input
+                        <div>
+                        <input
                         
-                            name='email'
-                            placeholder='Email to send to'
-                            onChange={(e:any) => {setEmail(e.target.value);setEmailIsSet(true)}}
-                            value={email}
+                        name='email'
+                        placeholder='Email to send to'
+                        onChange={(e:any) => {setEmail(e.target.value);setEmailIsSet(true)}}
+                        value={email}
                         />
+                        {workspacemails.map((val,ind) =>{
+                            return(
+                                <input
+                        
+                                name='email'
+                                placeholder='Email to send to'
+                                onChange={(e:any) => {setWorkSpaceEmails(e.target.value);}}
+                                value={email}
+                                />
+                            )
+                        })}
+                        <a><AddIcon/></a>
+                        </div>
                     }
                     
                     {formFields.map((form, index) => {
@@ -408,15 +472,18 @@ export default function AddRevisionCard(props:any){
                                 onChange={event => handleFormChange(event, index)}
                                 value={form.revisioncardtitle}
                             />
-                            {index === 0 && <Select options={revisionscheduleintervalselect} value={revisionscheduleintervalselect.find((obj:any) => obj.value === revisionscheduleinterval)} onChange= {(e:any) => {setRevisionScheduleInterval(e);}}  ></Select>}
-                            <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]} className="form-control" style={{height: "200px",width:"100%"}} onChange={event => handleFormChange(event, index)}>
+                            {/*index === 0 && <Select options={revisionscheduleintervalselect} value={revisionscheduleintervalselect.find((obj:any) => obj.value === revisionscheduleinterval)} onChange= {(e:any) => {setRevisionScheduleInterval(e);}}  ></Select>*/}
+
+                            {index === 0 && <div><input placeholder="Time Interval" maxLength={4} type="text" value={revisionscheduleinterval} onChange= {(e:any) => {setRevisionScheduleInterval(e.target.value)}}  ></input><p>30MI | 10H | 6D | 6MO</p></div>}
+                            
+                            <textarea name="revisioncard" defaultValue={formFields[index]["revisioncard"]} className="form-control" style={{height: "200px",width:"100%",minHeight:maxRowBased ? "400px":"200px"}} onChange={event => handleFormChange(event, index)}>
                             </textarea>
 
                         
                             </div>
                             <div style={{display:"flex",marginTop:"10px"}}>
                                 <label className="label">
-                                <input className="uploadfile" type="file" name="revisioncard" accept=".txt,text/html,text/plain,.png,.jpg,.jpeg"  onChange={event => handleFormChange(event, index)} />
+                                <input className="uploadfile" type="file" name="revisioncard" accept=".txt,text/html,text/plain,.png,.jpg,.jpeg,.gif"  onChange={event => handleFormChange(event, index)} />
                                 <span style={{width:"100px",border:"1px solid #fa0095",borderRadius:"10px",backgroundColor:"#fa0095",padding:"10px",color:"white"}}>Upload txt/png </span>
                                 </label>
                                 { showComponent === true && 
@@ -441,16 +508,15 @@ export default function AddRevisionCard(props:any){
                             </div>: <p></p>}
 
                             {formFields[index]["drawing"] === "true" &&
-                            <div ref={canvasrefdim} style={{display:"flex",marginTop:"10px",flexDirection:"column",border:"1px solid black",height: size.y-1,width:"100%"}}>
+                            <div ref={canvasrefdim} style={{display:"flex",marginTop:"10px",flexDirection:"column",border:"1px solid black",height: size[index].y-1,width:"100%"}}>
                             {/*<ReactCanvasPaint onDraw={(e:any) => {onDrawChange(e)}}  />*/}
                             {/*ref={canvasRef}  */}
-                            {size.y !== 0 &&
+                            {size[index].y !== 0 &&
                             <div >
-                            <CanvasDraw key={index} ref={(el:any) => (canvasRef.current[index] = el)} brushRadius={2} hideInterface={true} canvasHeight={size.y-2.5} canvasWidth={size.x -2.5} />
+                            <CanvasDraw key={index} ref={(el:any) => (canvasRef.current[index] = el)} brushRadius={2} hideInterface={true} canvasHeight={size[index].y-2.5} canvasWidth={size[index].x -2.5} />
                             </div>
                             }
-                          
-                            <DragHandleIcon sx={{fontSize:20}} style={{marginLeft:"auto"}}  id="draghandle" type="button" onMouseDown={handler}></DragHandleIcon>
+                            {/*<DragHandleIcon sx={{fontSize:20}} style={{marginLeft:"auto"}}  id="draghandle" type="button" onMouseDown={(e:any) => {handler(e,index)}}></DragHandleIcon> */}
 
                             </div>} 
                             {ocrprogress[index]["ocrprogress"] >  0 && ocrprogress[index]["ocrprogress"] <  100 &&<div >Loading text image: {ocrprogress[index]["ocrprogress"]}%</div>}

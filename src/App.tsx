@@ -33,8 +33,8 @@ import ResetPassword from './components/forgotpassword/resetpassword';
 import FreeTrialAuth from './components/freetrial/freetrialauth';
 import EdexcelMaths from './components/edxecelmaths/edexcelmaths';
 import EdexcelPdf from './components/edxecelmaths/edexcelpdf';
-import RevisionBankScheduler from './components/revisionbanknotecard/revisionbanknotecard';
-import ManageRevisionCards from './components/revisionbanknotecard/components/managerevisioncards'
+import RevisionBankScheduler from './components/revisionbanknotecard/freemium/revisionbanknotecard';
+import ManageRevisionCards from './components/revisionbanknotecard/freemium/components/managerevisioncards'
 import ComputerScienceAQA from './components/computerscience/computerscienceaqa';
 import ComputerSciencePDF from './components/computerscience/computersciencepdf';
 import PhysicsOCR from './components/physicsocr/physicsocr';
@@ -43,6 +43,8 @@ import { Helmet } from "react-helmet";
 import BiologyAQA from './components/biologyaqa/biologyaqa';
 import AmariTimeTable from './components/amarialevelTimetable/amaritimetable';
 import FeedBackPage from './components/fmaths/feedback';
+import ManageRevisionCardsWorkspace from './components/revisionbanknotecard/premiumworkspace/components/managerevisioncards';
+import RevisionBankSchedulerWorkSpace from './components/revisionbanknotecard/premiumworkspace/revisionbanknotecard';
 const App = () => {
 return(
   <Router>
@@ -83,8 +85,13 @@ return(
   <Route path="/completefreetrial" element={<CompleteFreeTrial/>}></Route>
   
   <Route path="/revisionbanktools" element={<RevisionBankTools/>}/>
+
   <Route path="/revisionbanknotecard" element={<RevisionBankScheduler/>}/>
   <Route path="/revisioncards" element={<ManageRevisionCards/>}/>
+  
+  <Route path="/revisionbanknotecardworkspace" element={<RevisionBankScheduler/>}/>
+  <Route path="/revisioncardsworkspace" element={<ManageRevisionCards/>}/>
+
   <Route path="/fmathqp" element={<FmathQP/>}/>
   <Route path="/edexcelmaths" element={<EdexcelMaths/>}/>
   <Route path="/computerscienceaqa" element={<ComputerScienceAQA/>}/>

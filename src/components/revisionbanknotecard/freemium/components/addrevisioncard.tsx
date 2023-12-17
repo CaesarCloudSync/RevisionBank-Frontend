@@ -1,8 +1,8 @@
 
 
 import { useEffect, useState,useRef } from "react";
-import useMediaQuery from "../../mediahooks/useMedia";
-import { maxRowBasedquery } from "../../mediahooks/mediamax";
+import useMediaQuery from "../../../mediahooks/useMedia";
+import { maxRowBasedquery } from "../../../mediahooks/mediamax";
 import axios from 'axios'
 import Select from "react-select";
 import { useNavigate } from "react-router";
@@ -11,9 +11,9 @@ import "./addrevisioncard.css";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Button } from "react-bootstrap";
 import Jimp from "jimp";
-import LoadingSpinner from "../../../animations/Loadingspinner";
+import LoadingSpinner from "../../../../animations/Loadingspinner";
 import { useAlert } from 'react-alert'
-import RevisionBankSpeechRecognition from "../../speechrecognition/speechrecognition";
+import RevisionBankSpeechRecognition from "../../../speechrecognition/speechrecognition";
 import Resizer from "react-image-file-resizer"
 import {useSpeechRecognition} from "react-speech-recognition"
 import WebcamImage from "./WebCamImage";

@@ -39,8 +39,8 @@ import ResetPassword from './src/components/forgotpassword/resetpassword';
 import FreeTrialAuth from './src/components/freetrial/freetrialauth';
 import EdexcelMaths from './src/components/edxecelmaths/edexcelmaths';
 import EdexcelPdf from './src/components/edxecelmaths/edexcelpdf';
-import RevisionBankScheduler from './src/components/revisionbanknotecard/revisionbanknotecard';
-import ManageRevisionCards from './src/components/revisionbanknotecard/components/managerevisioncards'
+import RevisionBankScheduler from './src/components/revisionbanknotecard/freemium/revisionbanknotecard';
+import ManageRevisionCards from './src/components/revisionbanknotecard/freemium/components/managerevisioncards'
 
 export default (
     <BrowserRouter>

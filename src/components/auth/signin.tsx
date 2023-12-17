@@ -141,8 +141,8 @@ function Signin(){
           //console.log(json)
           
           const responsestore:any = await axios.post("https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/storerevisioncards",notecardjson,config)
-          
-          navigate("/revisioncards",{state:{"token":token}})
+          // Make membership conditions once backend is set up.
+          navigate("/revisioncardsworkspace",{state:{"token":token}})
         }
         else if (end_date < current_date) {
           console.log("Subscription has expired")
@@ -153,14 +153,14 @@ function Signin(){
         }
         else if (end_date === current_date) {
           console.log("Subscription will expire today")
-          navigate("/revisioncards",{state:{"token":token,"email":json.email}})
+          navigate("/revisioncardsworkspace",{state:{"token":token,"email":json.email}})
         }
         else if (end_date > current_date) {
           console.log("Subscription will expire on " + end_date)
-          navigate("/revisioncards",{state:{"token":token,"email":json.email}})
+          navigate("/revisioncardsworkspace",{state:{"token":token,"email":json.email}})
         }
         else if (responseget.data.subscription === undefined && subscription === "basic"){
-          navigate("/revisioncards",{state:{"token":token,"email":json.email}})
+          navigate("/revisioncardsworkspace",{state:{"token":token,"email":json.email}})
         }
         else if (responseget.data.end_date_subscription === undefined && (subscription === "standard"|| subscription === "premium" || subscription === "educational" )) {
         //console.log(token)
@@ -174,7 +174,7 @@ function Signin(){
           navigate("/completefreetrial", { state: { token: token, subscription: subscription,email:json.email} });
         }
         else if (responseget.data.end_date_subscription === undefined ) {
-            navigate("/revisioncards",{state:{"token":token,"email":json.email}})
+            navigate("/revisioncardsworkspace",{state:{"token":token,"email":json.email}})
             setSetSubdoesnotexist(true)
             //
   

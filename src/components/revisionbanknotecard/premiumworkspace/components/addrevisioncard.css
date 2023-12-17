@@ -1,0 +1,16 @@
+label.label input[type="file"] {
+    display: none;
+
+  }
+  .label {
+    cursor: pointer;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    
+    margin: 5px;
+    background: #ffffff;
+    display: inline-block;
+  }
+.uploadfile{
+  background-color: black;
+}

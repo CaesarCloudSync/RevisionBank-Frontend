@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import useMediaQuery from "../../mediahooks/useMedia";
-import { maxRowBasedquery } from "../../mediahooks/mediamax";
+import useMediaQuery from "../../../mediahooks/useMedia";
+import { maxRowBasedquery } from "../../../mediahooks/mediamax";
 import axios from "axios";
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 const FACING_MODE_USER = "user";

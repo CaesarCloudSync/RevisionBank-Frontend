@@ -1,15 +1,15 @@
 import { useEffect,useState } from "react";
-import HeaderRevision from "../../headers/headerrevision"
+import HeaderRevision from "../../../../headers/headerrevision"
 import { Navigate, useLocation } from "react-router"
-import useMediaQuery from "../../mediahooks/useMedia";
-import { maxRowBasedquery } from "../../mediahooks/mediamax";
+import useMediaQuery from "../../../../mediahooks/useMedia";
+import { maxRowBasedquery } from "../../../../mediahooks/mediamax";
 import axios from "axios";
 import { useAlert } from 'react-alert'
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, Button } from "react-bootstrap"
-import ManageRevisionCardsInfo from "./managerevisioncardsinfo";
+
 import LensIcon from '@mui/icons-material/Lens';
-import ShareAlert from "./sharealert";
+import ShareAlert from "../sharealert";
 export default function ManageRevisionCards(props:any){
     let location = useLocation();
     const reactalert = useAlert()
@@ -34,8 +34,7 @@ export default function ManageRevisionCards(props:any){
     const [allowedmaximumscheduledcards,setAllowedMaximumScheduledCards] = useState(3)
     const [shareshow,setShareShow] = useState(false)
     const [shareurl,setShareURL] = useState("")
-    const [revisioncardswebsocket,setRevisionCardWebSocket] = useState<any>([])
-
+    
     
 
     //console.log(manualpagecookie)
@@ -59,7 +58,7 @@ export default function ManageRevisionCards(props:any){
             //console.log(showpickedtrafficlightind)
             const maxtrafficlight = showpickedtrafficlightind.map((items:any) => {if (items.color !== "none") {return(true)} else {return(false)}}).filter((v:boolean) => (v === true)).length;
             //console.log(maxtrafficlight)
-            //console.log(maxtrafficlight,scheduledcards.revisioncards.length + maxtrafficlight)
+            console.log(maxtrafficlight,scheduledcards.revisioncards.length + maxtrafficlight)
             if (scheduledcards.revisioncards.length + maxtrafficlight <= 5){
                 if (maxtrafficlight <= 5 ){
                     setShowPickedTrafficLightind(data)
@@ -136,31 +135,11 @@ export default function ManageRevisionCards(props:any){
     }
     const getrevisioncards = async (token:string) => {
         //console.log(token)
-        revisioncardswebsocket.insert = function ( index:number, ...items:any ) {
-            this.splice( index, 0, ...items );
-        };
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        const response:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
         const responseaccount:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getaccountinfo`,config)
-        const ws = new WebSocket(`wss://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncardsws/${token}`);
-
-
-        ws.onopen = (event) => {
-            ws.send(JSON.stringify(config));
-        };
-
-        ws.onmessage = function (event) {
-            try {
-                const response = JSON.parse(event.data);
-                //var revisioncardslarge = {"revisioncards":[response]}
-                const respobj = JSON.parse(response)
-                //console.log(respobj)
-                
-                revisioncardswebsocket.push(respobj)
-
-                var revisioncarddata:any = {"revisioncards":revisioncardswebsocket,"revisionscheduleinterval": respobj["revisionscheduleinterval"],"sendtoemail":respobj["sendtoemail"]}
-
-        
+        //console.log(response.data)
+        //console.log(responseaccount.data.subscription)
         if (responseaccount.data.subscription === "educational" || responseaccount.data.subscription === "premium" || responseaccount.data.subscription === "student educational" ){
             setAllowTrafficLights(true)
             setAllowedMaximumScheduledCards(5)
@@ -168,13 +147,14 @@ export default function ManageRevisionCards(props:any){
         setEmail(responseaccount.data.email)
         //setStudentAccountInfo(response.data.result)
         ////console.log(response.data)
-        
-
+        var revisioncarddata = response.data
+        //console.log(revisioncarddata)
+        //setRevisionCarddata(response.data)
+        //console.log(revisioncarddata)
         const trafficlightinit = Array.from({length:revisioncarddata.revisioncards.length}, (_,i) => {return({color:"none",showpickedtrafficlightind:-1,pickedtrafficlightind:false})})
         //console.log(trafficlightinit)
         setShowPickedTrafficLightind(trafficlightinit)
-        
-        if (!(Object.keys(respobj).includes("message"))){
+        if (!(Object.keys(response.data).includes("message"))){
             //console.log(response.data)
             setRevisionCarddata((previousState:any) => {
                 //revisioncarddata.revisioncards.reverse()
@@ -185,39 +165,35 @@ export default function ManageRevisionCards(props:any){
               });
             
         }
-        else{
-            if (respobj["message"] === "all sent."){
-                console.log(respobj["message"])
-
-                ws.close()
-            }
-
-        }
-    } catch (err) {
-        console.log(err);
-        }
-    };
 
     }
     // TODO : Each Button reqiures an api to do the following
     // TODO Allow change if Interval
-    const schedulerevisioncard = async (index:any,revisioncard:any,token:string) => {
+    const schedulerevisioncard = async (revisioncard:any,token:string) => {
         //console.log(token)
-        //console.log(revisioncard.revisionscheduleinterval)
-        var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncard.revisionscheduleinterval,"revisioncards":[revisioncard]}
+        //console.log(revisioncard)
+        var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const response:any = await axios.post(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/schedulerevisioncard`,json,config)
-        await checkschedulerevisioncard(token)
-        //window.location.reload();
-        //setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))
+        ////console.log(response.data)
+        const responseaccount:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        var newrevisioncarddata = responseaccount.data
+        //console.log(responseaccount)
+        
+        //console.log(config)
+        setRevisionCarddata((previousState:any) => {
+            //revisioncarddata.revisioncards.reverse()
+            //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
+            return { ...previousState, newrevisioncarddata}
+            
+          });
           
         
     }
     const unscheduleallrevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         const response:any = await axios.delete(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/unscheduleallrevisioncard`,config)
-
         window.location.reload()
         //console.log(response.data)
     }
@@ -229,22 +205,23 @@ export default function ManageRevisionCards(props:any){
         //console.log(response.data)
         //setScheduledCardState(response.data)
     }
-    const unschedulerevisioncard = async (index:any,revisioncard:any,token:string) => {
+    const unschedulerevisioncard = async (revisioncard:any,token:string) => {
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //console.log(revisioncard,"gy")
         const response:any = await axios.post(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/unschedulerevisioncard`,revisioncard,config)
-        setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))
-        //window.location.reload()
-        await checkschedulerevisioncard(token)
-
-        /*setRevisionCarddata((previousState:any) => {
+        ////console.log(response.data)
+        const responseaccount:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        var newrevisioncarddata = responseaccount.data
+        //console.log(responseaccount)
+        
+        //console.log(config)
+        setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-            return {previousState}
+            return { ...previousState, newrevisioncarddata}
             
-          });*/
+          });
     }
     const checkschedulerevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
@@ -259,21 +236,24 @@ export default function ManageRevisionCards(props:any){
             setCardNotChanged((items:any)=> ({...cardnotchanged,cardnotchangedind:revisioncardind,cardnotchanged:true}))
         }
         else if(newrevisioncard !== ""){
-            const newrevisioncardjson = {"revisioncard":prevrevisioncard.revisioncard,"newrevisioncard": newrevisioncard.newrevisoncard,"revisioncardtitle": prevrevisioncard.revisioncardtitle,"subject": prevrevisioncard.subject,"revisionscheduleinterval":prevrevisioncard.revisionscheduleinterval}
+            const newrevisioncardjson = {"revisioncard":prevrevisioncard.revisioncard,"newrevisioncard": newrevisioncard.newrevisoncard,"revisioncardtitle": prevrevisioncard.revisioncardtitle,"subject": prevrevisioncard.subject}
             //console.log(newrevisioncardjson)
             const config = {headers: {Authorization: `Bearer ${token}`,}}
-            //console.log(newrevisioncardjson)
             const response:any = await axios.post(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/changerevisioncard`,newrevisioncardjson,config)
-
+            //console.log(response.data)
+            const responseaccount:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+            var newrevisioncarddata = responseaccount.data
+            //console.log(newrevisioncarddata)
+            
+            //console.log(config)
             setRevisionCarddata((previousState:any) => {
                 //revisioncarddata.revisioncards.reverse()
                 //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-                previousState["revisioncarddata"]["revisioncards"][revisioncardind]["revisioncard"] = newrevisioncard.newrevisoncard
-                return { ...previousState, previousState}
+                return { ...previousState, newrevisioncarddata}
                 
               });
             setNewRevisionCard("")
-            //window.location.reload()
+            window.location.reload()
         }
           
     }
@@ -284,18 +264,19 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":newsendtoemail}
         //console.log(json)
         const response:any = await axios.put(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/changesendtoemail`,json,config)
+        const responseaccount:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
+        var newrevisioncarddata = responseaccount.data
+        ////console.log(responseaccount)
+        
+        //console.log(config)
         setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
-            //console.log(previousState)
-            
-            previousState["revisioncarddata"]["sendtoemail"] = newsendtoemail
-            return { ...previousState, previousState }
+            return { ...previousState, newrevisioncarddata}
             
           });
-          setNewSendToEmail("")
-          setChangeEmail(false)
-        
+        ////console.log(response.data)
+        window.location.reload();
 
     }
           
@@ -319,33 +300,11 @@ export default function ManageRevisionCards(props:any){
 
 
     }
-    const showintervaldatetime = (interval:any) => {
-            if (typeof(interval) === "string"){
-                if (interval.includes("MI")) {
-                    return "Minutes"
-                }
-                else if (interval.includes("H")){
-                    return "Hours"
-                }
-                else if (interval.includes("D") ){
-                    return "Days"
-                }
-                else if (interval.includes("MO") ){
-                    return "Months"
-                }
-            }
-            else{
-                return "Minutes"
-            }
-    }
     const removerevisioncard = async (revisioncard:any,token:string) => {
-        var answer = window.confirm("Remove revisioncard!");
-        if (answer) {
         //console.log(token)
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //var json = {"removerevisioncard":revisioncard}
-        revisioncard["sendtoemail"] = sendtoemail
         const response:any = await axios.post(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/removerevisioncard`,revisioncard,config)
         //console.log(response.data)
         const responseaccount:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncards`,config)
@@ -360,11 +319,6 @@ export default function ManageRevisionCards(props:any){
             
           });*/
         window.location.reload()
-        }
-        else {
-            //some code
-        }
-
         
     }
     const checkrevisecard = (revisioncard:any,scheduledcards:any) => {
@@ -403,11 +357,9 @@ export default function ManageRevisionCards(props:any){
       },[]);
     useEffect(() => {
         //Runs only on the first render
-        if (token !== ""){
         getrevisioncards(token)
         checkschedulerevisioncard(token)
-        }
-      },[]); //scheduled
+      },[scheduled]);
 
 
 
@@ -423,7 +375,7 @@ export default function ManageRevisionCards(props:any){
     //console.log(scheduled)
     //console.log(scheduledcardstate)
     //console.log(showpickedtrafficlightind)
-
+    //console.log(email)
     return(
         <div>
             
@@ -459,11 +411,6 @@ export default function ManageRevisionCards(props:any){
                         <Button style={{margin:"10px",fontSize:"13px",backgroundColor:"purple",border:"1px solid purple"}} onClick={(e:any) => {if (manualscheduling === true){setManualScheduling(false)} else if (manualscheduling === false){automaticschedulingcheck(token);window.localStorage.removeItem("manualstay")}}}>{manualscheduling === true ? "Manual Scheduling" :"Automatic Scheduling" }</Button>
                     </div>
                         }
-                    {/*This is for all to unschedule */}
-                   <div style={{display:"flex",justifyContent:"end"}}>
-                        {/**;unscheduleallrevisioncard(token) */}
-                        <Button style={{margin:"10px",fontSize:"13px",width:"100px",backgroundColor:"#dc3545",border:"1px solid #dc3545"}} onClick={(e:any) => {unscheduleallrevisioncard(token)}}>Unschedule All</Button>
-                    </div>
                     <div style={{position:"relative",left:"10%",top:"10%",width: "80%",border:"1px grey solid",borderRadius:"5px"}}>
  
                     
@@ -500,13 +447,27 @@ export default function ManageRevisionCards(props:any){
                                 //console.log(revisioncardcolor)
                                 //console.log(revisioncard.revisioncardimage)
                                 //console.log(newrevisioncard.newrevisoncard)
-                                const cards_exist = !("message" in revisioncard) ? true : false
-                                if (cards_exist === true){
                                 return(
                                 <div>
-                                    <ManageRevisionCardsInfo key={index} index={index} maxRowBased={maxRowBased} revisioncard={revisioncard} showintervaldatetime={showintervaldatetime} setNewRevisionCard={setNewRevisionCard} token={token}/>
-
+                                    <div key={index} style={{display:"flex",marginTop:"50px",flexDirection:maxRowBased ? "row":"column",justifyContent: "space-between"}}>
+                                        <p >{revisioncard.subject}</p>
+                                        <p style={{marginRight:"40px"}}>{revisioncard.revisioncardtitle}</p>
+                                    </div>
+                                    <textarea onChange={(e:any) => {setNewRevisionCard((items:any)=> ({...index,revisioncardind:index,newrevisoncard:e.target.value}))} } defaultValue={revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px"}}>
+                                    </textarea>
                                     
+                                    {revisioncard.revisioncardimage !== undefined &&
+                                    <table>
+                                        <tbody >
+                                        <tr>
+                                        {revisioncard.revisioncardimgname.map((val:any)=> {return(<th key={val} style={{textAlign:"left"}}>{val}</th>)})}
+                                        </tr>
+                                        <tr>
+                                        {revisioncard.revisioncardimage.map((val:any)=> {return(<td ><img key={val} style={{width:maxRowBased ? "55%": "75%" ,height: maxRowBased ? "55%" : "75%"}} src={val}></img></td>)})}
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    }
                                         
                                     
                                     <div style={{display:"flex",marginTop:"10px",flexDirection:maxRowBased ? "row":"row",justifyContent: "space-between"}}>
@@ -524,36 +485,25 @@ export default function ManageRevisionCards(props:any){
                                     {manualscheduling === true ?
                                     (scheduled.revisioncardind === index && scheduled.scheduled === true )|| revboole === true ? //
 
-                                    <Button onClick={() => {unschedulerevisioncard(index,revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{backgroundColor:"#fa0095",marginTop:"10px",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Scheduled</Button>
+                                    <Button onClick={() => {unschedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{backgroundColor:"#fa0095",marginTop:"10px",width:"100px",border:"1px solid #fa0095",height:"30px",fontSize:"13px",marginRight:maxRowBased ?"17px":"10px"}}>Scheduled</Button>
                                     :
                                      
                                     scheduledcards.revisioncards !== undefined ? 
                                     scheduledcards.revisioncards.length < allowedmaximumscheduledcards ? /* 5  */
                                     <div>
-                                    <Button onClick={() => {schedulerevisioncard(index,revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
-                                    {/*Send now 1 duplicate need*/}
-                                    { 
+                                    <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
+                                    { email === "amari.lawal05@gmail.com"  &&
                                     sentnow.revisioncardind === index && sentnow.scheduled === true ?
                                     <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
                                     :
                                     <Button onClick={() => {sendnowrevisioncard(revisioncard,token);setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Send Now!</Button>
-                                    
                                     }
                                     </div>
                                     :
                                     <Button onClick={() => {reactalert.show(`Maximum ${allowedmaximumscheduledcards} scheduled cards.`)}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
                                     :
-                                    <div>
-                                    <Button onClick={() => {schedulerevisioncard(index,revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
-                                    {/*Send now 2 duplicate also needed*/}
-                                    { 
-                                    sentnow.revisioncardind === index && sentnow.scheduled === true ?
-                                    <Button onClick={() => {setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:false}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Sent!</Button>
-                                    :
-                                    <Button onClick={() => {sendnowrevisioncard(revisioncard,token);setSentNow((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{marginTop:"10px",width:"100px",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Send Now!</Button>
-                                    
-                                    }
-                                    </div>
+                                    <Button onClick={() => {schedulerevisioncard(revisioncard,token);setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))}} style={{backgroundColor:"grey",marginTop:"10px",width:"100px",border:"1px solid grey",height:"30px",fontSize:"11px",marginRight:maxRowBased ?"17px":"10px"}}>Unscheduled</Button>
+                                
                                 :
                                 <div style={{display:"flex",justifyContent:"end",marginRight:"50px",marginTop:newrevisioncard.revisioncardind === index && newrevisioncard.newrevisoncard  !== "" ? "0px":"-30px"}}  >
                                     {/*( ( foo && !bar ) || ( !foo && bar ) )  */}
@@ -566,8 +516,7 @@ export default function ManageRevisionCards(props:any){
                                     {cardnotchanged.cardnotchangedind === index && cardnotchanged.cardnotchanged === true && <p>Card Not changed.</p>}
                                     
                                 </div>
-                                )}
-                                
+                                )
                             })}
                             {scheduledcardlimithit === true && <p>Schedule of 5 revison cards Limit Hit</p>}
 

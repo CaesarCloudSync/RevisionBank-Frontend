@@ -1,8 +1,8 @@
 import { useEffect,useState } from "react";
-import HeaderRevision from "../../../headers/headerrevision"
+import HeaderRevision from "../../../../headers/headerrevision"
 import { Navigate, useLocation } from "react-router"
-import useMediaQuery from "../../../mediahooks/useMedia";
-import { maxRowBasedquery } from "../../../mediahooks/mediamax";
+import useMediaQuery from "../../../../mediahooks/useMedia";
+import { maxRowBasedquery } from "../../../../mediahooks/mediamax";
 import axios from "axios";
 import { useAlert } from 'react-alert'
 import CloseIcon from '@mui/icons-material/Close';
