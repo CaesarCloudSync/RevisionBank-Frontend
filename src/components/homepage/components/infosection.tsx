@@ -73,9 +73,9 @@ export default function InfoSection(){
             </svg>
           </div>
           <div className="featured_info">
-            <span>Upload Images, Gifs and Share </span>
+            <span>Upload Images, GIFs and Share </span>
             <p>
-              Upload images or gifs to your revision cards and share them to your friends as a joke or for missing notes. Have a friend you need to remind for a project? Schedule cards to be sent to them.
+              Upload images or GIFs to your revision cards and share them to your friends as a joke or for missing notes. Have a friend you need to remind for a project? Schedule cards to be sent to them.
 
             </p>
           </div>
