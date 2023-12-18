@@ -26,7 +26,7 @@ export default function InfoSection(){
           <div className="featured_info">
             <span>Revision Cards</span>
             <p>
-            Create and schedule revision cards to be sent to your email. Revise on-the-go to improve efficiency and add provide convenience when revising for your AS Level and A Level exmas.
+            Create and schedule revision cards to be sent to your email. Revise on-the-go to improve efficiency and add provide convenience when revising for your AS Level and A Level exams.
             </p>
           </div>
         </div>
