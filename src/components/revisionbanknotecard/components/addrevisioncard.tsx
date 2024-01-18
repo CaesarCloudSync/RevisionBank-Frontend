@@ -128,7 +128,7 @@ export default function AddRevisionCard(props:any){
         if (speecrecog === false){
         if (event.target.files){
             const reader = new FileReader()
-            if (event.target.files[0].name.includes(".txt")){
+            if (event.target.files[0].name.includes(".txt") || event.target.files[0].name.includes(".csv")){
                 
                 reader.onload = async (e:any) => {
                     const text = (e.target.result)
@@ -468,8 +468,8 @@ export default function AddRevisionCard(props:any){
                             </div>
                             <div style={{display:"flex",marginTop:"10px"}}>
                                 <label className="label">
-                                <input className="uploadfile" type="file" name="revisioncard" accept=".txt,text/html,text/plain,.png,.jpg,.jpeg,.gif"  onChange={event => handleFormChange(event, index)} />
-                                <span style={{width:"100px",border:"1px solid #fa0095",borderRadius:"10px",backgroundColor:"#fa0095",padding:"10px",color:"white"}}>Upload txt/png </span>
+                                <input className="uploadfile" type="file" name="revisioncard" accept=".txt,text/html,text/plain,.png,.jpg,.jpeg,.gif,.csv"  onChange={event => handleFormChange(event, index)} />
+                                <span style={{width:"100px",border:"1px solid #fa0095",borderRadius:"10px",backgroundColor:"#fa0095",padding:"10px",color:"white"}}>Upload csv/txt/png </span>
                                 </label>
                                 { showComponent === true && 
                                 <label className="label">
