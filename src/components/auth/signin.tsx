@@ -197,6 +197,9 @@ function Signin(){
         var json = JSON.parse(JSON.stringify(data)); // Converts data to json
         json.email = json.email.toLowerCase();
         const response:any = await axios.post(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/loginapi`, json); // Send login post request.
+        if ("error" in response.data){
+          alert(response.data.error)
+        }
         if (response.data !== undefined){
           if ("access_token" in response.data){
             if (maxRowBased === true){
