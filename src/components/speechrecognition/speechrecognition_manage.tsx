@@ -10,6 +10,7 @@ export default function RevisionBankSpeechRecognition(props:any) {
     props.handleFormChange(transcript,props.index,true)
   },[transcript])*/
   const [isListening, setIsListening] = useState(false);
+  const [text,setText] = useState()
   const microphoneRef:any = useRef(null);
   const miciconstyle = {"marginTop":"10px","width":"50px","height":"50px","borderRadius": "50%",border:"1px solid #264be4",color:"white",backgroundColor:"#264be4"}
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
@@ -30,9 +31,8 @@ export default function RevisionBankSpeechRecognition(props:any) {
     setIsListening(false);
     microphoneRef.current.classList.remove("listening");
     SpeechRecognition.stopListening();
-    let data:any = [...props.formFields];
-    data[props.index]["translation"] =transcript;
-    props.setFormFields(data);
+    console.log(transcript,"")
+    setText(transcript)
     //props.handleFormChange(transcript,props.index,true)
     
   };
@@ -47,12 +47,7 @@ export default function RevisionBankSpeechRecognition(props:any) {
     resetHandle();
     resetTranscript();
   };
-  const AddToCard = () => {
-    resetHandle();
-    resetTranscript();
-    props.handleFormChange(transcript,props.index,true)
-    
-  }
+
   
   //console.log(transcript === "")
   /*
@@ -72,13 +67,10 @@ export default function RevisionBankSpeechRecognition(props:any) {
           {isListening ? <MicIcon style={miciconstyle}></MicIcon>:<MicNoneIcon style={miciconstyle}></MicNoneIcon> }
         </div>
       </div>
-      {props.formFields[props.index]["translation"] && (
+      {text && (
         <div className="microphone-result-container">
-          <div className="microphone-result-text">{props.formFields[props.index]["translation"]}</div>
+          <div className="microphone-result-text">{text}</div>
           <div style={{display:"flex",gap:"10px"}}>
-          <button style={{fontSize:"13px"}} className="microphone-reset btn" onClick={AddToCard}>
-            Add to Card
-          </button>
           <button className="microphone-reset btn" onClick={handleReset}>
             Reset
           </button>

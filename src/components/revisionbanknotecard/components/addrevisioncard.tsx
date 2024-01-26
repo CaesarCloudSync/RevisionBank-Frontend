@@ -508,6 +508,7 @@ export default function AddRevisionCard(props:any){
                             <div style={{display:"flex",flexDirection:showWebcam === true ? "column":"row",marginTop:formFields[index]["drawing"] === "true" ? "20px": "0px"}}>
                                 <RevisionBankSpeechRecognition resetTranscript={resetTranscript} transcript={transcript} setFormFields={setFormFields} formFields={formFields} handleFormChange={handleFormChange} index={index}></RevisionBankSpeechRecognition>
                                 {showWebcam === true ? 
+                                
                                 <WebcamImage setShowWebCam={setShowWebCam} setFormFields={setFormFields} formFields={formFields} handleFormChange={handleFormChange} index={index} marginLeft={{marginLeft:"auto"}} /> :
                                 <CameraAltIcon style={{position:"relative",top:"12px",left:"10px",fontSize:"15px","width":"50px","height":"50px"}} onClick={() => {setShowWebCam(true)}}/>
                                 }
