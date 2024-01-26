@@ -10,6 +10,7 @@ import { Alert, Button } from "react-bootstrap"
 import ManageRevisionCardsInfo from "./managerevisioncardsinfo";
 import LensIcon from '@mui/icons-material/Lens';
 import ShareAlert from "./sharealert";
+
 export default function ManageRevisionCards(props:any){
     let location = useLocation();
     const reactalert = useAlert()
@@ -490,6 +491,7 @@ export default function ManageRevisionCards(props:any){
                             </div>
                             <div style={{display:"flex",gap:"10%",borderBottom:"1px grey solid",marginTop:"50px",flexDirection:maxRowBased ? "row":"column"}}>
                             <p style={{color:"grey"}}>Manage Revision Cards:</p>
+                           
                             </div>
                             {/*TODO Dynamically display the revision cards*/}
                             {revisioncards.length > 0  && !revisioncards.includes(undefined) && revisioncards.map((revisioncard:any,index:any) => {

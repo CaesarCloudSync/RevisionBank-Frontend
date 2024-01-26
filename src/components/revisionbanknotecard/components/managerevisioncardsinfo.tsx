@@ -4,6 +4,7 @@ import {Button } from "react-bootstrap"
 import UploadIcon from '@mui/icons-material/Upload';
 import ManageAddImages from "./manageaddimages";
 import ManageRevisionCardsChange from "./managerevisioncardimagechange";
+import RevisionBankTextToSpeech from "../../speechrecognition/revisionbanktts";
 export default function ManageRevisionCardsInfo(props:any){
     const [loading,setLoading] = useState(false);
     const [newsubject,setNewSubject] = useState("");
@@ -45,6 +46,7 @@ export default function ManageRevisionCardsInfo(props:any){
     return(
         <div>
         <div key={props.index} style={{display:"flex",marginTop:"50px",flexDirection:props.maxRowBased ? "row":"column",justifyContent: "space-between"}}>
+            
             {changesubject === false ? <p onClick={()=>{setChangeSubject(true)}} style={{cursor:"pointer"}} >{props.revisioncard.subject}</p> : 
             <div style={{display:"flex"}}>
             <input placeholder={props.revisioncard.subject} onChange={(e) =>{setNewSubject(e.target.value)}} value={newsubject}></input>
@@ -71,8 +73,10 @@ export default function ManageRevisionCardsInfo(props:any){
             <Button style={{backgroundColor:"grey",width:"100px",border:"1px solid grey",height:"30px",fontSize:"13px"}}>Change</Button>
             
             }
+            <RevisionBankTextToSpeech text={props.revisioncard.revisioncard} index={props.index}/>
 
     </div>
+    
     <textarea onChange={(e:any) => {props.setNewRevisionCard((items:any)=> ({...props.index,revisioncardind:props.index,newrevisoncard:e.target.value}))} } defaultValue={props.revisioncard.revisioncard} name="revisioncard" className="form-control" style={{height: "200px",width:"95%",marginTop:"10px",minHeight:props.maxRowBased ? "500px":"200px"}}>
     </textarea>
 
