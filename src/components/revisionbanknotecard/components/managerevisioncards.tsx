@@ -67,8 +67,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getrevisioncards`,config)
+                    const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`https://revisionbankbackend-662756251108.us-central1.run.app/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -92,7 +92,7 @@ export default function ManageRevisionCards(props:any){
         // When there is a color already selected
         if (revisioncardcolor !== false && (color !== "none" && color !== revisioncardcolor)){
             revisioncard["color"] = revisioncardcolor
-            const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/unschedulerevisioncard`,revisioncard,config)
             revisioncard["color"] = color
             data[index]["color"] = color;
             data[index]["showpickedtrafficlightind"] = index;
@@ -106,8 +106,8 @@ export default function ManageRevisionCards(props:any){
                     const revisioncards = revisioncarddata.revisioncarddata.revisioncards.map((items:Object,ind:any) => {return(Object.assign({},items,{"color":data[ind].color}))}).filter((items:any) => (items.color !== "none"))
                     var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":revisioncards}
                     //console.log(json)
-                    const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/schedulerevisioncard`,json,config)
-                    const responseaccount:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getrevisioncards`,config)
+                    const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/schedulerevisioncard`,json,config)
+                    const responseaccount:any = await axios.get(`https://revisionbankbackend-662756251108.us-central1.run.app/getrevisioncards`,config)
                     var newrevisioncarddata = responseaccount.data
                     //console.log(responseaccount)
                     
@@ -129,7 +129,7 @@ export default function ManageRevisionCards(props:any){
 
         }
         if (color === revisioncardcolor){
-            const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/unschedulerevisioncard`,revisioncard,config)
+            const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/unschedulerevisioncard`,revisioncard,config)
             window.location.reload()
 
         }
@@ -141,9 +141,9 @@ export default function ManageRevisionCards(props:any){
             this.splice( index, 0, ...items );
         };
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getrevisioncards`,config)
-        const responseaccount:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getaccountinfo`,config)
-        const ws = new WebSocket(`wss://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getrevisioncardsws/${token}`);
+        //const response:any = await axios.get(`https://revisionbankbackend-662756251108.us-central1.run.app/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://revisionbankbackend-662756251108.us-central1.run.app/getaccountinfo`,config)
+        const ws = new WebSocket(`wss://revisionbankbackend-662756251108.us-central1.run.app/getrevisioncardsws/${token}`);
 
 
         ws.onopen = (event) => {
@@ -208,7 +208,7 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncard.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/schedulerevisioncard`,json,config)
+        const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/schedulerevisioncard`,json,config)
         await checkschedulerevisioncard(token)
         //window.location.reload();
         //setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:true}))
@@ -217,7 +217,7 @@ export default function ManageRevisionCards(props:any){
     }
     const unscheduleallrevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.delete(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/unscheduleallrevisioncard`,config)
+        const response:any = await axios.delete(`https://revisionbankbackend-662756251108.us-central1.run.app/unscheduleallrevisioncard`,config)
 
         window.location.reload()
         //console.log(response.data)
@@ -226,7 +226,7 @@ export default function ManageRevisionCards(props:any){
         setManualScheduling(true);
         window.location.reload()
         //const config = {headers: {Authorization: `Bearer ${token}`,}}
-        //const response:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/checkschedulerevisioncard`,config)
+        //const response:any = await axios.get(`https://revisionbankbackend-662756251108.us-central1.run.app/checkschedulerevisioncard`,config)
         //console.log(response.data)
         //setScheduledCardState(response.data)
     }
@@ -235,7 +235,7 @@ export default function ManageRevisionCards(props:any){
         //console.log(revisioncard)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //console.log(revisioncard,"gy")
-        const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/unschedulerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/unschedulerevisioncard`,revisioncard,config)
         setScheduled((items:any)=> ({...index,revisioncardind:index,scheduled:false}))
         //window.location.reload()
         await checkschedulerevisioncard(token)
@@ -249,7 +249,7 @@ export default function ManageRevisionCards(props:any){
     }
     const checkschedulerevisioncard = async (token:string) => {
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/checkschedulerevisioncard`,config)
+        const response:any = await axios.get(`https://revisionbankbackend-662756251108.us-central1.run.app/checkschedulerevisioncard`,config)
         //console.log(response.data)
         setScheduledCardState(response.data)
         ////console.log(response.data)
@@ -264,7 +264,7 @@ export default function ManageRevisionCards(props:any){
             //console.log(newrevisioncardjson)
             const config = {headers: {Authorization: `Bearer ${token}`,}}
             //console.log(newrevisioncardjson)
-            const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/changerevisioncard`,newrevisioncardjson,config)
+            const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/changerevisioncard`,newrevisioncardjson,config)
 
             setRevisionCarddata((previousState:any) => {
                 //revisioncarddata.revisioncards.reverse()
@@ -284,7 +284,7 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         var json = {"sendtoemail":newsendtoemail}
         //console.log(json)
-        const response:any = await axios.put(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/changesendtoemail`,json,config)
+        const response:any = await axios.put(`https://revisionbankbackend-662756251108.us-central1.run.app/changesendtoemail`,json,config)
         setRevisionCarddata((previousState:any) => {
             //revisioncarddata.revisioncards.reverse()
             //revisioncarddata.revisioncards.unshift(revisioncarddata.revisioncards.splice(-1)[0]) 
@@ -304,7 +304,7 @@ export default function ManageRevisionCards(props:any){
         var json = {"sendtoemail":revisioncarddata.revisioncarddata.sendtoemail,"revisionscheduleinterval":revisioncarddata.revisioncarddata.revisionscheduleinterval,"revisioncards":[revisioncard]}
         //console.log(json)
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/sendnowrevisioncard`,json,config)
+        const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/sendnowrevisioncard`,json,config)
         ////console.log(response.data)
 
     }
@@ -347,9 +347,9 @@ export default function ManageRevisionCards(props:any){
         const config = {headers: {Authorization: `Bearer ${token}`,}}
         //var json = {"removerevisioncard":revisioncard}
         revisioncard["sendtoemail"] = sendtoemail
-        const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/removerevisioncard`,revisioncard,config)
+        const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/removerevisioncard`,revisioncard,config)
         //console.log(response.data)
-        const responseaccount:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getrevisioncards`,config)
+        const responseaccount:any = await axios.get(`https://revisionbankbackend-662756251108.us-central1.run.app/getrevisioncards`,config)
         var newrevisioncarddata = responseaccount.data
         //console.log(responseaccount)
         

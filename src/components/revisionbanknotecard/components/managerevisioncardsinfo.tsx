@@ -24,7 +24,7 @@ export default function ManageRevisionCardsInfo(props:any){
             let revisionscheduleinterval = newinterval === "" ? props.revisioncard.revisionscheduleinterval : newinterval
             const json_data = {"oldsubject":props.revisioncard.subject,"oldrevisioncardtitle":props.revisioncard.revisioncardtitle,"oldrevisionscheduleinterval":props.revisioncard.revisionscheduleinterval,
             "newsubject":subject,"newrevisioncardtitle":revisioncardtitle,"newrevisionscheduleinterval":revisionscheduleinterval}
-            const response = await axios.post("https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/changerevisioncardmetadata",json_data,config)
+            const response = await axios.post("https://revisionbankbackend-662756251108.us-central1.run.app/changerevisioncardmetadata",json_data,config)
             const result = response.data
             if ("error" in result){
                 alert(`Error:${result.error}`)

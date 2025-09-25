@@ -27,7 +27,7 @@ export default function CompleteFreeTrial(){
         //
         var json:any = {"subscription":subscription,"start_date_subscription":start_date_freetrial,"end_date_subscription":end_date_freetrial}
         const config = {headers: {Authorization: `Bearer ${token}`,}}
-        const responseft:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/storefreetrial`,json,config)
+        const responseft:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/storefreetrial`,json,config)
         navigate("/revisionbank", { state: { token: token, subscription: subscription,email:email} });
         //navigate("/billing",{state:{token:token,subscription:subscription,price:price,email:email}})
         

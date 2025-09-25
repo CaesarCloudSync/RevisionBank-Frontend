@@ -50,7 +50,7 @@ export default function FmathSB(){
     const bookyearoptions = [{"label":1,"value":0},{"label":2,"value":0}]
     const getemailcount = async () => {
       const config = {headers: {Authorization: `Bearer ${token.token}`,}}
-      const responsecount = await axios.get("https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getemailcount",config)
+      const responsecount = await axios.get("https://revisionbankbackend-662756251108.us-central1.run.app/getemailcount",config)
       if (responsecount.data.emailcount === 0){
         setHideEmailPrompt(false);
         setEmailCount(0)
@@ -75,7 +75,7 @@ export default function FmathSB(){
 
           const config = {headers: {Authorization: `Bearer ${token.token}`,}}
           try{
-          const response:any = await axios.post("https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear.label,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
+          const response:any = await axios.post("https://revisionbankbackend-662756251108.us-central1.run.app/fmathsb",{"furthermathsb":{"email":email,"furthermathsbbook": furthermathsbook,"furthermathsbyear":furthermathsyear.label,"furthermathsbexercise":furthermathsexerciesNum,"platform":"web"}},config)
           
           if ('error' in response.data){
               console.log("error",response.data.error)

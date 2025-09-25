@@ -274,7 +274,7 @@ export default function AddRevisionCard(props:any){
             var json = {"revisioncardscheduler":{"sendtoemail":email,"revisionscheduleinterval":parseInt(revisionscheduleinterval.label.match(getdigitregex)[0]),"revisioncards":formFields}}
             //console.log(json)
             
-            const response = await axios.post("https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/storerevisioncards",json,config)
+            const response = await axios.post("https://revisionbankbackend-662756251108.us-central1.run.app/storerevisioncards",json,config)
             //console.log(response.data)
             setSubmitting(false)
             //window.location.reload();

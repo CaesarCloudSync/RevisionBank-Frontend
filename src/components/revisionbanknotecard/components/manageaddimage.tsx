@@ -46,7 +46,7 @@ export default function ManageAddImage(props:any){
 
             const json_data = {"subject":subject,"revisioncardtitle":revisioncardtitle,"newimagename":newaddimagename,"newimage":newaddimage}
 
-            const response = await axios.post("https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/manageaddcardimage",json_data,config)
+            const response = await axios.post("https://revisionbankbackend-662756251108.us-central1.run.app/manageaddcardimage",json_data,config)
             const result = response.data
             console.log(result)
             if ("error" in result){
