@@ -197,7 +197,7 @@ function Signin(){
         var json = JSON.parse(JSON.stringify(data)); // Converts data to json
         json.email = json.email.toLowerCase();
         const response:any = await axios.post(`https://revisionbankbackend-662756251108.us-central1.run.app/loginapi`, json); // Send login post request.
-        console.log(response.data)
+        //console.log(response.data)
         if ("error" in response.data){
           alert(response.data.error)
         }
