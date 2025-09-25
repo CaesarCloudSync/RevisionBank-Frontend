@@ -18,7 +18,7 @@ export default function ReactPayPal(props:any) {
   const storeSubscriptionData = async (subscription:string,start_date:string,end_date:string,token:any) => {
     var json = {"subscription":subscription,"start_date_subscription":start_date,"end_date_subscription":end_date}
     const config = {headers: {Authorization: `Bearer ${token}`,}}
-    const response:any = await axios.post(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/storesubscription`, json,config); // Send login post request.
+    const response:any = await axios.post(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/storesubscription`, json,config); // Send login post request.
   }
 
 

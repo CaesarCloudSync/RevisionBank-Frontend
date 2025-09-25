@@ -48,7 +48,7 @@ export default function ResetPassword(){
             const config = {headers: {Authorization: `Bearer ${token}`,}}
             console.log(config)
             console.log(newpassword)
-            const response:any = await axios.put(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/resetpassword`, {"password":newpassword},config); // Send login post request.
+            const response:any = await axios.put(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/resetpassword`, {"password":newpassword},config); // Send login post request.
             console.log(response)
             navigate("/signin");
             setSubmitted(true);
@@ -123,5 +123,5 @@ export default function ResetPassword(){
     )
 }
 
-//const responsegettoken:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getforgotpasswordtoken`,config); // Send login post request.
+//const responsegettoken:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getforgotpasswordtoken`,config); // Send login post request.
 //console.log(responsegettoken.data.token)

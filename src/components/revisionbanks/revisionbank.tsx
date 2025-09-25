@@ -53,10 +53,10 @@ function RevisionBankOptions() {
   //console.log(statevalue)
   const getsubscription = async (token:string) => {
     const config = {headers: {Authorization: `Bearer ${token}`,}}
-    const responseget:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/getsubscription`,config); // Send login post request.
+    const responseget:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/getsubscription`,config); // Send login post request.
     console.log(responseget.data)
     if (responseget.data.end_date_subscription === undefined) {
-      const responsegetstudent:any = await axios.get(`https://revisionbankbackendsql-aoz2m6et2a-uc.a.run.app/checkstudentsubscriptions`,config);
+      const responsegetstudent:any = await axios.get(`https://revisionbankbackend-qqbn26mgpa-uc.a.run.app/checkstudentsubscriptions`,config);
       //console.log(responsegetstudent.data)
       // TODO This allows the free version
       setSubscriptionpresent(true)
